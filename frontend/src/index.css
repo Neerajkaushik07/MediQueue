@@ -1,0 +1,651 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:wght@100..900&display=swap');
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Clean medical background */
+body {
+    @apply bg-gradient-to-b from-neutral-warm via-white to-calm-blue;
+    min-height: 100vh;
+}
+
+/* Medical card styles */
+.medical-card {
+    @apply rounded-xl border border-gray-100 shadow-soft;
+    transition: all 0.3s ease;
+}
+
+.medical-card:hover {
+    @apply shadow-card-hover border-primary/20;
+    transform: translateY(-4px);
+}
+
+/* Professional heading styles */
+.medical-heading {
+    font-family: 'Poppins', sans-serif;
+    @apply text-gray-900 font-bold;
+}
+
+.accent-heading {
+    @apply text-transparent bg-clip-text bg-gradient-primary;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Trust badge */
+.trust-badge {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full;
+    @apply bg-calm-blue text-primary font-semibold text-sm;
+    @apply border border-primary/20;
+}
+
+/* Primary button */
+.btn-primary {
+    @apply px-6 py-3 rounded-lg font-medium;
+    @apply bg-gradient-primary text-white;
+    @apply shadow-medical hover:shadow-card-hover;
+    @apply transition-all duration-300;
+    @apply hover:scale-105 active:scale-95;
+}
+
+/* Secondary button */
+.btn-secondary {
+    @apply px-6 py-3 rounded-lg font-medium;
+    @apply bg-white text-primary border-2 border-primary;
+    @apply hover:bg-primary hover:text-white;
+    @apply transition-all duration-300;
+}
+
+/* Info card for features */
+.info-card {
+    @apply rounded-2xl p-6 shadow-card;
+    @apply border border-gray-100;
+    @apply transition-all duration-300;
+}
+
+.info-card:hover {
+    @apply shadow-card-hover border-primary/30;
+    transform: translateY(-8px);
+}
+
+/* Section spacing */
+.section-padding {
+    @apply py-16 md:py-24 px-4 md:px-10;
+}
+
+/* Gradient text for accents */
+.gradient-text {
+    @apply text-transparent bg-clip-text bg-gradient-primary;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Smooth scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+    outline: 2px solid #0891b2;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Active nav styles */
+.active hr {
+    @apply block
+}
+
+@media (max-width:740px) {
+    .active p {
+        @apply text-primary font-semibold;
+    }
+}
+
+/* Loading skeleton for better UX */
+.skeleton {
+    @apply bg-gray-200 animate-pulse rounded;
+}
+
+/* Smooth transitions for all interactive elements */
+button,
+a,
+input,
+select {
+    @apply transition-all duration-200;
+}
+
+/* Article Content Styles */
+.article-content h2 {
+    @apply text-3xl font-bold text-gray-900 mt-8 mb-4;
+}
+
+.article-content h3 {
+    @apply text-2xl font-bold text-gray-800 mt-6 mb-3;
+}
+
+.article-content h4 {
+    @apply text-xl font-semibold text-gray-800 mt-4 mb-2;
+}
+
+.article-content p {
+    @apply mb-4 text-base leading-relaxed text-gray-700;
+}
+
+.article-content ul,
+.article-content ol {
+    @apply mb-6 ml-6 space-y-2;
+}
+
+.article-content ul li {
+    @apply list-disc text-gray-700 leading-relaxed;
+}
+
+.article-content ol li {
+    @apply list-decimal text-gray-700 leading-relaxed;
+}
+
+.article-content strong {
+    @apply font-semibold text-gray-900;
+}
+
+.article-content a {
+    @apply text-primary hover:underline;
+}
+
+.article-content blockquote {
+    @apply border-l-4 border-primary bg-gradient-to-r from-purple-50 to-blue-50 p-4 my-6 italic;
+}
+
+.article-content code {
+    @apply bg-gray-100 px-2 py-1 rounded text-sm font-mono;
+}
+
+.article-content pre {
+    @apply bg-gray-900 text-white p-4 rounded-lg overflow-x-auto mb-6;
+}
+
+.article-content img {
+    @apply rounded-lg my-6 w-full;
+}
+
+/* ============================================ */
+/* DOCTORS PAGE - HORIZONTAL FILTER BAR STYLES */
+/* ============================================ */
+
+/* Horizontal Filter Bar Container */
+.filter-bar {
+    @apply bg-white rounded-xl border border-gray-200 shadow-soft;
+    @apply px-6 py-4 mb-8;
+    @apply flex flex-wrap items-center gap-4;
+}
+
+/* Filter Item (Dropdown Container) */
+.filter-item {
+    @apply relative;
+}
+
+/* Filter Button/Trigger */
+.filter-trigger {
+    @apply flex items-center gap-2 px-4 py-2.5 rounded-lg;
+    @apply border-2 border-gray-200 bg-white;
+    @apply text-sm font-medium text-gray-700;
+    @apply transition-all duration-200 cursor-pointer;
+    @apply hover:border-primary/50 hover:bg-primary/5;
+}
+
+.filter-trigger.active {
+    @apply border-primary bg-primary/10 text-primary;
+}
+
+.filter-trigger svg {
+    @apply w-4 h-4 transition-transform duration-200;
+}
+
+.filter-trigger.open svg {
+    transform: rotate(180deg);
+}
+
+/* Filter Dropdown Menu */
+.filter-dropdown {
+    @apply absolute top-full left-0 mt-2 z-50;
+    @apply bg-white rounded-xl border border-gray-200 shadow-card;
+    @apply min-w-[240px] max-h-[400px] overflow-y-auto;
+    @apply py-2;
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Filter Dropdown Item */
+.filter-dropdown-item {
+    @apply px-4 py-2.5 text-sm text-gray-700;
+    @apply cursor-pointer transition-all duration-150;
+    @apply hover:bg-primary/5 hover:text-primary;
+    @apply flex items-center justify-between;
+}
+
+.filter-dropdown-item.selected {
+    @apply bg-primary/10 text-primary font-medium;
+}
+
+.filter-dropdown-item .checkmark {
+    @apply w-4 h-4 text-primary;
+}
+
+/* Search Input in Filter Bar */
+.search-input {
+    @apply px-4 py-2.5 pl-11 rounded-lg border-2 border-gray-200;
+    @apply text-sm text-gray-700 placeholder-gray-400;
+    @apply transition-all duration-200;
+    @apply focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none;
+    @apply min-w-[280px];
+}
+
+.search-input:focus {
+    @apply shadow-medical;
+}
+
+.search-input-wrapper {
+    @apply relative flex-1 min-w-[280px];
+}
+
+.search-icon {
+    @apply absolute left-3 top-1/2 -translate-y-1/2 text-gray-400;
+    pointer-events: none;
+}
+
+/* Enhanced Doctor Cards */
+.doctor-card-enhanced {
+    @apply bg-white rounded-2xl border border-gray-100 overflow-hidden;
+    @apply shadow-soft cursor-pointer;
+    @apply transition-all duration-300;
+}
+
+.doctor-card-enhanced:hover {
+    @apply shadow-card-hover border-primary/20;
+    transform: translateY(-8px);
+}
+
+.doctor-card-enhanced .doctor-image-wrapper {
+    @apply relative overflow-hidden bg-gradient-to-br from-calm-blue to-care-green;
+    @apply h-56;
+}
+
+.doctor-card-enhanced .doctor-image {
+    @apply w-full h-full object-cover transition-transform duration-500;
+}
+
+.doctor-card-enhanced:hover .doctor-image {
+    transform: scale(1.05);
+}
+
+.doctor-card-enhanced .status-badge {
+    @apply absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold;
+    @apply backdrop-blur-md shadow-soft;
+}
+
+.doctor-card-enhanced .status-badge.available {
+    @apply bg-green-500/90 text-white;
+}
+
+.doctor-card-enhanced .status-badge.busy {
+    @apply bg-red-500/90 text-white;
+}
+
+.doctor-card-enhanced .doctor-info {
+    @apply p-5;
+}
+
+.doctor-card-enhanced .doctor-name {
+    @apply text-lg font-bold text-gray-900 mb-1;
+}
+
+.doctor-card-enhanced .doctor-specialty {
+    @apply text-sm text-primary font-medium mb-3;
+}
+
+/* Rating Stars */
+.rating-stars {
+    @apply flex items-center gap-1 mb-3;
+}
+
+.rating-stars .star {
+    @apply text-yellow-400 text-sm;
+}
+
+.rating-stars .star.empty {
+    @apply text-gray-300;
+}
+
+.rating-stars .rating-text {
+    @apply text-xs text-gray-600 ml-2;
+}
+
+/* Specialty Badge */
+.badge-specialty {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full;
+    @apply bg-gradient-to-r from-primary/10 to-secondary/10;
+    @apply text-xs font-semibold text-primary border border-primary/20;
+}
+
+/* Experience Badge */
+.badge-experience {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-md;
+    @apply bg-care-green text-accent text-xs font-medium;
+}
+
+/* Fee Display */
+.fee-display {
+    @apply flex items-center justify-between mt-3 pt-3 border-t border-gray-100;
+}
+
+.fee-display .fee-label {
+    @apply text-xs text-gray-500;
+}
+
+.fee-display .fee-amount {
+    @apply text-base font-bold text-gray-900;
+}
+
+/* Sort Dropdown */
+.sort-dropdown {
+    @apply px-4 py-2.5 rounded-lg border-2 border-gray-200;
+    @apply text-sm font-medium text-gray-700 bg-white;
+    @apply transition-all duration-200 cursor-pointer;
+    @apply hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20;
+}
+
+/* View Toggle Buttons */
+.view-toggle {
+    @apply flex items-center gap-2 bg-gray-100 rounded-lg p-1;
+}
+
+.view-toggle button {
+    @apply px-3 py-2 rounded-md text-sm font-medium transition-all duration-200;
+    @apply text-gray-600 hover:text-gray-900;
+}
+
+.view-toggle button.active {
+    @apply bg-white text-primary shadow-soft;
+}
+
+/* Results Header */
+.results-header {
+    @apply flex flex-wrap items-center justify-between gap-4 mb-6;
+}
+
+.results-count {
+    @apply text-sm text-gray-600;
+}
+
+.results-count .count {
+    @apply font-bold text-primary;
+}
+
+/* Empty State */
+.empty-state {
+    @apply flex flex-col items-center justify-center py-16 px-4 text-center;
+}
+
+.empty-state-icon {
+    @apply text-6xl mb-4 text-gray-300;
+}
+
+.empty-state-title {
+    @apply text-xl font-bold text-gray-900 mb-2;
+}
+
+.empty-state-description {
+    @apply text-sm text-gray-600 max-w-md;
+}
+
+/* Filter Badge Counter */
+.filter-badge {
+    @apply inline-flex items-center justify-center;
+    @apply w-5 h-5 rounded-full bg-primary text-white;
+    @apply text-xs font-bold;
+}
+
+/* Clear Filters Button */
+.clear-filters-btn {
+    @apply w-full px-4 py-2 rounded-lg border-2 border-gray-200;
+    @apply text-sm font-medium text-gray-700;
+    @apply transition-all duration-200;
+    @apply hover:border-red-500 hover:text-red-500 hover:bg-red-50;
+}
+
+/* Mobile Filter Drawer */
+.filter-drawer {
+    @apply fixed inset-0 z-50 lg:hidden;
+}
+
+.filter-drawer-overlay {
+    @apply absolute inset-0 bg-black/50 backdrop-blur-sm;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.filter-drawer-content {
+    @apply absolute right-0 top-0 bottom-0 w-full max-w-sm;
+    @apply bg-white shadow-2xl overflow-y-auto;
+    animation: slideInRight 0.3s ease-out;
+}
+
+.filter-drawer-header {
+    @apply sticky top-0 bg-white border-b border-gray-200 px-6 py-4;
+    @apply flex items-center justify-between z-10;
+}
+
+.filter-drawer-body {
+    @apply p-6;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* Range Slider Custom Styling */
+.range-slider {
+    @apply w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer;
+}
+
+.range-slider::-webkit-slider-thumb {
+    @apply appearance-none w-5 h-5 bg-primary rounded-full cursor-pointer;
+    @apply shadow-medical hover:scale-110 transition-transform;
+}
+
+.range-slider::-moz-range-thumb {
+    @apply w-5 h-5 bg-primary rounded-full cursor-pointer border-0;
+    @apply shadow-medical hover:scale-110 transition-transform;
+}
+
+.range-slider::-webkit-slider-runnable-track {
+    @apply bg-gray-200 rounded-lg h-2;
+}
+
+.range-slider::-moz-range-track {
+    @apply bg-gray-200 rounded-lg h-2;
+}
+
+/* Loading Skeleton for Doctor Cards */
+.doctor-card-skeleton {
+    @apply bg-white rounded-2xl border border-gray-100 overflow-hidden;
+    @apply shadow-soft animate-pulse;
+}
+
+.doctor-card-skeleton .skeleton-image {
+    @apply h-56 bg-gray-200;
+}
+
+.doctor-card-skeleton .skeleton-content {
+    @apply p-5 space-y-3;
+}
+
+.doctor-card-skeleton .skeleton-line {
+    @apply h-4 bg-gray-200 rounded;
+}
+
+.doctor-card-skeleton .skeleton-line.short {
+    @apply w-2/3;
+}
+
+/* Page Header */
+.page-header {
+    @apply mb-8;
+}
+
+.page-title {
+    @apply text-4xl font-bold mb-2;
+    font-family: 'Poppins', sans-serif;
+}
+
+.page-subtitle {
+    @apply text-gray-600 text-base;
+}
+
+/* Responsive Grid for Doctor Cards */
+.doctors-grid {
+    @apply grid gap-6;
+    @apply grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+}
+
+/* Filter Toggle Button (Mobile) */
+.filter-toggle-btn {
+    @apply lg:hidden fixed bottom-6 right-6 z-40;
+    @apply w-14 h-14 rounded-full bg-gradient-primary text-white;
+    @apply shadow-card-hover flex items-center justify-center;
+    @apply transition-all duration-300 hover:scale-110 active:scale-95;
+}
+
+.filter-toggle-btn .badge {
+    @apply absolute -top-1 -right-1 w-5 h-5 rounded-full;
+    @apply bg-red-500 text-white text-xs font-bold;
+    @apply flex items-center justify-center;
+}
+
+/* Scrollbar Hiding Utility */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+/* ============================================ */
+/* DEMO ACCESS COMPONENT STYLES */
+/* ============================================ */
+
+/* Demo Access Floating Button */
+.demo-access-button {
+    @apply relative rounded-full shadow-2xl;
+    @apply transition-all duration-300;
+}
+
+.demo-access-button:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 20px rgba(8, 145, 178, 0.5);
+}
+
+/* Demo Dropdown */
+.demo-dropdown {
+    animation: slideUpFade 0.3s ease-out;
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Demo Option Buttons */
+.demo-option {
+    @apply transition-all duration-300;
+}
+
+.demo-option:hover {
+    transform: translateX(4px);
+}
+
+.demo-option:active {
+    transform: scale(0.98);
+}
+
+/* Glass Card Enhancement for Demo */
+.glass-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Pulse Animation for Demo Button */
+@keyframes ping {
+
+    75%,
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+.animate-ping {
+    animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Bounce Animation for Rocket Icon */
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.animate-bounce {
+    animation: bounce 2s infinite;
+}
