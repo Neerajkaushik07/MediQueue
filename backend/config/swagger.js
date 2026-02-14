@@ -19,8 +19,8 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:4000',
-        description: 'Development server',
+        url: process.env.BACKEND_URL || 'http://localhost:4000',
+        description: 'Current server',
       },
       {
         url: 'https://api.mediqueue.com',
