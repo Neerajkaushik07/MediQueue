@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerUser, loginUser, googleAuth, getProfile, updateProfile, bookAppointment, listAppointment, cancelAppointment, paymentStripe, verifyStripe, addReview, getDoctorReviews, rescheduleAppointment, toggleFavoriteDoctor, getFavoriteDoctors, subscribeToNewsletter, paymentRazorpay, verifyRazorpay } from '../controllers/userController.js';
+import { registerUser, loginUser, googleAuth, getProfile, updateProfile, bookAppointment, listAppointment, cancelAppointment, completeAppointment, paymentStripe, verifyStripe, addReview, getDoctorReviews, rescheduleAppointment, toggleFavoriteDoctor, getFavoriteDoctors, subscribeToNewsletter, paymentRazorpay, verifyRazorpay } from '../controllers/userController.js';
 import authUser from '../middlewares/authUser.js';
 import upload from '../middlewares/multer.js';
 
@@ -13,6 +13,7 @@ userRouter.post("/update-profile", upload.single('image'), authUser, updateProfi
 userRouter.post("/book-appointment", authUser, bookAppointment)
 userRouter.get("/appointments", authUser, listAppointment)
 userRouter.post("/cancel-appointment", authUser, cancelAppointment)
+userRouter.post("/complete-appointment", authUser, completeAppointment)
 userRouter.post("/reschedule-appointment", authUser, rescheduleAppointment)
 userRouter.post("/payment-stripe", authUser, paymentStripe)
 userRouter.post("/verify-stripe", authUser, verifyStripe)

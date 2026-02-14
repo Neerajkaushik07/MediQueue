@@ -76,7 +76,10 @@ const MyAppointments = () => {
 
   // Function to cancel appointment Using API
   const cancelAppointment = async (appointmentId) => {
-
+    if (isDemoMode) {
+      toast.info('Changes cannot be saved in Demo Mode')
+      return
+    }
     try {
 
       const { data } = await axios.post(backendUrl + '/api/user/cancel-appointment', { appointmentId }, { headers: { token } })
@@ -95,8 +98,32 @@ const MyAppointments = () => {
 
   }
 
+  // Function to mark appointment as completed
+  const markCompleted = async (appointmentId) => {
+    if (isDemoMode) {
+      toast.info('Changes cannot be saved in Demo Mode')
+      return
+    }
+    try {
+      const { data } = await axios.post(backendUrl + '/api/user/complete-appointment', { appointmentId }, { headers: { token } })
+      if (data.success) {
+        toast.success(data.message)
+        getUserAppointments()
+        getDoctorsData()
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
   // Function to make payment using razorpay
   const appointmentRazorpay = async (appointmentId) => {
+    if (isDemoMode) {
+      toast.info('Payments are simulated in Demo Mode')
+      return
+    }
     try {
       const { data } = await axios.post(backendUrl + '/api/user/payment-razorpay', { appointmentId }, { headers: { token } })
       if (data.success) {
@@ -105,7 +132,7 @@ const MyAppointments = () => {
         toast.error(data.message)
       }
     } catch (error) {
-      
+
       toast.error('Payment initialization failed')
     }
   }
@@ -139,7 +166,7 @@ const MyAppointments = () => {
             getUserAppointments()
           }
         } catch (error) {
-          
+
           toast.error(error.message)
         }
       }
@@ -182,6 +209,11 @@ const MyAppointments = () => {
 
   // Function to submit review
   const submitReview = async () => {
+    if (isDemoMode) {
+      toast.info('Changes cannot be saved in Demo Mode')
+      setShowReviewModal(false)
+      return
+    }
     if (rating === 0) {
       toast.warning('Please select a rating')
       return
@@ -282,6 +314,11 @@ const MyAppointments = () => {
 
   // Function to reschedule appointment
   const rescheduleAppointment = async () => {
+    if (isDemoMode) {
+      toast.info('Changes cannot be saved in Demo Mode')
+      setShowRescheduleModal(false)
+      return
+    }
     if (!rescheduleSlotTime) {
       toast.warning('Please select a time slot')
       return
@@ -466,6 +503,12 @@ const MyAppointments = () => {
                       Reschedule
                     </button>
                     <button
+                      onClick={() => markCompleted(item._id)}
+                      className='px-4 py-2.5 rounded-lg text-primary font-medium hover:bg-blue-50 border border-transparent hover:border-blue-100 transition-colors'
+                    >
+                      Mark Completed
+                    </button>
+                    <button
                       onClick={() => cancelAppointment(item._id)}
                       className='px-4 py-2.5 rounded-lg text-gray-400 font-medium hover:bg-red-50 hover:text-red-600 transition-colors'
                       title="Cancel Appointment"
@@ -488,6 +531,12 @@ const MyAppointments = () => {
                       className='flex-1 text-gray-600 font-medium hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors'
                     >
                       Reschedule
+                    </button>
+                    <button
+                      onClick={() => markCompleted(item._id)}
+                      className='px-3 text-primary font-medium hover:bg-blue-50 rounded-lg transition-colors'
+                    >
+                      Mark Completed
                     </button>
                     <button
                       onClick={() => cancelAppointment(item._id)}

@@ -2,15 +2,36 @@ import React, { useContext, useEffect, useState, useCallback, useMemo } from 're
 import { AppContext } from '../../context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { assets } from '../../assets/assets'
 
 const DoctorReviews = () => {
-    const { backendUrl, token } = useContext(AppContext)
+    const { backendUrl, token, isDemoMode } = useContext(AppContext)
     const [reviews, setReviews] = useState([])
     const [loading, setLoading] = useState(true)
 
     const getReviews = useCallback(async () => {
         try {
             setLoading(true)
+            if (isDemoMode) {
+                setReviews([
+                    {
+                        userName: 'Sarah Wilson',
+                        userImage: assets.profile_pic,
+                        rating: 5,
+                        comment: 'Excellent consultation, very professional and thorough.',
+                        date: '2026-02-15'
+                    },
+                    {
+                        userName: 'John Miller',
+                        userImage: assets.profile_pic,
+                        rating: 4,
+                        comment: 'Good experience, but the waiting time was slightly longer than expected.',
+                        date: '2026-02-14'
+                    }
+                ])
+                setLoading(false)
+                return
+            }
             const { data } = await axios.post(backendUrl + '/api/doctor/reviews', {}, {
                 headers: { Authorization: `Bearer ${token}` }
             })
@@ -20,12 +41,12 @@ const DoctorReviews = () => {
                 toast.error(data.message)
             }
         } catch (error) {
-            
+
             toast.error('Failed to load reviews')
         } finally {
             setLoading(false)
         }
-    }, [backendUrl, token])
+    }, [backendUrl, token, isDemoMode])
 
     useEffect(() => {
         if (token) {

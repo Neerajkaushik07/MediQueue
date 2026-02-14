@@ -5,13 +5,18 @@ import { toast } from 'react-toastify'
 import { assets } from '../../assets/assets'
 
 const DoctorProfile = () => {
-    const { backendUrl, token, userRole, currencySymbol } = useContext(AppContext)
+    const { backendUrl, token, userRole, currencySymbol, isDemoMode, userData } = useContext(AppContext)
     const [profileData, setProfileData] = useState(null)
     const [isEdit, setIsEdit] = useState(false)
     const [loading, setLoading] = useState(true)
 
     const getProfile = useCallback(async () => {
         try {
+            if (isDemoMode) {
+                setProfileData(userData)
+                setLoading(false)
+                return
+            }
             if (userRole === 'doctor' && token) {
                 const { data } = await axios.get(backendUrl + '/api/doctor/profile', { headers: { Authorization: `Bearer ${token}` } })
                 if (data.success) {
@@ -21,14 +26,19 @@ const DoctorProfile = () => {
                 }
             }
         } catch (error) {
-            
+
             toast.error(error.message || 'Failed to load profile')
         } finally {
             setLoading(false)
         }
-    }, [backendUrl, token, userRole])
+    }, [backendUrl, token, userRole, isDemoMode])
 
     const updateProfile = async () => {
+        if (isDemoMode) {
+            toast.info('Changes cannot be saved in Demo Mode')
+            setIsEdit(false)
+            return
+        }
         try {
             const updateData = {
                 docId: profileData._id,
@@ -55,7 +65,7 @@ const DoctorProfile = () => {
             }
 
         } catch (error) {
-            
+
             toast.error(error.message || 'Failed to update profile')
         }
     }

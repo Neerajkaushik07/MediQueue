@@ -11,7 +11,7 @@ import ActionGrid from '../components/Dashboard/ActionGrid'
 import AppointmentList from '../components/Dashboard/AppointmentList'
 
 const PatientDashboard = () => {
-    const { token, userData, backendUrl } = useContext(AppContext)
+    const { token, userData, backendUrl, isDemoMode } = useContext(AppContext)
     const navigate = useNavigate()
     const [appointments, setAppointments] = useState([])
     const [loading, setLoading] = useState(true)
@@ -51,7 +51,7 @@ const PatientDashboard = () => {
         } catch (error) {
             setLoading(false)
         }
-    }, [backendUrl, token])
+    }, [backendUrl, token, isDemoMode])
 
     useEffect(() => {
         fetchAppointments()

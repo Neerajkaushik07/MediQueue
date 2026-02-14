@@ -47,8 +47,8 @@ const WheelPicker = ({ value, onChange, options, label }) => {
                                 className='h-[32px] flex items-center justify-center snap-center'
                             >
                                 <span className={`text-sm font-poppins transition-all duration-200 ${isSelected
-                                        ? 'text-primary font-black scale-105'
-                                        : 'text-gray-300 font-bold scale-90 opacity-30'
+                                    ? 'text-primary font-black scale-105'
+                                    : 'text-gray-300 font-bold scale-90 opacity-30'
                                     }`}>
                                     {opt}
                                 </span>
@@ -62,7 +62,7 @@ const WheelPicker = ({ value, onChange, options, label }) => {
 };
 
 const DoctorSchedule = () => {
-    const { backendUrl, token, userRole } = useContext(AppContext)
+    const { backendUrl, token, userRole, isDemoMode } = useContext(AppContext)
     const [scheduleData, setScheduleData] = useState(null)
     const [isEdit, setIsEdit] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -71,11 +71,21 @@ const DoctorSchedule = () => {
     const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     const hours24 = Array.from({ length: 24 }, (_, i) => i < 10 ? `0${i}` : `${i}`);
     const hours12 = Array.from({ length: 12 }, (_, i) => i === 0 ? '12' : i < 10 ? `0${i}` : `${i}`);
-    const minutes = ['00', '15', '30', '45'];
+    const minutes = Array.from({ length: 60 }, (_, i) => i < 10 ? `0${i}` : `${i}`);
+    const durations = Array.from({ length: 60 }, (_, i) => i + 1);
     const ampm = ['AM', 'PM'];
 
     const getSchedule = useCallback(async () => {
         try {
+            if (isDemoMode) {
+                setScheduleData({
+                    workingDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+                    startTime: '09:00',
+                    endTime: '17:00',
+                    slotDuration: 30
+                })
+                return
+            }
             if (userRole === 'doctor' && token) {
                 const { data } = await axios.get(backendUrl + '/api/doctor/schedule', { headers: { Authorization: `Bearer ${token}` } })
                 if (data.success && data.schedule) {
@@ -90,7 +100,7 @@ const DoctorSchedule = () => {
                 }
             }
         } catch (error) {
-            
+
             setScheduleData({
                 workingDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
                 startTime: '09:00',
@@ -98,7 +108,7 @@ const DoctorSchedule = () => {
                 slotDuration: 30
             })
         }
-    }, [backendUrl, token, userRole])
+    }, [backendUrl, token, userRole, isDemoMode])
 
     const toggleWorkingDay = (day) => {
         if (!isEdit) return
@@ -111,6 +121,11 @@ const DoctorSchedule = () => {
     }
 
     const updateSchedule = async () => {
+        if (isDemoMode) {
+            toast.info('Changes cannot be saved in Demo Mode')
+            setIsEdit(false)
+            return
+        }
         if (loading) return;
         setLoading(true);
         try {
@@ -128,7 +143,7 @@ const DoctorSchedule = () => {
                 toast.error(data.message)
             }
         } catch (error) {
-            
+
             toast.error(error.response?.data?.message || error.message || 'Failed to update schedule')
         } finally {
             setLoading(false);
@@ -226,8 +241,8 @@ const DoctorSchedule = () => {
                                     onClick={() => toggleWorkingDay(day)}
                                     disabled={!isEdit}
                                     className={`py-2 rounded-xl border-2 text-center transition-all ${isActive
-                                            ? 'border-primary bg-primary text-white shadow-sm'
-                                            : 'border-gray-50 bg-gray-50/20 text-gray-400 opacity-60'
+                                        ? 'border-primary bg-primary text-white shadow-sm'
+                                        : 'border-gray-50 bg-gray-50/20 text-gray-400 opacity-60'
                                         }`}
                                 >
                                     <span className='font-black text-[9px] uppercase tracking-tighter'>{day.slice(0, 3)}</span>
@@ -312,16 +327,13 @@ const DoctorSchedule = () => {
                             <p className='text-lg font-black text-gray-900 font-poppins'>{scheduleData.slotDuration} min</p>
                         </div>
                         {isEdit && (
-                            <div className='flex gap-1 bg-gray-50 p-1 rounded-lg'>
-                                {[15, 30, 45, 60].map(duration => (
-                                    <button
-                                        key={duration}
-                                        onClick={() => setScheduleData(prev => ({ ...prev, slotDuration: duration }))}
-                                        className={`px-2 py-1 rounded-md text-[9px] font-black transition-all ${scheduleData.slotDuration === duration ? 'bg-primary text-white shadow-sm' : 'text-gray-400'}`}
-                                    >
-                                        {duration}m
-                                    </button>
-                                ))}
+                            <div className='flex items-center gap-4 bg-gray-50 p-2 rounded-2xl border border-gray-100'>
+                                <WheelPicker
+                                    label="DUR (MIN)"
+                                    value={scheduleData.slotDuration}
+                                    options={durations}
+                                    onChange={(v) => setScheduleData(prev => ({ ...prev, slotDuration: parseInt(v) }))}
+                                />
                             </div>
                         )}
                     </div>

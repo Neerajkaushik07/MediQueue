@@ -2,9 +2,10 @@ import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { AppContext } from '../../context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { assets } from '../../assets/assets'
 
 const DoctorAppointments = () => {
-    const { backendUrl, token, userRole, currencySymbol } = useContext(AppContext)
+    const { backendUrl, token, userRole, currencySymbol, isDemoMode } = useContext(AppContext)
     const [appointments, setAppointments] = useState([])
     const [filteredAppointments, setFilteredAppointments] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
@@ -20,6 +21,35 @@ const DoctorAppointments = () => {
     const getAppointments = useCallback(async () => {
         try {
             setLoading(true)
+            if (isDemoMode) {
+                setAppointments([
+                    {
+                        _id: 'mock_apt_1',
+                        userData: { name: 'Sarah Wilson', image: assets.profile_pic, email: 'sarah@example.com', dob: '1995-03-20' },
+                        slotDate: '15_02_2026',
+                        slotTime: '10:30 AM',
+                        amount: 800,
+                        payment: true,
+                        isCompleted: false,
+                        cancelled: false
+                    },
+                    {
+                        _id: 'mock_apt_2',
+                        userData: { name: 'John Miller', image: assets.profile_pic, email: 'john@example.com', dob: '1988-11-12' },
+                        slotDate: '14_02_2026',
+                        slotTime: '02:00 PM',
+                        amount: 800,
+                        payment: false,
+                        isCompleted: true,
+                        cancelled: false,
+                        diagnosis: 'Common Cold',
+                        medications: ['Paracetamol', 'Vitamin C'],
+                        notes: 'Rest and hydration recommended.'
+                    }
+                ])
+                setLoading(false)
+                return
+            }
             if (userRole === 'doctor' && token) {
                 const { data } = await axios.get(backendUrl + '/api/doctor/appointments', { headers: { Authorization: `Bearer ${token}` } })
                 if (data.success) {
@@ -29,12 +59,12 @@ const DoctorAppointments = () => {
                 }
             }
         } catch (error) {
-            
+
             toast.error(error.message || 'Failed to load appointments')
         } finally {
             setLoading(false)
         }
-    }, [backendUrl, token, userRole])
+    }, [backendUrl, token, userRole, isDemoMode])
 
     const openPrescriptionModal = (appointment) => {
         setSelectedAppointment(appointment)
@@ -45,6 +75,11 @@ const DoctorAppointments = () => {
     }
 
     const handlePrescriptionSubmit = async () => {
+        if (isDemoMode) {
+            toast.info('Changes cannot be saved in Demo Mode')
+            setShowPrescriptionModal(false)
+            return
+        }
         try {
             const medArray = medications.split(',').map(m => m.trim()).filter(m => m !== '')
             const payload = {
@@ -68,12 +103,16 @@ const DoctorAppointments = () => {
                 toast.error(data.message)
             }
         } catch (error) {
-            
+
             toast.error('Failed to save prescription details')
         }
     }
 
     const cancelAppointment = async (appointmentId) => {
+        if (isDemoMode) {
+            toast.info('Changes cannot be saved in Demo Mode')
+            return
+        }
         try {
             const { data } = await axios.post(backendUrl + '/api/doctor/cancel-appointment', { appointmentId }, { headers: { Authorization: `Bearer ${token}` } })
             if (data.success) {
@@ -83,7 +122,7 @@ const DoctorAppointments = () => {
                 toast.error(data.message)
             }
         } catch (error) {
-            
+
             toast.error(error.message || 'Failed to cancel appointment')
         }
     }

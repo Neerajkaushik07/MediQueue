@@ -6,12 +6,24 @@ import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 
 const LabReports = () => {
-    const { backendUrl, token } = useContext(AppContext)
+    const { backendUrl, token, isDemoMode } = useContext(AppContext)
     const [reports, setReports] = useState([])
     const [loading, setLoading] = useState(true)
     const [selectedReport, setSelectedReport] = useState(null)
     const [showModal, setShowModal] = useState(false)
+    const [showAddModal, setShowAddModal] = useState(false)
     const [activeFilter, setActiveFilter] = useState('all')
+    const [uploadFiles, setUploadFiles] = useState([])
+    const [newReport, setNewReport] = useState({
+        title: '',
+        labName: '',
+        testDate: '',
+        reportType: 'blood_test',
+        description: '',
+        overallStatus: 'pending',
+        results: [{ testName: '', value: '', unit: '', referenceRange: '', status: 'normal' }],
+        doctorNotes: ''
+    })
 
     const demoReports = [
         {
@@ -47,6 +59,11 @@ const LabReports = () => {
     ]
 
     const fetchReports = useCallback(async () => {
+        if (isDemoMode) {
+            setReports(demoReports)
+            setLoading(false)
+            return
+        }
         try {
             setLoading(true)
             const { data } = await axios.get(`${backendUrl}/api/health/lab-reports`, { headers: { token } })
@@ -95,6 +112,78 @@ const LabReports = () => {
         { value: 'ecg', label: 'ECG / Heart', icon: '❤️' },
         { value: 'other', label: 'Others', icon: '📋' }
     ]
+
+    const handleAddReport = async (e) => {
+        e.preventDefault()
+        if (isDemoMode) {
+            toast.info('Changes cannot be saved in Demo Mode')
+            setShowAddModal(false)
+            return
+        }
+        try {
+            const formData = new FormData()
+            formData.append('title', newReport.title)
+            formData.append('labName', newReport.labName)
+            formData.append('testDate', newReport.testDate)
+            formData.append('reportType', newReport.reportType)
+            formData.append('description', newReport.description)
+            formData.append('overallStatus', newReport.overallStatus)
+            formData.append('doctorNotes', newReport.doctorNotes)
+            formData.append('results', JSON.stringify(newReport.results))
+
+            if (uploadFiles.length > 0) {
+                Array.from(uploadFiles).forEach(file => {
+                    formData.append('files', file)
+                })
+            }
+
+            const { data } = await axios.post(`${backendUrl}/api/health/lab-reports/add`, formData, {
+                headers: { token, 'Content-Type': 'multipart/form-data' }
+            })
+
+            if (data.success) {
+                toast.success('Lab report added successfully!')
+                setShowAddModal(false)
+                fetchReports()
+                setNewReport({
+                    title: '',
+                    labName: '',
+                    testDate: '',
+                    reportType: 'blood_test',
+                    description: '',
+                    overallStatus: 'pending',
+                    results: [{ testName: '', value: '', unit: '', referenceRange: '', status: 'normal' }],
+                    doctorNotes: ''
+                })
+                setUploadFiles([])
+            } else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            console.error('Error adding lab report:', error)
+            toast.error(error.message)
+        }
+    }
+
+    const addResultRow = () => {
+        setNewReport(prev => ({
+            ...prev,
+            results: [...prev.results, { testName: '', value: '', unit: '', referenceRange: '', status: 'normal' }]
+        }))
+    }
+
+    const removeResultRow = (index) => {
+        setNewReport(prev => ({
+            ...prev,
+            results: prev.results.filter((_, i) => i !== index)
+        }))
+    }
+
+    const handleResultChange = (index, field, value) => {
+        const updatedResults = [...newReport.results]
+        updatedResults[index][field] = value
+        setNewReport(prev => ({ ...prev, results: updatedResults }))
+    }
 
     const handleDownloadPDF = (report) => {
         try {
@@ -168,9 +257,17 @@ const LabReports = () => {
     return (
         <div className='min-h-screen py-8 mb-20'>
             {/* Header */}
-            <div className='mb-8'>
-                <h1 className='text-4xl font-bold medical-heading mb-2'>Lab Reports</h1>
-                <p className='text-gray-600'>View and track your laboratory test results over time</p>
+            <div className='flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8'>
+                <div>
+                    <h1 className='text-4xl font-bold medical-heading mb-2'>Lab Reports</h1>
+                    <p className='text-gray-600'>View and track your laboratory test results over time</p>
+                </div>
+                <button
+                    onClick={() => setShowAddModal(true)}
+                    className='px-6 py-3 bg-gradient-primary text-white font-bold rounded-2xl shadow-lg hover:opacity-90 transition-all flex items-center gap-2 self-start md:self-auto'
+                >
+                    <span className='text-xl'>+</span> Add New Report
+                </button>
             </div>
 
             {/* Filters */}
@@ -357,6 +454,124 @@ const LabReports = () => {
                                 Download PDF
                             </button>
                         </div>
+                    </div>
+                </div>
+            )}
+            {/* Add Report Modal */}
+            {showAddModal && (
+                <div className='fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm'>
+                    <div className='bg-white rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-fade-in'>
+                        <div className='flex justify-between items-center mb-8'>
+                            <h2 className='text-3xl font-bold medical-heading'>Add Lab Report</h2>
+                            <button onClick={() => setShowAddModal(false)} className='p-2 hover:bg-gray-100 rounded-full transition-colors'>
+                                <svg className='w-6 h-6 text-gray-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M6 18L18 6M6 6l12 12' />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleAddReport} className='space-y-6'>
+                            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                                <div>
+                                    <label className='block text-sm font-bold text-gray-700 mb-2'>Report Title *</label>
+                                    <input required type='text' value={newReport.title} onChange={(e) => setNewReport(prev => ({ ...prev, title: e.target.value }))} placeholder='e.g. Annual Blood Work' className='w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-primary/20 outline-none' />
+                                </div>
+                                <div>
+                                    <label className='block text-sm font-bold text-gray-700 mb-2'>Lab Name *</label>
+                                    <input required type='text' value={newReport.labName} onChange={(e) => setNewReport(prev => ({ ...prev, labName: e.target.value }))} placeholder='e.g. Central Diagnostic Lab' className='w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-primary/20 outline-none' />
+                                </div>
+                                <div>
+                                    <label className='block text-sm font-bold text-gray-700 mb-2'>Test Date *</label>
+                                    <input required type='date' value={newReport.testDate} onChange={(e) => setNewReport(prev => ({ ...prev, testDate: e.target.value }))} className='w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-primary/20 outline-none' />
+                                </div>
+                                <div>
+                                    <label className='block text-sm font-bold text-gray-700 mb-2'>Report Type *</label>
+                                    <select value={newReport.reportType} onChange={(e) => setNewReport(prev => ({ ...prev, reportType: e.target.value }))} className='w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none'>
+                                        {reportTypes.filter(t => t.value !== 'all').map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 className='text-lg font-bold mb-4 flex items-center justify-between'>
+                                    <span>📊 Test Results</span>
+                                    <button type='button' onClick={addResultRow} className='text-sm text-primary hover:underline'>+ Add Row</button>
+                                </h3>
+                                <div className='space-y-3'>
+                                    {newReport.results.map((result, idx) => (
+                                        <div key={idx} className='grid grid-cols-1 sm:grid-cols-5 gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100 items-end'>
+                                            <div className='sm:col-span-1'>
+                                                <label className='block text-[10px] font-bold text-gray-400 uppercase mb-1'>Test Name</label>
+                                                <input type='text' value={result.testName} onChange={(e) => handleResultChange(idx, 'testName', e.target.value)} placeholder='Hemoglobin' className='w-full p-2 bg-white border border-gray-200 rounded-lg outline-none text-sm' />
+                                            </div>
+                                            <div>
+                                                <label className='block text-[10px] font-bold text-gray-400 uppercase mb-1'>Value</label>
+                                                <input type='text' value={result.value} onChange={(e) => handleResultChange(idx, 'value', e.target.value)} placeholder='14.5' className='w-full p-2 bg-white border border-gray-200 rounded-lg outline-none text-sm' />
+                                            </div>
+                                            <div>
+                                                <label className='block text-[10px] font-bold text-gray-400 uppercase mb-1'>Unit</label>
+                                                <input type='text' value={result.unit} onChange={(e) => handleResultChange(idx, 'unit', e.target.value)} placeholder='g/dL' className='w-full p-2 bg-white border border-gray-200 rounded-lg outline-none text-sm' />
+                                            </div>
+                                            <div>
+                                                <label className='block text-[10px] font-bold text-gray-400 uppercase mb-1'>Ref. Range</label>
+                                                <input type='text' value={result.referenceRange} onChange={(e) => handleResultChange(idx, 'referenceRange', e.target.value)} placeholder='13.5-17.5' className='w-full p-2 bg-white border border-gray-200 rounded-lg outline-none text-sm' />
+                                            </div>
+                                            <div className='flex gap-2 items-center'>
+                                                <div className='flex-1'>
+                                                    <label className='block text-[10px] font-bold text-gray-400 uppercase mb-1'>Status</label>
+                                                    <select value={result.status} onChange={(e) => handleResultChange(idx, 'status', e.target.value)} className='w-full p-2 bg-white border border-gray-200 rounded-lg outline-none text-sm'>
+                                                        <option value='normal'>Normal</option>
+                                                        <option value='abnormal'>Abnormal</option>
+                                                        <option value='critical'>Critical</option>
+                                                    </select>
+                                                </div>
+                                                {newReport.results.length > 1 && (
+                                                    <button type='button' onClick={() => removeResultRow(idx)} className='p-2 text-red-500 hover:bg-red-50 rounded-lg'>
+                                                        <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
+                                                        </svg>
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className='block text-sm font-bold text-gray-700 mb-2'>Upload Report Files (PDF/Images)</label>
+                                <div className='border-2 border-dashed border-gray-200 rounded-2xl p-8 text-center hover:border-primary/50 transition-colors cursor-pointer relative'>
+                                    <input type='file' multiple onChange={(e) => setUploadFiles(e.target.files)} className='absolute inset-0 opacity-0 cursor-pointer' />
+                                    <div className='space-y-2'>
+                                        <div className='text-4xl mb-2 text-primary'>📁</div>
+                                        <p className='font-bold text-gray-600'>
+                                            {uploadFiles.length > 0 ? `${uploadFiles.length} files selected` : 'Click or drop files here'}
+                                        </p>
+                                        <p className='text-xs text-gray-400'>Supports PDF, JPG, PNG (Max 5 files)</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className='block text-sm font-bold text-gray-700 mb-2'>Overall Summary / Status</label>
+                                <select value={newReport.overallStatus} onChange={(e) => setNewReport(prev => ({ ...prev, overallStatus: e.target.value }))} className='w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none'>
+                                    <option value='normal'>Normal</option>
+                                    <option value='abnormal'>Abnormal</option>
+                                    <option value='critical'>Critical</option>
+                                    <option value='pending'>Pending</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label className='block text-sm font-bold text-gray-700 mb-2'>Doctor's Notes (Optional)</label>
+                                <textarea rows='3' value={newReport.doctorNotes} onChange={(e) => setNewReport(prev => ({ ...prev, doctorNotes: e.target.value }))} className='w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none' placeholder='Any additional notes from your physician...'></textarea>
+                            </div>
+
+                            <div className='flex gap-4 pt-4'>
+                                <button type='button' onClick={() => setShowAddModal(false)} className='flex-1 py-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-2xl transition-all'>Cancel</button>
+                                <button type='submit' className='flex-1 py-4 bg-gradient-primary text-white font-bold rounded-2xl shadow-lg hover:opacity-90 transition-all'>Save Report</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}

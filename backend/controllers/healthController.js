@@ -258,11 +258,24 @@ const getLatestHealthMetrics = async (req, res) => {
 // Add lab report
 const addLabReport = async (req, res) => {
     try {
+        const { results, ...rest } = req.body;
+
         const reportData = {
-            ...req.body,
+            ...rest,
             reportNumber: `LAB${Date.now()}`,
             userId: req.body.userId
         };
+
+        // Parse results if they were sent as a JSON string (common with FormData)
+        if (typeof results === 'string') {
+            try {
+                reportData.results = JSON.parse(results);
+            } catch (e) {
+                reportData.results = [];
+            }
+        } else {
+            reportData.results = results || [];
+        }
 
         // Handle file uploads
         if (req.files && req.files.length > 0) {

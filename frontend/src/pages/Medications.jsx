@@ -4,7 +4,7 @@ import { AppContext } from '../context/AppContext'
 import axios from 'axios'
 
 const Medications = () => {
-    const { backendUrl, token } = useContext(AppContext)
+    const { backendUrl, token, isDemoMode } = useContext(AppContext)
     const [activeTab, setActiveTab] = useState('active')
     const [showAddModal, setShowAddModal] = useState(false)
     const [loading, setLoading] = useState(true)
@@ -52,6 +52,10 @@ const Medications = () => {
     })
 
     const fetchReminders = useCallback(async () => {
+        if (isDemoMode) {
+            setLoading(false)
+            return
+        }
         try {
             setLoading(true)
             const { data } = await axios.get(backendUrl + '/api/advanced-health/medication-reminders', { headers: { token } })
@@ -96,6 +100,11 @@ const Medications = () => {
 
     const handleAddReminder = async (e) => {
         e.preventDefault()
+        if (isDemoMode) {
+            toast.info('Changes cannot be saved in Demo Mode')
+            setShowAddModal(false)
+            return
+        }
         try {
             const { data } = await axios.post(backendUrl + '/api/advanced-health/medication-reminders/add', formData, { headers: { token } })
             if (data.success) {
@@ -386,8 +395,8 @@ const Medications = () => {
                                     onClick={() => handleLogIntake(item._id)}
                                     disabled={item.isTaken}
                                     className={`px-6 py-2 rounded-lg text-white font-semibold transition-all ${item.isTaken
-                                            ? 'bg-gray-400 cursor-not-allowed'
-                                            : 'bg-green-500 hover:bg-green-600 shadow-md'
+                                        ? 'bg-gray-400 cursor-not-allowed'
+                                        : 'bg-green-500 hover:bg-green-600 shadow-md'
                                         }`}
                                 >
                                     {item.isTaken ? 'Taken' : 'Take Now'}

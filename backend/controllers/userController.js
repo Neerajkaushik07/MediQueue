@@ -268,6 +268,27 @@ const bookAppointment = async (req, res) => {
 
 }
 
+// API to complete appointment
+const completeAppointment = async (req, res) => {
+    try {
+        const { userId, appointmentId } = req.body
+        const appointmentData = await appointmentModel.findById(appointmentId)
+
+        // verify appointment user 
+        if (!appointmentData || appointmentData.userId !== userId) {
+            return res.json({ success: false, message: 'Unauthorized action' })
+        }
+
+        await appointmentModel.findByIdAndUpdate(appointmentId, { isCompleted: true })
+
+        res.json({ success: true, message: 'Appointment Marked as Completed' })
+
+    } catch (error) {
+        logger.error(error);
+        res.json({ success: false, message: error.message })
+    }
+}
+
 // API to cancel appointment
 const cancelAppointment = async (req, res) => {
     try {
@@ -686,4 +707,4 @@ const subscribeToNewsletter = async (req, res) => {
     }
 };
 
-export { registerUser, loginUser, googleAuth, getProfile, updateProfile, bookAppointment, listAppointment, cancelAppointment, paymentStripe, verifyStripe, addReview, getDoctorReviews, rescheduleAppointment, toggleFavoriteDoctor, getFavoriteDoctors, subscribeToNewsletter, paymentRazorpay, verifyRazorpay }
+export { registerUser, loginUser, googleAuth, getProfile, updateProfile, bookAppointment, listAppointment, cancelAppointment, completeAppointment, paymentStripe, verifyStripe, addReview, getDoctorReviews, rescheduleAppointment, toggleFavoriteDoctor, getFavoriteDoctors, subscribeToNewsletter, paymentRazorpay, verifyRazorpay }

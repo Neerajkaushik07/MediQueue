@@ -3,14 +3,43 @@ import { AppContext } from '../../context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
+import { assets } from '../../assets/assets'
 
 const DoctorDashboard = () => {
-    const { backendUrl, token, userRole, currencySymbol, userData } = useContext(AppContext)
+    const { backendUrl, token, userRole, currencySymbol, userData, isDemoMode } = useContext(AppContext)
     const [dashData, setDashData] = useState(null)
     const navigate = useNavigate()
 
     const getDashData = useCallback(async () => {
         try {
+            if (isDemoMode) {
+                setDashData({
+                    dailyEarnings: 4500,
+                    weeklyEarnings: 28000,
+                    monthlyEarnings: 125000,
+                    earnings: 95000,
+                    appointments: 120,
+                    latestAppointments: [
+                        {
+                            _id: 'mock_apt_1',
+                            userData: { name: 'Sarah Wilson', image: assets.profile_pic },
+                            slotDate: '15_02_2026',
+                            slotTime: '10:30 AM',
+                            cancelled: false,
+                            isCompleted: false
+                        },
+                        {
+                            _id: 'mock_apt_2',
+                            userData: { name: 'John Miller', image: assets.profile_pic },
+                            slotDate: '14_02_2026',
+                            slotTime: '02:00 PM',
+                            cancelled: false,
+                            isCompleted: true
+                        }
+                    ]
+                })
+                return
+            }
             if (userRole === 'doctor' && token) {
                 const { data } = await axios.get(backendUrl + '/api/doctor/dashboard', { headers: { Authorization: `Bearer ${token}` } })
                 if (data.success) {
@@ -23,9 +52,13 @@ const DoctorDashboard = () => {
             console.error('Error in getDashData:', error)
             toast.error('Failed to load dashboard data')
         }
-    }, [backendUrl, token, userRole])
+    }, [backendUrl, token, userRole, isDemoMode])
 
     const completeAppointment = async (appointmentId) => {
+        if (isDemoMode) {
+            toast.info('Changes cannot be saved in Demo Mode')
+            return
+        }
         try {
             if (userRole === 'doctor' && token) {
                 const { data } = await axios.post(backendUrl + '/api/doctor/complete-appointment', { appointmentId }, { headers: { Authorization: `Bearer ${token}` } })
@@ -37,12 +70,16 @@ const DoctorDashboard = () => {
                 }
             }
         } catch (error) {
-            
+
             toast.error('Failed to complete appointment')
         }
     }
 
     const cancelAppointment = async (appointmentId) => {
+        if (isDemoMode) {
+            toast.info('Changes cannot be saved in Demo Mode')
+            return
+        }
         try {
             if (userRole === 'doctor' && token) {
                 const { data } = await axios.post(backendUrl + '/api/doctor/cancel-appointment', { appointmentId }, { headers: { Authorization: `Bearer ${token}` } })
@@ -54,7 +91,7 @@ const DoctorDashboard = () => {
                 }
             }
         } catch (error) {
-            
+
             toast.error('Failed to cancel appointment')
         }
     }

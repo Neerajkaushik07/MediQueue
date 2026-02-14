@@ -4,7 +4,7 @@ import { AppContext } from '../context/AppContext'
 import axios from 'axios'
 
 const MedicalRecords = () => {
-    const { backendUrl, token, userData } = useContext(AppContext)
+    const { backendUrl, token, userData, isDemoMode } = useContext(AppContext)
     const [activeTab, setActiveTab] = useState('all')
     const [showAddModal, setShowAddModal] = useState(false)
     const [showViewModal, setShowViewModal] = useState(false)
@@ -64,6 +64,10 @@ const MedicalRecords = () => {
     const [attachments, setAttachments] = useState([])
 
     const fetchRecords = useCallback(async () => {
+        if (isDemoMode) {
+            setLoading(false)
+            return
+        }
         try {
             setLoading(true)
             const { data } = await axios.get(backendUrl + '/api/health/medical-records', { headers: { token } })
@@ -101,6 +105,11 @@ const MedicalRecords = () => {
 
     const handleAddRecord = async (e) => {
         e.preventDefault()
+        if (isDemoMode) {
+            toast.info('Changes cannot be saved in Demo Mode')
+            setShowAddModal(false)
+            return
+        }
         try {
             const dataToSubmit = new FormData()
             Object.keys(formData).forEach(key => {

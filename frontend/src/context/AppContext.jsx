@@ -33,15 +33,73 @@ const AppContextProvider = (props) => {
         try {
             const { data } = await axios.get(backendUrl + '/api/doctor/list')
             if (data.success) {
-                setDoctors(data.doctors)
+                if (isDemoMode && data.doctors.length === 0) {
+                    // Inject mock doctors if list is empty in demo mode
+                    setDoctors([
+                        {
+                            _id: 'doc1',
+                            name: 'Dr. Richard James',
+                            image: assets.doc1,
+                            speciality: 'General physician',
+                            degree: 'MBBS',
+                            experience: '4 Years',
+                            about: 'Dr. Richard James has a strong commitment to delivering comprehensive medical care.',
+                            fees: 500,
+                            available: true,
+                            slots_booked: {}
+                        },
+                        {
+                            _id: 'doc2',
+                            name: 'Dr. Emily Larson',
+                            image: assets.doc2,
+                            speciality: 'Gynecologist',
+                            degree: 'MBBS',
+                            experience: '3 Years',
+                            about: 'Dr. Emily Larson is a dedicated gynecologist with a focus on women\'s health.',
+                            fees: 600,
+                            available: true,
+                            slots_booked: {}
+                        }
+                    ])
+                } else {
+                    setDoctors(data.doctors)
+                }
             } else {
                 toast.error(data.message)
             }
         } catch (error) {
-
-            toast.error(error.message)
+            console.error('Error fetching doctors:', error)
+            // If in demo mode and fetch fails, provide mock data
+            if (isDemoMode) {
+                setDoctors([
+                    {
+                        _id: 'doc1',
+                        name: 'Dr. Richard James',
+                        image: assets.doc1,
+                        speciality: 'General physician',
+                        degree: 'MBBS',
+                        experience: '4 Years',
+                        about: 'Dr. Richard James has a strong commitment to delivering comprehensive medical care.',
+                        fees: 500,
+                        available: true,
+                        slots_booked: {}
+                    },
+                    {
+                        _id: 'doc2',
+                        name: 'Dr. Emily Larson',
+                        image: assets.doc2,
+                        speciality: 'Gynecologist',
+                        degree: 'MBBS',
+                        experience: '3 Years',
+                        about: 'Dr. Emily Larson is a dedicated gynecologist with a focus on women\'s health.',
+                        fees: 600,
+                        available: true,
+                        slots_booked: {}
+                    }
+                ])
+            }
         }
-    }, [backendUrl])
+    }, [backendUrl, isDemoMode])
 
     const loadUserProfileData = useCallback(async () => {
         try {
@@ -167,6 +225,46 @@ const AppContextProvider = (props) => {
             dob: '2000-01-01'
         })
     }
+
+    useEffect(() => {
+        if (isDemoMode && token && userRole) {
+            if (userRole === 'patient') {
+                setUserData({
+                    name: 'Alex Johnson',
+                    image: assets.profile_pic,
+                    email: 'patient.demo@mediqueue.com',
+                    phone: '+91 98765 43210',
+                    address: {
+                        line1: '456 Healthcare Avenue',
+                        line2: 'Mumbai, Maharashtra'
+                    },
+                    gender: 'Male',
+                    dob: '1990-05-15',
+                    bloodType: 'O+',
+                    height: '175 cm',
+                    weight: '70 kg'
+                })
+            } else if (userRole === 'doctor') {
+                setUserData({
+                    _id: 'demo-doctor-static',
+                    name: 'Dr. Sarah Williams',
+                    image: assets.profile_pic,
+                    email: 'doctor.demo@mediqueue.com',
+                    phone: '+91 98765 12345',
+                    address: {
+                        line1: 'Apollo Clinic, 789 Medical Street',
+                        line2: 'Delhi, India'
+                    },
+                    speciality: 'Cardiologist',
+                    degree: 'MBBS, MD (Cardiology)',
+                    experience: 12,
+                    about: 'Experienced cardiologist specializing in interventional cardiology and heart disease prevention.',
+                    fees: 800,
+                    available: true
+                })
+            }
+        }
+    }, [isDemoMode, token, userRole])
 
     useEffect(() => {
         getDoctorsData()

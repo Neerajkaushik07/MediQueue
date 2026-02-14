@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import axios from 'axios'
 
 const HealthProfile = () => {
-    const { backendUrl, token, userData, setUserData } = useContext(AppContext)
+    const { backendUrl, token, userData, setUserData, isDemoMode } = useContext(AppContext)
 
     const [loading, setLoading] = useState(true)
     const [profile, setProfile] = useState({
@@ -24,14 +24,53 @@ const HealthProfile = () => {
     const [modalConfig, setModalConfig] = useState({
         show: false,
         type: '', // 'allergy', 'condition', 'contact', 'goal', 'vitals'
-        data: {}
+        data: {},
+        isEditing: false,
+        editIndex: -1
     })
+
+    const fetchFamilyMembers = useCallback(async () => {
+        if (!token || isDemoMode) return
+        try {
+            const { data } = await axios.get(backendUrl + '/api/family-health/family', { headers: { token } })
+            if (data.success) {
+                setProfile(prev => ({ ...prev, familyMembers: data.members }))
+            }
+        } catch (error) {
+            console.error('Error fetching family members:', error)
+        }
+    }, [backendUrl, token])
 
     const fetchProfile = useCallback(async () => {
         if (!token) {
             setLoading(false)
             return
         }
+
+        if (isDemoMode) {
+            // Use userData directly for demo
+            setProfile(prev => ({
+                ...prev,
+                bloodGroup: userData.bloodType || 'O+',
+                height: parseInt(userData.height) || 175,
+                weight: parseInt(userData.weight) || 70,
+                bmi: (userData.weight && userData.height) ? (parseInt(userData.weight) / ((parseInt(userData.height) / 100) ** 2)).toFixed(1) : 22.9,
+                allergies: [
+                    { id: 1, name: 'Peanuts', severity: 'high', reaction: 'Anaphylaxis' },
+                    { id: 2, name: 'Dust Mites', severity: 'low', reaction: 'Sneezing' }
+                ],
+                chronicConditions: [
+                    { id: 1, name: 'Asthma', diagnosedDate: '2015-06-12', managedBy: 'Dr. Sarah Williams' }
+                ],
+                emergencyContacts: [
+                    { id: 1, name: 'Emma Johnson', relationship: 'Spouse', phone: '+91 98765 98765' }
+                ],
+                healthGoals: ['Lose 5kg weight', 'Improve sleep quality', 'Run 5km daily']
+            }))
+            setLoading(false)
+            return
+        }
+
         try {
             const { data } = await axios.get(backendUrl + '/api/user/get-profile', { headers: { token } })
             if (data.success) {
@@ -64,10 +103,13 @@ const HealthProfile = () => {
         } finally {
             setLoading(false)
         }
-    }, [backendUrl, token])
+    }, [backendUrl, token, isDemoMode, userData])
 
     const updateBackend = async (updatedProfile) => {
-        if (!token) return
+        if (!token || isDemoMode) {
+            if (isDemoMode) toast.info('Changes cannot be saved in Demo Mode')
+            return
+        }
         try {
             const formData = new FormData()
             formData.append('userId', userData._id)
@@ -115,13 +157,19 @@ const HealthProfile = () => {
 
     const handleSaveContact = (e) => {
         e.preventDefault()
+        let updatedContacts = [...profile.emergencyContacts]
+        if (modalConfig.isEditing) {
+            updatedContacts[modalConfig.editIndex] = { ...modalConfig.data }
+        } else {
+            updatedContacts.push({ ...modalConfig.data, id: Date.now() })
+        }
         const updated = {
             ...profile,
-            emergencyContacts: [modalConfig.data]
+            emergencyContacts: updatedContacts
         }
         setProfile(updated)
         updateBackend(updated)
-        setModalConfig({ show: false, type: '', data: {} })
+        setModalConfig({ show: false, type: '', data: {}, isEditing: false, editIndex: -1 })
     }
 
     const handleAddGoal = (e) => {
@@ -137,29 +185,63 @@ const HealthProfile = () => {
 
     const handleAddAllery = (e) => {
         e.preventDefault()
+        let updatedAllergies = [...profile.allergies]
+        if (modalConfig.isEditing) {
+            updatedAllergies[modalConfig.editIndex] = { ...modalConfig.data }
+        } else {
+            updatedAllergies.push({ ...modalConfig.data, id: Date.now() })
+        }
         const updated = {
             ...profile,
-            allergies: [...profile.allergies, { ...modalConfig.data, id: Date.now() }]
+            allergies: updatedAllergies
         }
         setProfile(updated)
         updateBackend(updated)
-        setModalConfig({ show: false, type: '', data: {} })
+        setModalConfig({ show: false, type: '', data: {}, isEditing: false, editIndex: -1 })
     }
 
     const handleAddCondition = (e) => {
         e.preventDefault()
+        let updatedConditions = [...profile.chronicConditions]
+        if (modalConfig.isEditing) {
+            updatedConditions[modalConfig.editIndex] = { ...modalConfig.data }
+        } else {
+            updatedConditions.push({ ...modalConfig.data, id: Date.now() })
+        }
         const updated = {
             ...profile,
-            chronicConditions: [...profile.chronicConditions, { ...modalConfig.data, id: Date.now() }]
+            chronicConditions: updatedConditions
         }
         setProfile(updated)
         updateBackend(updated)
-        setModalConfig({ show: false, type: '', data: {} })
+        setModalConfig({ show: false, type: '', data: {}, isEditing: false, editIndex: -1 })
+    }
+
+    const handleAddFamilyMember = async (e) => {
+        e.preventDefault()
+        if (isDemoMode) {
+            toast.info('Changes cannot be saved in Demo Mode')
+            setModalConfig({ show: false, type: '', data: {}, isEditing: false, editIndex: -1 })
+            return
+        }
+        try {
+            const { data } = await axios.post(backendUrl + '/api/family-health/family/add', modalConfig.data, { headers: { token } })
+            if (data.success) {
+                toast.success(data.message)
+                fetchFamilyMembers()
+                setModalConfig({ show: false, type: '', data: {}, isEditing: false, editIndex: -1 })
+            } else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)
+        }
     }
 
     useEffect(() => {
         fetchProfile()
-    }, [fetchProfile])
+        fetchFamilyMembers()
+    }, [fetchProfile, fetchFamilyMembers])
 
     const getSeverityColor = (severity) => {
         switch (severity?.toLowerCase()) {
@@ -234,7 +316,7 @@ const HealthProfile = () => {
                     </button>
                 </div>
                 <div className='space-y-3'>
-                    {profile.allergies.map((allergy) => (
+                    {profile.allergies.map((allergy, index) => (
                         <div key={allergy.id} className='flex items-center justify-between p-4 bg-red-50 border border-red-200 rounded-lg'>
                             <div className='flex-1'>
                                 <div className='flex items-center gap-3 mb-2'>
@@ -245,7 +327,10 @@ const HealthProfile = () => {
                                 </div>
                                 <p className='text-gray-600 text-sm'>Reaction: {allergy.reaction}</p>
                             </div>
-                            <button className='px-4 py-2 bg-white text-gray-700 rounded-lg text-sm hover:bg-gray-100'>
+                            <button
+                                onClick={() => setModalConfig({ show: true, type: 'allergy', data: { ...allergy }, isEditing: true, editIndex: index })}
+                                className='px-4 py-2 bg-white text-gray-700 rounded-lg text-sm hover:bg-gray-100'
+                            >
                                 Edit
                             </button>
                         </div>
@@ -268,7 +353,7 @@ const HealthProfile = () => {
                     </button>
                 </div>
                 <div className='space-y-3'>
-                    {profile.chronicConditions.map((condition) => (
+                    {profile.chronicConditions.map((condition, index) => (
                         <div key={condition.id} className='flex items-center justify-between p-4 bg-orange-50 border border-orange-200 rounded-lg'>
                             <div className='flex-1'>
                                 <h3 className='font-bold text-lg mb-2'>{condition.name}</h3>
@@ -277,7 +362,10 @@ const HealthProfile = () => {
                                     <p>Managed by: {condition.managedBy}</p>
                                 </div>
                             </div>
-                            <button className='px-4 py-2 bg-white text-gray-700 rounded-lg text-sm hover:bg-gray-100'>
+                            <button
+                                onClick={() => setModalConfig({ show: true, type: 'condition', data: { ...condition }, isEditing: true, editIndex: index })}
+                                className='px-4 py-2 bg-white text-gray-700 rounded-lg text-sm hover:bg-gray-100'
+                            >
                                 Manage
                             </button>
                         </div>
@@ -301,14 +389,19 @@ const HealthProfile = () => {
                         </button>
                     </div>
                     <div className='space-y-3'>
-                        {profile.emergencyContacts.map((contact) => (
+                        {profile.emergencyContacts.map((contact, index) => (
                             <div key={contact.id} className='flex items-center justify-between p-3 bg-gray-50 rounded-lg'>
                                 <div>
                                     <p className='font-bold'>{contact.name}</p>
                                     <p className='text-sm text-gray-600'>{contact.relationship}</p>
                                     <p className='text-sm text-primary'>{contact.phone}</p>
                                 </div>
-                                <button className='text-gray-600 hover:text-gray-800'>✏️</button>
+                                <button
+                                    onClick={() => setModalConfig({ show: true, type: 'contact', data: { ...contact }, isEditing: true, editIndex: index })}
+                                    className='text-gray-600 hover:text-gray-800'
+                                >
+                                    ✏️
+                                </button>
                             </div>
                         ))}
                     </div>
@@ -322,8 +415,8 @@ const HealthProfile = () => {
                             Family Members
                         </h2>
                         <button
-                            onClick={() => toast.info('Add member feature coming soon!')}
-                            className='text-primary text-sm hover:underline'
+                            onClick={() => setModalConfig({ show: true, type: 'familyMember', data: { name: '', relationship: 'other', gender: 'male', dob: '', bloodGroup: 'A+' } })}
+                            className='text-primary text-sm hover:underline font-bold'
                         >
                             + Add
                         </button>
@@ -420,16 +513,18 @@ const HealthProfile = () => {
                 <div className='fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4'>
                     <div className='bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl'>
                         <h2 className='text-2xl font-bold mb-6 capitalize'>
-                            {modalConfig.type === 'allergy' && 'Add Allergy'}
-                            {modalConfig.type === 'condition' && 'Add Condition'}
+                            {modalConfig.type === 'allergy' && (modalConfig.isEditing ? 'Edit Allergy' : 'Add Allergy')}
+                            {modalConfig.type === 'condition' && (modalConfig.isEditing ? 'Manage Condition' : 'Add Condition')}
                             {modalConfig.type === 'contact' && 'Emergency Contact'}
                             {modalConfig.type === 'vitals' && 'Edit Vitals'}
+                            {modalConfig.type === 'familyMember' && 'Add Family Member'}
                         </h2>
                         <form onSubmit={
                             modalConfig.type === 'allergy' ? handleAddAllery :
                                 modalConfig.type === 'condition' ? handleAddCondition :
                                     modalConfig.type === 'contact' ? handleSaveContact :
-                                        handleSaveVitals
+                                        modalConfig.type === 'familyMember' ? handleAddFamilyMember :
+                                            handleSaveVitals
                         } className='space-y-4'>
 
                             {modalConfig.type === 'vitals' && (
@@ -482,6 +577,43 @@ const HealthProfile = () => {
                                 </div>
                             )}
 
+                            {modalConfig.type === 'familyMember' && (
+                                <>
+                                    <div>
+                                        <label className='block text-sm font-semibold mb-1'>Full Name *</label>
+                                        <input required type='text' value={modalConfig.data.name} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, name: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl' />
+                                    </div>
+                                    <div className='grid grid-cols-2 gap-4'>
+                                        <div>
+                                            <label className='block text-sm font-semibold mb-1'>Relationship *</label>
+                                            <select required value={modalConfig.data.relationship} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, relationship: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl'>
+                                                {['spouse', 'child', 'parent', 'sibling', 'grandparent', 'other'].map(rel => <option key={rel} value={rel}>{rel.charAt(0).toUpperCase() + rel.slice(1)}</option>)}
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-semibold mb-1'>Gender *</label>
+                                            <select required value={modalConfig.data.gender} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, gender: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl'>
+                                                <option value='male'>Male</option>
+                                                <option value='female'>Female</option>
+                                                <option value='other'>Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className='grid grid-cols-2 gap-4'>
+                                        <div>
+                                            <label className='block text-sm font-semibold mb-1'>Date of Birth *</label>
+                                            <input required type='date' value={modalConfig.data.dob} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, dob: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl' />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-semibold mb-1'>Blood Group</label>
+                                            <select value={modalConfig.data.bloodGroup} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, bloodGroup: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl'>
+                                                {['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map(bg => <option key={bg} value={bg}>{bg}</option>)}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+
                             {modalConfig.type === 'allergy' && (
                                 <>
                                     <div>
@@ -512,7 +644,7 @@ const HealthProfile = () => {
                                 </>
                             )}
                             <div className='flex gap-4 pt-4'>
-                                <button type='button' onClick={() => setModalConfig({ show: false, type: '', data: {} })} className='flex-1 px-6 py-3 bg-gray-100 text-gray-700 font-bold rounded-xl'>Cancel</button>
+                                <button type='button' onClick={() => setModalConfig({ show: false, type: '', data: {}, isEditing: false, editIndex: -1 })} className='flex-1 px-6 py-3 bg-gray-100 text-gray-700 font-bold rounded-xl'>Cancel</button>
                                 <button type='submit' className='flex-1 px-6 py-3 bg-gradient-primary text-white font-bold rounded-xl shadow-lg'>Save</button>
                             </div>
                         </form>

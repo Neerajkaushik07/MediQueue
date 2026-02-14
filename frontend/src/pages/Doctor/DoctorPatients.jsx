@@ -2,9 +2,10 @@ import React, { useContext, useEffect, useState, useCallback, useMemo } from 're
 import { AppContext } from '../../context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { assets } from '../../assets/assets'
 
 const DoctorPatients = () => {
-    const { backendUrl, token, userRole } = useContext(AppContext)
+    const { backendUrl, token, userRole, isDemoMode } = useContext(AppContext)
     const [patients, setPatients] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
     const [loading, setLoading] = useState(true)
@@ -17,6 +18,34 @@ const DoctorPatients = () => {
     const getPatients = useCallback(async () => {
         try {
             setLoading(true)
+            if (isDemoMode) {
+                setPatients([
+                    {
+                        _id: 'mock_patient_1',
+                        name: 'Sarah Wilson',
+                        email: 'sarah@example.com',
+                        phone: '+91 91234 56789',
+                        gender: 'Female',
+                        dob: '1995-03-20',
+                        image: assets.profile_pic,
+                        totalVisits: 3,
+                        lastVisit: '2026-02-15'
+                    },
+                    {
+                        _id: 'mock_patient_2',
+                        name: 'John Miller',
+                        email: 'john@example.com',
+                        phone: '+91 88888 88888',
+                        gender: 'Male',
+                        dob: '1988-11-12',
+                        image: assets.profile_pic,
+                        totalVisits: 1,
+                        lastVisit: '2026-02-14'
+                    }
+                ])
+                setLoading(false)
+                return
+            }
             if (userRole === 'doctor' && token) {
                 const { data } = await axios.get(backendUrl + '/api/doctor/patients', {
                     headers: { Authorization: `Bearer ${token}` }
@@ -28,18 +57,33 @@ const DoctorPatients = () => {
                 }
             }
         } catch (error) {
-            
+
             toast.error(error.message || 'Failed to load patients')
         } finally {
             setLoading(false)
         }
-    }, [backendUrl, token, userRole])
+    }, [backendUrl, token, userRole, isDemoMode])
 
     const viewPatientHistory = async (patient) => {
         setSelectedPatient(patient)
         setShowHistoryModal(true)
         setHistoryLoading(true)
         try {
+            if (isDemoMode) {
+                setPatientHistory([
+                    {
+                        date: '2026-02-15',
+                        slotTime: '10:30 AM',
+                        diagnosis: 'Follow-up Checkup',
+                        medications: ['Consultation Only'],
+                        notes: 'Patient recovery is on track.',
+                        isCompleted: true,
+                        payment: true
+                    }
+                ])
+                setHistoryLoading(false)
+                return
+            }
             const { data } = await axios.post(backendUrl + '/api/doctor/patient-history', { userId: patient._id }, {
                 headers: { Authorization: `Bearer ${token}` }
             })
@@ -49,7 +93,7 @@ const DoctorPatients = () => {
                 toast.error(data.message)
             }
         } catch (error) {
-            
+
             toast.error('Failed to load patient history')
         } finally {
             setHistoryLoading(false)

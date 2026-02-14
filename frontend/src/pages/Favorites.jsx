@@ -9,10 +9,10 @@ const Favorites = () => {
   const [favoriteDoctors, setFavoriteDoctors] = useState([])
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
-  const { backendUrl, token } = useContext(AppContext)
+  const { backendUrl, token, isDemoMode } = useContext(AppContext)
 
   const getFavoriteDoctors = useCallback(async () => {
-    if (!token) {
+    if (isDemoMode) {
       // Mock data for demo
       setFavoriteDoctors([
         {
@@ -62,7 +62,7 @@ const Favorites = () => {
         toast.error(data.message)
       }
     } catch (error) {
-      
+
       toast.error(error.message)
     } finally {
       setLoading(false)
@@ -70,6 +70,10 @@ const Favorites = () => {
   }, [backendUrl, token])
 
   const removeFavorite = async (doctorId) => {
+    if (isDemoMode) {
+      toast.info('Changes cannot be saved in Demo Mode')
+      return
+    }
     try {
       const { data } = await axios.post(
         backendUrl + '/api/user/toggle-favorite',
@@ -84,7 +88,7 @@ const Favorites = () => {
         toast.error(data.message)
       }
     } catch (error) {
-      
+
       toast.error(error.message)
     }
   }

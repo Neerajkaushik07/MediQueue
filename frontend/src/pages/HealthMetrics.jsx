@@ -4,7 +4,7 @@ import { AppContext } from '../context/AppContext'
 import axios from 'axios'
 
 const HealthMetrics = () => {
-    const { backendUrl, token } = useContext(AppContext)
+    const { backendUrl, token, isDemoMode } = useContext(AppContext)
     const [selectedMetric, setSelectedMetric] = useState('blood_pressure')
     const [timeRange, setRange] = useState('7D')
     const [showAddModal, setShowAddModal] = useState(false)
@@ -44,6 +44,7 @@ const HealthMetrics = () => {
     }
 
     const fetchLatestMetrics = useCallback(async () => {
+        if (isDemoMode) return
         try {
             const { data } = await axios.get(backendUrl + '/api/health/metrics/latest', { headers: { token } })
             if (data.success) {
@@ -52,9 +53,18 @@ const HealthMetrics = () => {
         } catch (error) {
             console.error('Error fetching latest metrics:', error)
         }
-    }, [backendUrl, token])
+    }, [backendUrl, token, isDemoMode])
 
     const fetchHistory = useCallback(async () => {
+        if (isDemoMode) {
+            setLoading(true)
+            setTimeout(() => {
+                setMetricRecords(demoData[selectedMetric] || [])
+                setLoading(false)
+            }, 500)
+            return
+        }
+
         try {
             setLoading(true)
             const daysMap = { '7D': 7, '30D': 30, '90D': 90 }
@@ -79,7 +89,7 @@ const HealthMetrics = () => {
         } finally {
             setLoading(false)
         }
-    }, [backendUrl, token, selectedMetric, timeRange])
+    }, [backendUrl, token, selectedMetric, timeRange, isDemoMode])
 
     useEffect(() => {
         if (token) {
@@ -90,6 +100,11 @@ const HealthMetrics = () => {
 
     const handleLogReading = async (e) => {
         e.preventDefault()
+        if (isDemoMode) {
+            toast.info('Changes cannot be saved in Demo Mode')
+            setShowAddModal(false)
+            return
+        }
         try {
             const dataToSubmit = {
                 ...formData,
@@ -109,6 +124,47 @@ const HealthMetrics = () => {
         } catch (error) {
             toast.error(error.message)
         }
+    }
+
+    const handleExportData = () => {
+        if (metricRecords.length === 0) {
+            toast.error('No data found to export')
+            return
+        }
+
+        const headers = selectedMetric === 'blood_pressure'
+            ? ['Date', 'Systolic', 'Diastolic', 'Unit', 'Status', 'Notes']
+            : ['Date', 'Value', 'Unit', 'Status', 'Notes']
+
+        const rows = metricRecords.map(record => {
+            const date = new Date(record.recordedAt).toLocaleDateString()
+            const status = (record.status || 'normal').toUpperCase()
+            const notes = record.notes ? record.notes.replace(/,/g, ';') : 'Manual entry'
+            const unit = record.unit || metricsConfig[selectedMetric].unit
+
+            if (selectedMetric === 'blood_pressure') {
+                return [date, record.systolic, record.diastolic, unit, status, notes]
+            } else {
+                return [date, record.value, unit, status, notes]
+            }
+        })
+
+        const csvContent = [
+            headers.join(','),
+            ...rows.map(row => row.join(','))
+        ].join('\n')
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+        const link = document.createElement('a')
+        const url = URL.createObjectURL(blob)
+        link.setAttribute('href', url)
+        link.setAttribute('download', `${selectedMetric}_report_${new Date().toISOString().split('T')[0]}.csv`)
+        link.style.visibility = 'hidden'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+
+        toast.success(`${metricsConfig[selectedMetric].name} data exported!`)
     }
 
     const getStatusColor = (status) => {
@@ -255,10 +311,10 @@ const HealthMetrics = () => {
                 <div className='flex items-center justify-between mb-6'>
                     <h3 className='text-lg font-bold'>Recent Readings</h3>
                     <button
-                        onClick={() => toast.info('Export feature coming soon!')}
-                        className='px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200'
+                        onClick={handleExportData}
+                        className='px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200 flex items-center gap-2'
                     >
-                        Export Data
+                        <span>📥</span> Export Data
                     </button>
                 </div>
                 <div className='overflow-x-auto'>

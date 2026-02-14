@@ -4,13 +4,28 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 
 const DoctorFinances = () => {
-    const { backendUrl, token, currencySymbol } = useContext(AppContext)
+    const { backendUrl, token, currencySymbol, isDemoMode } = useContext(AppContext)
     const [financialData, setFinancialData] = useState(null)
     const [loading, setLoading] = useState(true)
 
     const getFinancialStats = useCallback(async () => {
         try {
             setLoading(true)
+            if (isDemoMode) {
+                setFinancialData({
+                    success: true,
+                    chartData: [
+                        { month: 'Sep', amount: 45000 },
+                        { month: 'Oct', amount: 52000 },
+                        { month: 'Nov', amount: 48000 },
+                        { month: 'Dec', amount: 61000 },
+                        { month: 'Jan', amount: 58000 },
+                        { month: 'Feb', amount: 65000 }
+                    ]
+                })
+                setLoading(false)
+                return
+            }
             const { data } = await axios.get(backendUrl + '/api/doctor/financial-stats', {
                 headers: { Authorization: `Bearer ${token}` }
             })
@@ -20,12 +35,12 @@ const DoctorFinances = () => {
                 toast.error(data.message)
             }
         } catch (error) {
-            
+
             toast.error('Failed to load financial data')
         } finally {
             setLoading(false)
         }
-    }, [backendUrl, token])
+    }, [backendUrl, token, isDemoMode])
 
     useEffect(() => {
         if (token) {
