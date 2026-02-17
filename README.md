@@ -31,7 +31,6 @@ A comprehensive healthcare queue and management platform designed to streamline 
 - [Setup & Installation](#setup--installation)
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
-- [Testing](#testing)
 - [Contributing](#contributing)
 - [License](#license)
 
