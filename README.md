@@ -1,7 +1,25 @@
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/javascript-%23F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
+![Stripe](https://img.shields.io/badge/Stripe-626CD9?style=for-the-badge&logo=Stripe&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
+![Cloudinary](https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=Cloudinary&logoColor=white)
+![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
+![Render](https://img.shields.io/badge/Render-%2346E3B7.svg?style=for-the-badge&logo=render&logoColor=white)
+
 # MediQueue
 
 A comprehensive healthcare queue and management platform designed to streamline patient, doctor, and admin interactions. Built with a modern tech stack for real-world healthcare needs.
 
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=render)](https://mediqueue-frontend.onrender.com)
+
+**Live Link:** [https://mediqueue-frontend.onrender.com](https://mediqueue-frontend.onrender.com)
 ---
 
 ## Table of Contents
@@ -21,7 +39,7 @@ A comprehensive healthcare queue and management platform designed to streamline 
 
 ## Project Overview
 
-MediQueue is a full-stack web application that digitizes and optimizes healthcare queue management. It enables patients to book appointments, doctors to manage schedules, and admins to oversee operations, all in a secure and user-friendly environment.
+MediQueue is a full-stack web application that digitizes and optimizes healthcare queue management. It enables patients to book appointments, doctors to manage schedules, all in a secure and user-friendly environment.
 
 ## Features
 
@@ -41,6 +59,7 @@ MediQueue is a full-stack web application that digitizes and optimizes healthcar
 
 **Frontend:**
 
+- JavaScript
 - React (Vite)
 - Tailwind CSS
 - Axios
@@ -84,7 +103,6 @@ backend/    # Node.js/Express API
 ```bash
 cd backend
 npm install
-# Configure .env (see .env.example)
 npm run dev
 ```
 
@@ -98,7 +116,8 @@ npm run dev
 
 ## Usage
 
-- Visit the frontend URL (default: http://localhost:5173)
+- **Live Demo:** [https://mediqueue-frontend.onrender.com](https://mediqueue-frontend.onrender.com)
+- **Local Development:** Visit the frontend URL (default: http://localhost:5173)
 - Register/login as a Patient, Doctor
 - Explore dashboards, book appointments, manage health data
 
