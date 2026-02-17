@@ -15,7 +15,7 @@
 
 # MediQueue
 
-A comprehensive healthcare queue and management platform designed to streamline patient, doctor, and admin interactions. Built with a modern tech stack for real-world healthcare needs.
+A comprehensive healthcare queue and management platform designed to streamline patient and doctor. Built with a modern tech stack for real-world healthcare needs.
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=render)](https://mediqueue-frontend.onrender.com)
 
