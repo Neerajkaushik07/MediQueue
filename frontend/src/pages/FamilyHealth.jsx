@@ -10,6 +10,7 @@ import { FaUserFriends, FaShieldAlt, FaFileInvoiceDollar, FaPlus, FaTrash, FaEdi
 const FamilyHealth = () => {
     const { backendUrl, token } = useContext(AppContext)
     const [activeTab, setActiveTab] = useState('family')
+    const [showRelationDropdown, setShowRelationDropdown] = useState(false)
     const navigate = useNavigate()
     const [loading, setLoading] = useState(true)
     const [showMemberModal, setShowMemberModal] = useState(false)
@@ -19,7 +20,7 @@ const FamilyHealth = () => {
 
     // Form States
     const [memberForm, setMemberForm] = useState({
-        name: '', relationship: 'spouse', gender: 'male', age: '', bloodGroup: '', allergies: ''
+        name: '', relationship: 'husband', gender: 'male', age: '', bloodGroup: '', allergies: ''
     })
     const [insuranceForm, setInsuranceForm] = useState({
         providerName: '', policyNumber: '', type: '', endDate: '', premium: ''
@@ -32,8 +33,8 @@ const FamilyHealth = () => {
 
     // Demo Data
     const demoFamily = [
-        { _id: 'f1', name: 'Sarah Wilson', relationship: 'Spouse', gender: 'Female', age: 34, bloodGroup: 'A+', allergies: ['Penicillin'], profileImage: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150' },
-        { _id: 'f2', name: 'Leo Wilson', relationship: 'Child', gender: 'Male', age: 8, bloodGroup: 'A+', allergies: [], profileImage: 'https://images.unsplash.com/photo-1513956589380-bad6ac3f7a9f?w=150' }
+        { _id: 'f1', name: 'Sarah Wilson', relationship: 'Wife', gender: 'Female', age: 34, bloodGroup: 'A+', allergies: ['Penicillin'], profileImage: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150' },
+        { _id: 'f2', name: 'Leo Wilson', relationship: 'Son', gender: 'Male', age: 8, bloodGroup: 'A+', allergies: [], profileImage: 'https://images.unsplash.com/photo-1513956589380-bad6ac3f7a9f?w=150' }
     ]
 
     const demoInsurance = [
@@ -90,7 +91,7 @@ const FamilyHealth = () => {
             if (data.success) {
                 toast.success('Family member added successfully!')
                 setShowMemberModal(false)
-                setMemberForm({ name: '', relationship: 'spouse', gender: 'male', age: '', bloodGroup: '', allergies: '' })
+                setMemberForm({ name: '', relationship: 'husband', gender: 'male', age: '', bloodGroup: '', allergies: '' })
                 fetchData()
             } else {
                 toast.error(data.message)
@@ -257,7 +258,8 @@ const FamilyHealth = () => {
                                     <div key={member._id} className='glass-card p-6 group hover:shadow-2xl transition-all'>
                                         <div className='flex items-center gap-4 mb-6'>
                                             <img
-                                                src={member.profileImage || 'https://via.placeholder.com/150'}
+                                                src={member.profileImage || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random`}
+                                                onError={(e) => { e.target.onerror = null; e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random` }}
                                                 alt={member.name}
                                                 className='w-16 h-16 rounded-full object-cover border-4 border-primary/10 group-hover:border-primary transition-all'
                                             />
@@ -415,8 +417,8 @@ const FamilyHealth = () => {
             </div>
             {/* Add Member Modal */}
             {showMemberModal && (
-                <div className='fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4'>
-                    <div className='bg-white rounded-3xl p-8 max-w-xl w-full animate-slide-up'>
+                <div className='fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start pt-[10vh] sm:pt-[15vh] justify-center z-50 p-4 overflow-y-auto'>
+                    <div className='bg-white rounded-3xl p-8 max-w-xl w-full animate-slide-up mb-20'>
                         <h2 className='text-2xl font-bold mb-6'>Add Family Member</h2>
                         <form onSubmit={handleAddMember} className='space-y-4'>
                             <div className='grid grid-cols-2 gap-4'>
@@ -426,13 +428,35 @@ const FamilyHealth = () => {
                                 </div>
                                 <div>
                                     <label className='block text-sm font-bold text-gray-700 mb-1'>Relationship</label>
-                                    <select className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl' value={memberForm.relationship} onChange={e => setMemberForm({ ...memberForm, relationship: e.target.value })}>
-                                        <option value='spouse'>Spouse</option>
-                                        <option value='child'>Child</option>
-                                        <option value='parent'>Parent</option>
-                                        <option value='sibling'>Sibling</option>
-                                        <option value='other'>Other</option>
-                                    </select>
+                                    <div className='relative'>
+                                        <button 
+                                            type='button' 
+                                            onClick={() => setShowRelationDropdown(!showRelationDropdown)}
+                                            className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-left flex justify-between items-center'
+                                        >
+                                            <span className='capitalize'>{memberForm.relationship}</span>
+                                            <svg className={`w-4 h-4 text-gray-400 transition-transform ${showRelationDropdown ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                                        </button>
+                                        {showRelationDropdown && (
+                                            <>
+                                                <div className="fixed inset-0 z-40" onClick={() => setShowRelationDropdown(false)}></div>
+                                                <div className='absolute z-50 w-full mt-1 bg-white border border-gray-100 rounded-xl shadow-xl max-h-48 overflow-y-auto top-full left-0'>
+                                                    {['husband', 'wife', 'son', 'daughter', 'father', 'mother', 'brother', 'sister', 'grandfather', 'grandmother', 'uncle', 'aunt', 'cousin', 'nephew', 'niece', 'other'].map(rel => (
+                                                        <div 
+                                                            key={rel}
+                                                            className={`p-3 hover:bg-primary/5 cursor-pointer capitalize text-sm ${memberForm.relationship === rel ? 'bg-primary/10 text-primary font-bold' : 'text-gray-700'}`}
+                                                            onClick={() => {
+                                                                setMemberForm({ ...memberForm, relationship: rel })
+                                                                setShowRelationDropdown(false)
+                                                            }}
+                                                        >
+                                                            {rel}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
                                 <div>
                                     <label className='block text-sm font-bold text-gray-700 mb-1'>Age</label>

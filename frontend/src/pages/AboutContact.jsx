@@ -25,25 +25,18 @@ const AboutContact = () => {
 
     const careerPositions = [
         {
-            title: 'Senior Backend Developer',
-            department: 'Engineering',
-            location: 'Remote / New York',
-            type: 'Full-time',
-            description: 'Build scalable healthcare APIs and microservices using Node.js and MongoDB.'
-        },
-        {
-            title: 'Frontend React Developer',
+            title: 'Frontend Developer',
             department: 'Engineering',
             location: 'Remote',
             type: 'Full-time',
             description: 'Create beautiful, responsive user interfaces for our patient portal.'
         },
         {
-            title: 'Healthcare Product Manager',
-            department: 'Product',
-            location: 'Hybrid / San Francisco',
+            title: 'Backend Developer',
+            department: 'Engineering',
+            location: 'Remote',
             type: 'Full-time',
-            description: 'Lead product strategy for our telemedicine and appointment management platform.'
+            description: 'Build scalable healthcare APIs and microservices using Node.js and MongoDB.'
         },
         {
             title: 'UX/UI Designer',
@@ -51,6 +44,13 @@ const AboutContact = () => {
             location: 'Remote',
             type: 'Contract',
             description: 'Design intuitive healthcare experiences for patients and medical professionals.'
+        },
+        {
+            title: 'Healthcare Product Manager',
+            department: 'Product',
+            location: 'Hybrid',
+            type: 'Full-time',
+            description: 'Lead product strategy for our telemedicine and appointment management platform.'
         },
         {
             title: 'Medical Content Writer',
@@ -62,7 +62,7 @@ const AboutContact = () => {
         {
             title: 'Customer Success Manager',
             department: 'Operations',
-            location: 'Hybrid / Boston',
+            location: 'Hybrid',
             type: 'Full-time',
             description: 'Ensure hospitals and clinics maximize value from our platform.'
         }

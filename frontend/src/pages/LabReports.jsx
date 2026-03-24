@@ -333,7 +333,8 @@ const LabReports = () => {
             {/* Report Details Modal */}
             {showModal && selectedReport && (
                 <div className='fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm'>
-                    <div className='bg-white rounded-3xl p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-fade-in'>
+                    <div className='bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl animate-fade-in'>
+                        <div className='p-8 overflow-y-auto w-full h-full'>
                         <div className='flex justify-between items-start mb-8'>
                             <div>
                                 <span className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase mb-3 inline-block ${getStatusStyles(selectedReport.overallStatus)}`}>
@@ -442,17 +443,12 @@ const LabReports = () => {
 
                         <div className='mt-10 flex gap-4'>
                             <button
-                                onClick={() => setShowModal(false)}
-                                className='flex-1 py-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-2xl transition-all'
-                            >
-                                Close View
-                            </button>
-                            <button
                                 onClick={() => handleDownloadPDF(selectedReport)}
                                 className='flex-1 py-4 bg-gradient-primary text-white font-bold rounded-2xl shadow-lg hover:opacity-90 transition-all'
                             >
                                 Download PDF
                             </button>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -460,7 +456,8 @@ const LabReports = () => {
             {/* Add Report Modal */}
             {showAddModal && (
                 <div className='fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm'>
-                    <div className='bg-white rounded-3xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-fade-in'>
+                    <div className='bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl animate-fade-in'>
+                        <div className='p-8 overflow-y-auto w-full h-full'>
                         <div className='flex justify-between items-center mb-8'>
                             <h2 className='text-3xl font-bold medical-heading'>Add Lab Report</h2>
                             <button onClick={() => setShowAddModal(false)} className='p-2 hover:bg-gray-100 rounded-full transition-colors'>
@@ -572,6 +569,7 @@ const LabReports = () => {
                                 <button type='submit' className='flex-1 py-4 bg-gradient-primary text-white font-bold rounded-2xl shadow-lg hover:opacity-90 transition-all'>Save Report</button>
                             </div>
                         </form>
+                        </div>
                     </div>
                 </div>
             )}

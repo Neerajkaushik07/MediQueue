@@ -7,6 +7,7 @@ const HealthProfile = () => {
     const { backendUrl, token, userData, setUserData, isDemoMode } = useContext(AppContext)
 
     const [loading, setLoading] = useState(true)
+    const [showRelationDropdown, setShowRelationDropdown] = useState(false)
     const [profile, setProfile] = useState({
         bloodGroup: '',
         height: 0,
@@ -253,7 +254,7 @@ const HealthProfile = () => {
     }
 
     return (
-        <div className='min-h-screen py-8'>
+        <div className='min-h-screen pt-8 pb-20'>
             {/* Header */}
             <div className='flex items-center justify-between mb-8'>
                 <div>
@@ -396,12 +397,6 @@ const HealthProfile = () => {
                                     <p className='text-sm text-gray-600'>{contact.relationship}</p>
                                     <p className='text-sm text-primary'>{contact.phone}</p>
                                 </div>
-                                <button
-                                    onClick={() => setModalConfig({ show: true, type: 'contact', data: { ...contact }, isEditing: true, editIndex: index })}
-                                    className='text-gray-600 hover:text-gray-800'
-                                >
-                                    ✏️
-                                </button>
                             </div>
                         ))}
                     </div>
@@ -510,8 +505,8 @@ const HealthProfile = () => {
 
             {/* Modals */}
             {modalConfig.show && (
-                <div className='fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4'>
-                    <div className='bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl'>
+                <div className='fixed inset-0 bg-black/50 flex items-start pt-[10vh] sm:pt-[15vh] justify-center z-50 p-4 overflow-y-auto'>
+                    <div className='bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl mb-20'>
                         <h2 className='text-2xl font-bold mb-6 capitalize'>
                             {modalConfig.type === 'allergy' && (modalConfig.isEditing ? 'Edit Allergy' : 'Add Allergy')}
                             {modalConfig.type === 'condition' && (modalConfig.isEditing ? 'Manage Condition' : 'Add Condition')}
@@ -586,9 +581,35 @@ const HealthProfile = () => {
                                     <div className='grid grid-cols-2 gap-4'>
                                         <div>
                                             <label className='block text-sm font-semibold mb-1'>Relationship *</label>
-                                            <select required value={modalConfig.data.relationship} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, relationship: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl'>
-                                                {['spouse', 'child', 'parent', 'sibling', 'grandparent', 'other'].map(rel => <option key={rel} value={rel}>{rel.charAt(0).toUpperCase() + rel.slice(1)}</option>)}
-                                            </select>
+                                            <div className='relative'>
+                                                <button 
+                                                    type='button' 
+                                                    onClick={() => setShowRelationDropdown(!showRelationDropdown)}
+                                                    className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-left flex justify-between items-center'
+                                                >
+                                                    <span className='capitalize'>{modalConfig.data.relationship}</span>
+                                                    <svg className={`w-4 h-4 text-gray-400 transition-transform ${showRelationDropdown ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                                                </button>
+                                                {showRelationDropdown && (
+                                                    <>
+                                                        <div className="fixed inset-0 z-40" onClick={() => setShowRelationDropdown(false)}></div>
+                                                        <div className='absolute z-50 w-full mt-1 bg-white border border-gray-100 rounded-xl shadow-xl max-h-48 overflow-y-auto top-full left-0'>
+                                                            {['husband', 'wife', 'son', 'daughter', 'father', 'mother', 'brother', 'sister', 'grandfather', 'grandmother', 'uncle', 'aunt', 'cousin', 'nephew', 'niece', 'other'].map(rel => (
+                                                                <div 
+                                                                    key={rel}
+                                                                    className={`p-3 hover:bg-primary/5 cursor-pointer capitalize text-sm ${modalConfig.data.relationship === rel ? 'bg-primary/10 text-primary font-bold' : 'text-gray-700'}`}
+                                                                    onClick={() => {
+                                                                        setModalConfig(prev => ({ ...prev, data: { ...prev.data, relationship: rel } }))
+                                                                        setShowRelationDropdown(false)
+                                                                    }}
+                                                                >
+                                                                    {rel}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </>
+                                                )}
+                                            </div>
                                         </div>
                                         <div>
                                             <label className='block text-sm font-semibold mb-1'>Gender *</label>

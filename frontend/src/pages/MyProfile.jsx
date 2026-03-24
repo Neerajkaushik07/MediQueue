@@ -36,7 +36,7 @@ const MyProfile = () => {
     }
 
     return userData ? (
-        <div className='max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-xl border border-gray-100 font-sans'>
+        <div className='max-w-4xl mx-auto mt-10 mb-20 p-6 bg-white shadow-lg rounded-xl border border-gray-100 font-sans'>
 
             {/* Header Section */}
             <div className='flex flex-col md:flex-row items-center gap-8 mb-8'>

@@ -181,7 +181,7 @@ const HealthMetrics = () => {
     const latestForType = latestMetrics[selectedMetric] || (demoData[selectedMetric] ? demoData[selectedMetric][demoData[selectedMetric].length - 1] : null)
 
     return (
-        <div className='min-h-screen py-8'>
+        <div className='min-h-screen pt-8 pb-20'>
             {/* Demo Data Notice */}
             {/* Demo Data Notice removed */}
             {/* Header */}

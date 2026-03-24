@@ -185,7 +185,7 @@ const Medications = () => {
     ).sort((a, b) => a.scheduledTime.localeCompare(b.scheduledTime))
 
     return (
-        <div className='min-h-screen py-8'>
+        <div className='min-h-screen pt-8 pb-20'>
             {/* Demo Data Notice */}
             {/* Demo Data Notice removed */}
             {/* Header */}

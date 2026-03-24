@@ -177,7 +177,7 @@ const Doctors = () => {
     )
 
     return (
-        <div className="px-4 sm:px-6 lg:px-10 py-8">
+        <div className="px-4 sm:px-6 lg:px-10 pt-8 pb-20">
             {/* Page Header */}
             <div className="page-header">
                 <h1 className="page-title gradient-text">Find Your Doctor</h1>

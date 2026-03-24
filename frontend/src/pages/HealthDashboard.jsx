@@ -89,7 +89,7 @@ const HealthDashboard = () => {
     ]
 
     return (
-        <div className='min-h-screen py-8'>
+        <div className='min-h-screen pt-8 pb-20'>
             {/* Demo Data Notice for non-logged-in users */}
             {!token && (
                 <div className='mb-6 bg-gradient-to-r from-blue-50 to-cyan-50 border-l-4 border-primary p-4 rounded-lg'>

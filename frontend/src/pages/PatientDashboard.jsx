@@ -68,7 +68,7 @@ const PatientDashboard = () => {
     ]
 
     return (
-        <div className='min-h-screen py-8'>
+        <div className='min-h-screen pt-8 pb-20'>
             <div className='max-w-7xl mx-auto'>
                 <DashboardHeader
                     name={userData?.name || 'Patient'}

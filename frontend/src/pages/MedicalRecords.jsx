@@ -217,7 +217,7 @@ Status: ${record.status}
     }
 
     return (
-        <div className='min-h-screen py-8'>
+        <div className='min-h-screen pt-8 pb-20'>
             {/* Demo Data Notice */}
             {/* Demo Data Notice removed */}
             {/* Header */}
@@ -358,7 +358,8 @@ Status: ${record.status}
             {/* Add Record Modal */}
             {showAddModal && (
                 <div className='fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4'>
-                    <div className='bg-white rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto'>
+                    <div className='bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col'>
+                        <div className='p-8 overflow-y-auto w-full h-full'>
                         <div className='flex items-center justify-between mb-6'>
                             <h2 className='text-2xl font-bold'>Add Medical Record</h2>
                             <button
@@ -497,6 +498,7 @@ Status: ${record.status}
                                 </button>
                             </div>
                         </form>
+                        </div>
                     </div>
                 </div>
             )}
@@ -504,7 +506,8 @@ Status: ${record.status}
             {/* View Details Modal */}
             {showViewModal && selectedRecord && (
                 <div className='fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4'>
-                    <div className='bg-white rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto'>
+                    <div className='bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col'>
+                        <div className='p-8 overflow-y-auto w-full h-full'>
                         <div className='flex items-center justify-between mb-8 pb-4 border-b border-gray-100'>
                             <div className='flex items-center gap-4'>
                                 <div className='w-14 h-14 bg-gradient-primary rounded-xl flex items-center justify-center text-3xl text-white'>
@@ -577,19 +580,6 @@ Status: ${record.status}
                             )}
                         </div>
 
-                        <div className='flex gap-4 mt-10 pt-6 border-t border-gray-100'>
-                            <button
-                                onClick={() => handleDownload(selectedRecord)}
-                                className='flex-1 px-6 py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition-all'
-                            >
-                                Download Report
-                            </button>
-                            <button
-                                onClick={() => handleShare(selectedRecord)}
-                                className='flex-1 px-6 py-3 bg-gradient-primary text-white font-bold rounded-xl shadow-lg hover:opacity-90 transition-all'
-                            >
-                                Share Record
-                            </button>
                         </div>
                     </div>
                 </div>
