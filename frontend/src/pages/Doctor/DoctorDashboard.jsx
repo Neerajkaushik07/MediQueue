@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useCallback } from 'react'
+import React, { useContext, useEffect, useState, useCallback, useMemo } from 'react'
 import { AppContext } from '../../context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
@@ -8,9 +8,13 @@ import { assets } from '../../assets/assets'
 const DoctorDashboard = () => {
     const { backendUrl, token, userRole, currencySymbol, userData, isDemoMode } = useContext(AppContext)
     const [dashData, setDashData] = useState(null)
+    const [lastUpdated, setLastUpdated] = useState(null)
+    const [refreshing, setRefreshing] = useState(false)
+    const [actionLoadingId, setActionLoadingId] = useState('')
     const navigate = useNavigate()
 
-    const getDashData = useCallback(async () => {
+    const getDashData = useCallback(async (manualRefresh = false) => {
+        if (manualRefresh) setRefreshing(true)
         try {
             if (isDemoMode) {
                 setDashData({
@@ -35,15 +39,25 @@ const DoctorDashboard = () => {
                             slotTime: '02:00 PM',
                             cancelled: false,
                             isCompleted: true
+                        },
+                        {
+                            _id: 'mock_apt_3',
+                            userData: { name: 'Elena Brown', image: assets.profile_pic },
+                            slotDate: '16_02_2026',
+                            slotTime: '11:45 AM',
+                            cancelled: true,
+                            isCompleted: false
                         }
                     ]
                 })
+                setLastUpdated(new Date())
                 return
             }
             if (userRole === 'doctor' && token) {
                 const { data } = await axios.get(backendUrl + '/api/doctor/dashboard', { headers: { Authorization: `Bearer ${token}` } })
                 if (data.success) {
                     setDashData(data.dashData)
+                    setLastUpdated(new Date())
                 } else {
                     toast.error(data.message)
                 }
@@ -51,6 +65,8 @@ const DoctorDashboard = () => {
         } catch (error) {
             console.error('Error in getDashData:', error)
             toast.error('Failed to load dashboard data')
+        } finally {
+            setRefreshing(false)
         }
     }, [backendUrl, token, userRole, isDemoMode])
 
@@ -60,6 +76,7 @@ const DoctorDashboard = () => {
             return
         }
         try {
+            setActionLoadingId(appointmentId)
             if (userRole === 'doctor' && token) {
                 const { data } = await axios.post(backendUrl + '/api/doctor/complete-appointment', { appointmentId }, { headers: { Authorization: `Bearer ${token}` } })
                 if (data.success) {
@@ -70,8 +87,9 @@ const DoctorDashboard = () => {
                 }
             }
         } catch (error) {
-
             toast.error('Failed to complete appointment')
+        } finally {
+            setActionLoadingId('')
         }
     }
 
@@ -81,6 +99,7 @@ const DoctorDashboard = () => {
             return
         }
         try {
+            setActionLoadingId(appointmentId)
             if (userRole === 'doctor' && token) {
                 const { data } = await axios.post(backendUrl + '/api/doctor/cancel-appointment', { appointmentId }, { headers: { Authorization: `Bearer ${token}` } })
                 if (data.success) {
@@ -91,14 +110,75 @@ const DoctorDashboard = () => {
                 }
             }
         } catch (error) {
-
             toast.error('Failed to cancel appointment')
+        } finally {
+            setActionLoadingId('')
         }
     }
 
     useEffect(() => {
         getDashData()
     }, [getDashData])
+
+    const recentAppointments = useMemo(() => {
+        return Array.isArray(dashData?.latestAppointments) ? dashData.latestAppointments : []
+    }, [dashData])
+
+    const completedCount = useMemo(() => recentAppointments.filter(item => item.isCompleted).length, [recentAppointments])
+    const cancelledCount = useMemo(() => recentAppointments.filter(item => item.cancelled).length, [recentAppointments])
+    const activeCount = useMemo(() => recentAppointments.filter(item => !item.cancelled && !item.isCompleted).length, [recentAppointments])
+    const careScore = useMemo(() => {
+        if (!recentAppointments.length) return 0
+        return Math.round(((completedCount + activeCount) / recentAppointments.length) * 100)
+    }, [recentAppointments, completedCount, activeCount])
+
+    const sessionSuccess = useMemo(() => {
+        if (!recentAppointments.length) return 0
+        return Math.round((completedCount / recentAppointments.length) * 100)
+    }, [recentAppointments, completedCount])
+
+    const statCards = [
+        {
+            label: "Today's Revenue",
+            value: dashData?.dailyEarnings || 0,
+            sub: `${activeCount} active today`,
+            iconPath: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
+            iconWrap: 'bg-emerald-50 text-emerald-600',
+            subClass: 'text-emerald-600'
+        },
+        {
+            label: 'Weekly Revenue',
+            value: dashData?.weeklyEarnings || 0,
+            sub: `${completedCount} completed sessions`,
+            iconPath: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
+            iconWrap: 'bg-violet-50 text-violet-600',
+            subClass: 'text-violet-600'
+        },
+        {
+            label: 'Monthly Revenue',
+            value: dashData?.monthlyEarnings || 0,
+            sub: `${currencySymbol}${dashData?.earnings || 0} available`,
+            iconPath: 'M8 13v-1m4 1v-3m4 3V8M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z',
+            iconWrap: 'bg-sky-50 text-sky-600',
+            subClass: 'text-sky-600'
+        },
+        {
+            label: 'Total Patients',
+            value: dashData?.appointments || 0,
+            sub: `${cancelledCount} cancelled recently`,
+            iconPath: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z',
+            iconWrap: 'bg-indigo-50 text-indigo-600',
+            subClass: 'text-indigo-600'
+        }
+    ]
+
+    const operationsActions = [
+        { label: 'Appointments', sub: 'Schedule Management', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', route: '/doctor-appointments', className: 'bg-cyan-50 text-cyan-700 border-cyan-100 hover:border-cyan-300' },
+        { label: 'Patient Logs', sub: 'Clinical Records', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z', route: '/doctor-patients', className: 'bg-emerald-50 text-emerald-700 border-emerald-100 hover:border-emerald-300' },
+        { label: 'Set Availability', sub: 'Work Schedule', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', route: '/doctor-schedule', className: 'bg-violet-50 text-violet-700 border-violet-100 hover:border-violet-300' },
+        { label: 'Finances', sub: 'Payouts & Reports', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', route: '/doctor-finances', className: 'bg-amber-50 text-amber-700 border-amber-100 hover:border-amber-300' },
+        { label: 'Live Chat', sub: 'Active Consultations', icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', route: '/teleconsultation?role=doctor', className: 'bg-rose-50 text-rose-700 border-rose-100 hover:border-rose-300' }
+    ]
 
     if (dashData === null) {
         return (
@@ -124,31 +204,35 @@ const DoctorDashboard = () => {
                 <div className='flex items-center gap-3 bg-white p-2 rounded-xl shadow-soft border border-gray-100'>
                     <div className='text-right px-2'>
                         <p className='text-[10px] font-bold text-gray-500 uppercase tracking-widest'>Last Updated</p>
-                        <p className='text-sm font-bold text-gray-800 uppercase'>Just Now</p>
+                        <p className='text-sm font-bold text-gray-800 uppercase'>
+                            {lastUpdated ? lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Just Now'}
+                        </p>
                     </div>
+                    <button
+                        onClick={() => getDashData(true)}
+                        disabled={refreshing}
+                        className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors ${refreshing ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-cyan-50 text-cyan-700 hover:bg-cyan-100'}`}
+                    >
+                        {refreshing ? 'Refreshing...' : 'Refresh'}
+                    </button>
                 </div>
             </div>
 
             {/* Premium Stats Grid */}
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8'>
-                {[
-                    { label: 'Today\'s Revenue', value: dashData.dailyEarnings, sub: '8% vs. yesterday', color: 'green', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
-                    { label: 'Weekly Revenue', value: dashData.weeklyEarnings, sub: '12% growth', color: 'purple', icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' },
-                    { label: 'Monthly Revenue', value: dashData.monthlyEarnings, sub: 'On projection', color: 'blue', icon: 'M8 13v-1m4 1v-3m4 3V8M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z' },
-                    { label: 'Total Patients', value: dashData.appointments, sub: 'All time', color: 'indigo', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' }
-                ].map((stat, i) => (
+                {statCards.map((stat, i) => (
                     <div key={i} className='bg-white rounded-2xl p-6 shadow-soft border border-gray-100 hover:shadow-card-hover hover:border-primary/20 transition-all duration-300 group'>
                         <div className='flex items-center justify-between mb-4'>
-                            <div className={`bg-${stat.color}-50 p-3 rounded-xl text-${stat.color}-600 group-hover:scale-110 transition-transform duration-300`}>
-                                <svg className='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d={stat.icon} /></svg>
+                            <div className={`${stat.iconWrap} p-3 rounded-xl group-hover:scale-110 transition-transform duration-300`}>
+                                <svg className='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d={stat.iconPath} /></svg>
                             </div>
-                            <span className={`text-[10px] font-black uppercase tracking-wider text-${stat.color}-600/70`}>{stat.label.split(' ')[0]}</span>
+                            <span className='text-[10px] font-black uppercase tracking-wider text-gray-500'>{stat.label.split(' ')[0]}</span>
                         </div>
                         <p className='text-xs font-bold text-gray-400 uppercase tracking-widest'>{stat.label}</p>
                         <p className='text-3xl font-black text-gray-900 mt-1 font-poppins tracking-tight'>
                             {stat.label.includes('Revenue') ? currencySymbol : ''}{stat.value || 0}
                         </p>
-                        <div className={`mt-3 flex items-center gap-1.5 text-xs font-bold text-${stat.color}-600`}>
+                        <div className={`mt-3 flex items-center gap-1.5 text-xs font-bold ${stat.subClass}`}>
                             <svg className='w-3 h-3' fill='currentColor' viewBox='0 0 20 20'><path fillRule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z' clipRule='evenodd' /></svg>
                             <span>{stat.sub}</span>
                         </div>
@@ -168,17 +252,13 @@ const DoctorDashboard = () => {
 
                     </div>
                     <div className='p-8 grid grid-cols-1 md:grid-cols-3 gap-6'>
-                        {[
-                            { label: 'Appointments', sub: 'Schedule Management', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', route: '/doctor-appointments', color: 'primary' },
-                            { label: 'Patient Logs', sub: 'Clinical Records', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z', route: '/doctor-patients', color: 'green' },
-                            { label: 'Set Availability', sub: 'Work Schedule', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', route: '/doctor-schedule', color: 'purple' }
-                        ].map((action, i) => (
+                        {operationsActions.map((action, i) => (
                             <button
                                 key={i}
                                 onClick={() => navigate(action.route)}
-                                className='flex flex-col items-center p-6 rounded-2xl border border-gray-100 hover:border-primary/30 hover:bg-primary/5 transition-all group'
+                                className={`flex flex-col items-center p-6 rounded-2xl border transition-all group ${action.className}`}
                             >
-                                <div className={`mb-4 w-14 h-14 flex items-center justify-center rounded-2xl bg-${action.color}/10 text-${action.color} group-hover:scale-110 transition-transform`}>
+                                <div className='mb-4 w-14 h-14 flex items-center justify-center rounded-2xl bg-white/70 group-hover:scale-110 transition-transform'>
                                     <svg className='w-7 h-7' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d={action.icon} /></svg>
                                 </div>
                                 <span className='font-bold text-gray-900'>{action.label}</span>
@@ -201,7 +281,10 @@ const DoctorDashboard = () => {
                             </p>
                         </div>
                         <div className='flex gap-3'>
-                            <button className='flex-1 h-11 bg-white text-indigo-700 rounded-xl text-xs font-bold hover:bg-neutral-100 transition-all shadow-lg active:scale-95'>
+                            <button
+                                onClick={() => navigate('/doctor-finances')}
+                                className='flex-1 h-11 bg-white text-indigo-700 rounded-xl text-xs font-bold hover:bg-neutral-100 transition-all shadow-lg active:scale-95'
+                            >
                                 Withdraw Funds
                             </button>
                         </div>
@@ -214,8 +297,8 @@ const DoctorDashboard = () => {
                         </h3>
                         <div className='space-y-6'>
                             {[
-                                { label: 'Patient Care', val: 92, color: 'text-green-500', bg: 'bg-green-500' },
-                                { label: 'Session Success', val: 88, color: 'text-blue-500', bg: 'bg-blue-500' }
+                                { label: 'Patient Care', val: careScore, color: 'text-green-500', bg: 'bg-green-500' },
+                                { label: 'Session Success', val: sessionSuccess, color: 'text-blue-500', bg: 'bg-blue-500' }
                             ].map((m, i) => (
                                 <div key={i}>
                                     <div className='flex justify-between text-xs font-bold mb-2'>
@@ -257,15 +340,19 @@ const DoctorDashboard = () => {
                                     <div className='relative'>
                                         <img
                                             className='w-14 h-14 rounded-2xl object-cover border-2 border-white shadow-soft group-hover:scale-105 transition-transform'
-                                            src={item.userData.image}
-                                            alt={item.userData.name}
+                                            src={item.userData?.image || assets.profile_pic}
+                                            alt={item.userData?.name || 'Patient'}
+                                            onError={(e) => {
+                                                e.target.onerror = null
+                                                e.target.src = assets.profile_pic
+                                            }}
                                         />
                                         {!item.cancelled && !item.isCompleted && (
                                             <div className='absolute -top-1 -right-1 w-4 h-4 bg-primary border-2 border-white rounded-full'></div>
                                         )}
                                     </div>
                                     <div>
-                                        <p className='font-bold text-gray-900 font-poppins text-lg leading-tight'>{item.userData.name}</p>
+                                        <p className='font-bold text-gray-900 font-poppins text-lg leading-tight'>{item.userData?.name || 'Unknown Patient'}</p>
                                         <div className='flex items-center gap-3 mt-1.5'>
                                             <p className='text-xs font-bold text-gray-400 flex items-center gap-1'>
                                                 <svg className='w-3 h-3' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' /></svg>
@@ -289,20 +376,22 @@ const DoctorDashboard = () => {
                                             Completed
                                         </span>
                                     ) : (
-                                        <div className='flex gap-2 invisible group-hover:visible'>
+                                        <div className='flex gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity'>
                                             <button
                                                 onClick={() => cancelAppointment(item._id)}
-                                                className='w-10 h-10 flex items-center justify-center bg-gray-100 text-gray-400 hover:bg-red-50 hover:text-red-500 rounded-xl transition-all shadow-sm'
+                                                disabled={actionLoadingId === item._id}
+                                                className='w-10 h-10 flex items-center justify-center bg-gray-100 text-gray-400 hover:bg-red-50 hover:text-red-500 rounded-xl transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed'
                                                 title='Deny'
                                             >
                                                 <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M6 18L18 6M6 6l12 12' /></svg>
                                             </button>
                                             <button
                                                 onClick={() => completeAppointment(item._id)}
-                                                className='flex items-center gap-2 px-5 bg-primary text-white rounded-xl text-xs font-extrabold hover:bg-primary-dark transition-all shadow-medical active:scale-95'
+                                                disabled={actionLoadingId === item._id}
+                                                className='flex items-center gap-2 px-5 bg-primary text-white rounded-xl text-xs font-extrabold hover:bg-primary-dark transition-all shadow-medical active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed'
                                             >
                                                 <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M5 13l4 4L19 7' /></svg>
-                                                CHECK-IN
+                                                {actionLoadingId === item._id ? 'UPDATING...' : 'CHECK-IN'}
                                             </button>
                                         </div>
                                     )}

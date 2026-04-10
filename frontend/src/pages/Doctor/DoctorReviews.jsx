@@ -8,10 +8,20 @@ const DoctorReviews = () => {
     const { backendUrl, token, isDemoMode } = useContext(AppContext)
     const [reviews, setReviews] = useState([])
     const [loading, setLoading] = useState(true)
+    const [refreshing, setRefreshing] = useState(false)
+    const [lastUpdated, setLastUpdated] = useState(null)
+    const [searchTerm, setSearchTerm] = useState('')
+    const [selectedRating, setSelectedRating] = useState('all')
+    const [sortBy, setSortBy] = useState('recent')
 
-    const getReviews = useCallback(async () => {
+    const getReviews = useCallback(async (showRefreshing = false) => {
         try {
-            setLoading(true)
+            if (showRefreshing) {
+                setRefreshing(true)
+            } else {
+                setLoading(true)
+            }
+
             if (isDemoMode) {
                 setReviews([
                     {
@@ -29,14 +39,15 @@ const DoctorReviews = () => {
                         date: '2026-02-14'
                     }
                 ])
-                setLoading(false)
+                setLastUpdated(new Date())
                 return
             }
             const { data } = await axios.post(backendUrl + '/api/doctor/reviews', {}, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             if (data.success) {
-                setReviews(data.reviews.reverse())
+                setReviews(Array.isArray(data.reviews) ? data.reviews : [])
+                setLastUpdated(new Date())
             } else {
                 toast.error(data.message)
             }
@@ -45,6 +56,7 @@ const DoctorReviews = () => {
             toast.error('Failed to load reviews')
         } finally {
             setLoading(false)
+            setRefreshing(false)
         }
     }, [backendUrl, token, isDemoMode])
 
@@ -54,6 +66,42 @@ const DoctorReviews = () => {
         }
     }, [token, getReviews])
 
+    const filteredAndSortedReviews = useMemo(() => {
+        let data = [...reviews]
+
+        if (searchTerm.trim()) {
+            const needle = searchTerm.toLowerCase()
+            data = data.filter((review) =>
+                review.userName?.toLowerCase().includes(needle) ||
+                review.comment?.toLowerCase().includes(needle)
+            )
+        }
+
+        if (selectedRating !== 'all') {
+            data = data.filter((review) => Number(review.rating) === Number(selectedRating))
+        }
+
+        data.sort((a, b) => {
+            if (sortBy === 'recent') return new Date(b.date || 0) - new Date(a.date || 0)
+            if (sortBy === 'highest') return Number(b.rating || 0) - Number(a.rating || 0)
+            if (sortBy === 'lowest') return Number(a.rating || 0) - Number(b.rating || 0)
+            return 0
+        })
+
+        return data
+    }, [reviews, searchTerm, selectedRating, sortBy])
+
+    const ratingDistribution = useMemo(() => {
+        const distribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+        reviews.forEach((review) => {
+            const rating = Number(review.rating)
+            if (distribution[rating] !== undefined) {
+                distribution[rating] += 1
+            }
+        })
+        return distribution
+    }, [reviews])
+
     const stats = useMemo(() => {
         const avg = reviews.length > 0
             ? (reviews.reduce((acc, curr) => acc + curr.rating, 0) / reviews.length).toFixed(1)
@@ -61,7 +109,8 @@ const DoctorReviews = () => {
         const positivePercentage = reviews.length > 0
             ? Math.round((reviews.filter(r => r.rating >= 4).length / reviews.length) * 100)
             : 0
-        return { avg, total: reviews.length, positivePercentage }
+        const lowRatings = reviews.filter((review) => Number(review.rating) <= 2).length
+        return { avg, total: reviews.length, positivePercentage, lowRatings }
     }, [reviews])
 
     if (loading) {
@@ -82,10 +131,22 @@ const DoctorReviews = () => {
                 <div>
                     <h1 className='text-4xl font-black text-gray-900 tracking-tight'>Reputation & Trust</h1>
                     <p className='text-gray-500 mt-2 text-lg italic'>Monitor patient satisfaction and professional feedback pulse.</p>
+                    <p className='text-xs font-bold text-gray-400 uppercase tracking-widest mt-3'>
+                        Last synced: {lastUpdated ? lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Not synced yet'}
+                    </p>
                 </div>
-                <div className='flex items-center gap-3 bg-white px-6 py-3 rounded-2xl shadow-soft border border-gray-100'>
-                    <div className='w-3 h-3 bg-amber-400 rounded-full animate-pulse'></div>
-                    <span className='text-xs font-black text-gray-500 uppercase tracking-widest'>Verified Professional Profile</span>
+                <div className='flex items-center gap-3'>
+                    <div className='flex items-center gap-3 bg-white px-6 py-3 rounded-2xl shadow-soft border border-gray-100'>
+                        <div className='w-3 h-3 bg-amber-400 rounded-full animate-pulse'></div>
+                        <span className='text-xs font-black text-gray-500 uppercase tracking-widest'>Verified Professional Profile</span>
+                    </div>
+                    <button
+                        onClick={() => getReviews(true)}
+                        disabled={refreshing}
+                        className='px-5 py-3 rounded-2xl border border-primary/30 bg-primary/5 text-primary font-black text-xs uppercase tracking-wider hover:bg-primary hover:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed'
+                    >
+                        {refreshing ? 'Refreshing...' : 'Refresh'}
+                    </button>
                 </div>
             </div>
 
@@ -111,8 +172,14 @@ const DoctorReviews = () => {
                     <p className='text-[10px] font-black text-green-500 uppercase tracking-widest bg-green-50 px-4 py-1.5 rounded-full relative z-10'>Top 5% of Practitioners</p>
                 </div>
 
+                <div className='bg-white p-10 rounded-[3rem] shadow-card border border-gray-100 flex flex-col justify-center hover:-translate-y-2 transition-all duration-500'>
+                    <p className='text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4'>Critical Feedback</p>
+                    <h2 className='text-5xl font-black text-gray-900 leading-none'>{stats.lowRatings}</h2>
+                    <p className='text-xs font-bold text-gray-500 mt-3'>Reviews with 1-2 stars that may need follow-up.</p>
+                </div>
+
                 {/* Satisfaction Breakdown */}
-                <div className='md:col-span-3 bg-white p-10 rounded-[3rem] shadow-medical border border-gray-100'>
+                <div className='md:col-span-2 bg-white p-10 rounded-[3rem] shadow-medical border border-gray-100'>
                     <div className='flex justify-between items-center mb-10'>
                         <h3 className='text-xl font-black text-gray-900 tracking-tight'>Satisfaction Distribution</h3>
                         <div className='flex items-center gap-6'>
@@ -128,7 +195,7 @@ const DoctorReviews = () => {
 
                     <div className='space-y-6'>
                         {[5, 4, 3, 2, 1].map(star => {
-                            const count = reviews.filter(r => r.rating === star).length
+                            const count = ratingDistribution[star]
                             const percentage = reviews.length > 0 ? (count / reviews.length) * 100 : 0
                             return (
                                 <div key={star} className='flex items-center gap-6 group'>
@@ -154,37 +221,87 @@ const DoctorReviews = () => {
 
             {/* Reviews Section */}
             <div className='space-y-8'>
-                <div className='flex justify-between items-end'>
+                <div className='flex flex-col lg:flex-row lg:justify-between lg:items-end gap-5'>
                     <div>
                         <h3 className='text-2xl font-black text-gray-900 tracking-tight'>Patient Feedback</h3>
                         <p className='text-sm font-bold text-gray-400 mt-1 uppercase tracking-widest'>All verified experiences from your clinic</p>
                     </div>
-                    <div className='flex gap-2'>
-                        <button className='px-4 py-2 bg-white border border-gray-200 rounded-xl text-[10px] font-black uppercase tracking-widest text-gray-500 hover:border-primary hover:text-primary transition-all shadow-sm'>Recent first</button>
-                        <button className='px-4 py-2 bg-white border border-gray-200 rounded-xl text-[10px] font-black uppercase tracking-widest text-gray-500 hover:border-primary hover:text-primary transition-all shadow-sm'>Highest Rated</button>
+
+                    <div className='flex flex-wrap items-center gap-3 w-full lg:w-auto'>
+                        <div className='relative min-w-[240px] flex-1 lg:flex-none'>
+                            <svg className='absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' />
+                            </svg>
+                            <input
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                placeholder='Search feedback...'
+                                className='w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary'
+                            />
+                        </div>
+
+                        <select
+                            value={selectedRating}
+                            onChange={(e) => setSelectedRating(e.target.value)}
+                            className='px-3 py-2.5 rounded-xl border border-gray-200 bg-white text-xs font-black uppercase tracking-wider text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary'
+                        >
+                            <option value='all'>All Ratings</option>
+                            <option value='5'>5 Stars</option>
+                            <option value='4'>4 Stars</option>
+                            <option value='3'>3 Stars</option>
+                            <option value='2'>2 Stars</option>
+                            <option value='1'>1 Star</option>
+                        </select>
+
+                        <select
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value)}
+                            className='px-3 py-2.5 rounded-xl border border-gray-200 bg-white text-xs font-black uppercase tracking-wider text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary'
+                        >
+                            <option value='recent'>Recent First</option>
+                            <option value='highest'>Highest Rated</option>
+                            <option value='lowest'>Lowest Rated</option>
+                        </select>
+
+                        {(searchTerm || selectedRating !== 'all' || sortBy !== 'recent') && (
+                            <button
+                                onClick={() => {
+                                    setSearchTerm('')
+                                    setSelectedRating('all')
+                                    setSortBy('recent')
+                                }}
+                                className='px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-[10px] font-black uppercase tracking-widest text-gray-500 hover:border-primary hover:text-primary transition-all shadow-sm'
+                            >
+                                Clear
+                            </button>
+                        )}
                     </div>
                 </div>
 
-                {reviews.length === 0 ? (
+                <p className='text-xs font-bold text-gray-400 uppercase tracking-widest'>Showing {filteredAndSortedReviews.length} of {reviews.length} reviews</p>
+
+                {filteredAndSortedReviews.length === 0 ? (
                     <div className='bg-white p-32 rounded-[4rem] border-4 border-dashed border-gray-100 flex flex-col items-center justify-center text-center grayscale opacity-50'>
                         <div className='w-24 h-24 bg-gray-50 rounded-[2.5rem] flex items-center justify-center mb-8'>
                             <svg className='w-12 h-12 text-gray-300' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.539-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.382-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z' /></svg>
                         </div>
-                        <h4 className='font-black text-2xl text-gray-800 tracking-tight'>Silence is Golden...</h4>
-                        <p className='text-sm font-bold text-gray-400 mt-3 max-w-xs uppercase tracking-wider'>Your first verified patient review will shine here soon.</p>
+                        <h4 className='font-black text-2xl text-gray-800 tracking-tight'>{reviews.length ? 'No matching feedback' : 'Silence is Golden...'}</h4>
+                        <p className='text-sm font-bold text-gray-400 mt-3 max-w-xs uppercase tracking-wider'>
+                            {reviews.length ? 'Try changing filters or search terms to see more reviews.' : 'Your first verified patient review will shine here soon.'}
+                        </p>
                     </div>
                 ) : (
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
-                        {reviews.map((review, index) => (
-                            <div key={index} className='bg-white p-10 rounded-[3rem] shadow-card border border-gray-100 hover:shadow-medical hover:border-amber-100 transition-all duration-500 relative group'>
+                        {filteredAndSortedReviews.map((review) => (
+                            <div key={review._id || review.appointmentId || `${review.userName}-${review.date}`} className='bg-white p-10 rounded-[3rem] shadow-card border border-gray-100 hover:shadow-medical hover:border-amber-100 transition-all duration-500 relative group'>
                                 <div className='flex justify-between items-start mb-8'>
                                     <div className='flex items-center gap-5'>
                                         <div className='relative'>
                                             <div className='absolute inset-0 bg-gradient-primary rounded-[2rem] blur-lg opacity-0 group-hover:opacity-20 transition-opacity'></div>
                                             <img
-                                                src={review.userImage || '/default-user.png'}
+                                                src={review.userImage || assets.profile_pic}
                                                 className='w-16 h-16 rounded-[1.8rem] object-cover relative z-10 border-4 border-gray-50 group-hover:border-white transition-all duration-500 shadow-sm'
-                                                alt=""
+                                                alt=''
                                             />
                                             <div className='absolute -bottom-1 -right-1 bg-primary border-4 border-white w-6 h-6 rounded-full z-20 flex items-center justify-center'>
                                                 <svg className='w-2.5 h-2.5 text-white' fill='currentColor' viewBox='0 0 20 20'><path fillRule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clipRule='evenodd' /></svg>
@@ -197,14 +314,14 @@ const DoctorReviews = () => {
                                                     Verified Experience
                                                 </span>
                                                 <span className='text-[10px] font-black text-gray-300 uppercase tracking-widest'>
-                                                    {new Date(review.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                                                    {review.date ? new Date(review.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : 'Date N/A'}
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
                                     <div className='flex gap-0.5 text-amber-400 bg-amber-50/50 px-3 py-1.5 rounded-xl'>
-                                        {[...Array(review.rating)].map((_, i) => (
-                                            <svg key={i} className='w-3.5 h-3.5 fill-current' viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                                        {[1, 2, 3, 4, 5].map((star) => (
+                                            <svg key={star} className={`w-3.5 h-3.5 ${star <= Number(review.rating || 0) ? 'fill-current' : 'fill-current text-gray-200'}`} viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
                                         ))}
                                     </div>
                                 </div>

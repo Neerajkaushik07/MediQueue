@@ -9,15 +9,48 @@ const DoctorPatients = () => {
     const [patients, setPatients] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
     const [loading, setLoading] = useState(true)
+    const [refreshing, setRefreshing] = useState(false)
+    const [lastUpdated, setLastUpdated] = useState(null)
     const [showHistoryModal, setShowHistoryModal] = useState(false)
     const [selectedPatient, setSelectedPatient] = useState(null)
     const [patientHistory, setPatientHistory] = useState([])
     const [historyLoading, setHistoryLoading] = useState(false)
     const [sortBy, setSortBy] = useState('name') // name, lastVisit, totalVisits
 
-    const getPatients = useCallback(async () => {
+    const calculateAge = (dob) => {
+        if (!dob) return 'Age N/A'
+        const birthDate = new Date(dob)
+        const now = new Date()
+        let age = now.getFullYear() - birthDate.getFullYear()
+        const monthDiff = now.getMonth() - birthDate.getMonth()
+        if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birthDate.getDate())) {
+            age--
+        }
+        return `${Math.max(age, 0)} Years`
+    }
+
+    const formatDisplayDate = (value, fallback = 'Pending') => {
+        if (!value) return fallback
+        const date = new Date(value)
+        if (Number.isNaN(date.getTime())) return fallback
+        return date.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })
+    }
+
+    const getEngagementStatus = (lastVisit) => {
+        if (!lastVisit) return { label: 'No Visits', dot: 'bg-gray-300', chip: 'bg-gray-100 text-gray-600 border-gray-200' }
+        const daysAgo = Math.floor((new Date() - new Date(lastVisit)) / (1000 * 60 * 60 * 24))
+        if (daysAgo <= 45) return { label: 'Active', dot: 'bg-green-500', chip: 'bg-green-50 text-green-700 border-green-200' }
+        if (daysAgo <= 120) return { label: 'Follow-up Due', dot: 'bg-amber-500', chip: 'bg-amber-50 text-amber-700 border-amber-200' }
+        return { label: 'Dormant', dot: 'bg-gray-400', chip: 'bg-gray-100 text-gray-600 border-gray-200' }
+    }
+
+    const getPatients = useCallback(async (showRefreshing = false) => {
         try {
-            setLoading(true)
+            if (showRefreshing) {
+                setRefreshing(true)
+            } else {
+                setLoading(true)
+            }
             if (isDemoMode) {
                 setPatients([
                     {
@@ -43,7 +76,7 @@ const DoctorPatients = () => {
                         lastVisit: '2026-02-14'
                     }
                 ])
-                setLoading(false)
+                setLastUpdated(new Date())
                 return
             }
             if (userRole === 'doctor' && token) {
@@ -52,6 +85,7 @@ const DoctorPatients = () => {
                 })
                 if (data.success) {
                     setPatients(data.patients)
+                    setLastUpdated(new Date())
                 } else {
                     toast.error(data.message)
                 }
@@ -61,6 +95,7 @@ const DoctorPatients = () => {
             toast.error(error.message || 'Failed to load patients')
         } finally {
             setLoading(false)
+            setRefreshing(false)
         }
     }, [backendUrl, token, userRole, isDemoMode])
 
@@ -130,19 +165,64 @@ const DoctorPatients = () => {
             return lastVisit.getMonth() === today.getMonth() && lastVisit.getFullYear() === today.getFullYear()
         }).length
 
-        return { total, avgVisits, newThisMonth }
+        const activeCount = patients.filter((patient) => getEngagementStatus(patient.lastVisit).label === 'Active').length
+
+        return { total, avgVisits, newThisMonth, activeCount }
     }, [patients])
+
+    const historySummary = useMemo(() => {
+        if (!patientHistory.length) {
+            return {
+                firstVisit: selectedPatient?.lastVisit ? formatDisplayDate(selectedPatient.lastVisit) : 'No visit yet',
+                lastVisit: selectedPatient?.lastVisit ? formatDisplayDate(selectedPatient.lastVisit) : 'No visit yet',
+                lastNotes: 'No clinical notes yet',
+                adherence: 'Not enough data',
+                completedSessions: 0
+            }
+        }
+
+        const sortedByDate = [...patientHistory].sort((a, b) => new Date(a.date || 0) - new Date(b.date || 0))
+        const firstVisit = formatDisplayDate(sortedByDate[0]?.date, 'No visit yet')
+        const lastVisit = formatDisplayDate(sortedByDate[sortedByDate.length - 1]?.date, 'No visit yet')
+        const latestWithNotes = [...sortedByDate].reverse().find((apt) => apt.notes)
+        const completedSessions = patientHistory.filter((apt) => apt.isCompleted).length
+        const completionRate = patientHistory.length ? (completedSessions / patientHistory.length) * 100 : 0
+
+        let adherence = 'Needs monitoring'
+        if (completionRate >= 80) adherence = 'Excellent follow-through'
+        else if (completionRate >= 55) adherence = 'Stable follow-through'
+
+        return {
+            firstVisit,
+            lastVisit,
+            lastNotes: latestWithNotes?.notes || 'No clinical notes yet',
+            adherence,
+            completedSessions
+        }
+    }, [patientHistory, selectedPatient])
 
     return (
         <div className='flex flex-col gap-8 m-5 max-w-7xl animate-fade-in-up'>
             {/* Header Section */}
-            <div>
-                <h2 className='text-4xl font-black text-gray-900 font-outfit tracking-tight'>Patients Directory</h2>
-                <p className='text-gray-500 mt-2 text-lg'>Manage your patient relationships and clinical history in one place.</p>
+            <div className='flex flex-col md:flex-row md:items-end md:justify-between gap-4'>
+                <div>
+                    <h2 className='text-4xl font-black text-gray-900 font-outfit tracking-tight'>Patients Directory</h2>
+                    <p className='text-gray-500 mt-2 text-lg'>Manage your patient relationships and clinical history in one place.</p>
+                    <p className='text-xs font-bold uppercase tracking-widest text-gray-400 mt-3'>
+                        Last synced: {lastUpdated ? lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Not synced yet'}
+                    </p>
+                </div>
+                <button
+                    onClick={() => getPatients(true)}
+                    disabled={refreshing}
+                    className='px-5 py-3 rounded-2xl border border-primary/30 bg-primary/5 text-primary font-black text-xs uppercase tracking-wider hover:bg-primary hover:text-white transition-all disabled:opacity-60 disabled:cursor-not-allowed'
+                >
+                    {refreshing ? 'Refreshing...' : 'Refresh List'}
+                </button>
             </div>
 
             {/* Stats Overview */}
-            <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+            <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6'>
                 <div className='bg-gradient-primary p-1 rounded-3xl shadow-medical group cursor-default transition-all hover:scale-[1.02]'>
                     <div className='bg-white rounded-[1.4rem] p-6 h-full flex items-center gap-5'>
                         <div className='w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary'>
@@ -178,6 +258,12 @@ const DoctorPatients = () => {
                         </div>
                     </div>
                 </div>
+
+                <div className='bg-white rounded-3xl border border-gray-100 p-6 shadow-sm'>
+                    <p className='text-sm font-bold text-gray-500 uppercase tracking-wider'>Currently Active</p>
+                    <h3 className='text-3xl font-black text-gray-900 mt-1'>{stats.activeCount}</h3>
+                    <p className='text-xs text-gray-500 mt-2'>Patients seen in the last 45 days.</p>
+                </div>
             </div>
 
             {/* Main Content Area */}
@@ -199,6 +285,17 @@ const DoctorPatients = () => {
                         </div>
 
                         <div className='flex items-center gap-4 w-full lg:w-auto'>
+                            {(searchTerm || sortBy !== 'name') && (
+                                <button
+                                    onClick={() => {
+                                        setSearchTerm('')
+                                        setSortBy('name')
+                                    }}
+                                    className='px-4 py-4 rounded-2xl border border-gray-200 text-xs font-black uppercase tracking-wider text-gray-600 hover:bg-gray-100 transition-all'
+                                >
+                                    Clear
+                                </button>
+                            )}
                             <span className='text-sm font-bold text-gray-500 uppercase hidden sm:inline'>Sort by:</span>
                             <select
                                 value={sortBy}
@@ -212,6 +309,7 @@ const DoctorPatients = () => {
                             </select>
                         </div>
                     </div>
+                    <p className='text-xs font-bold text-gray-400 mt-4 uppercase tracking-widest'>Showing {filteredAndSortedPatients.length} of {patients.length} patients</p>
                 </div>
 
                 <div className='p-0 sm:p-4'>
@@ -242,8 +340,8 @@ const DoctorPatients = () => {
                                     </tr>
                                 </thead>
                                 <tbody className='divide-y divide-gray-50'>
-                                    {filteredAndSortedPatients.map((patient, index) => (
-                                        <tr key={index} className='group hover:bg-gray-50/80 transition-all duration-300'>
+                                    {filteredAndSortedPatients.map((patient) => (
+                                        <tr key={patient._id || patient.email} className='group hover:bg-gray-50/80 transition-all duration-300'>
                                             <td className='py-6 px-8'>
                                                 <div className='flex items-center gap-5'>
                                                     <div className='relative'>
@@ -254,7 +352,7 @@ const DoctorPatients = () => {
                                                                 {patient.name?.[0]?.toUpperCase() || 'P'}
                                                             </div>
                                                         )}
-                                                        <div className={`absolute -bottom-1 -right-1 w-5 h-5 border-4 border-white rounded-full ${patient.totalVisits > 5 ? 'bg-amber-400' : 'bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]'}`}></div>
+                                                        <div className={`absolute -bottom-1 -right-1 w-5 h-5 border-4 border-white rounded-full ${getEngagementStatus(patient.lastVisit).dot}`}></div>
                                                     </div>
                                                     <div>
                                                         <p className='font-black text-gray-900 font-outfit text-lg group-hover:text-primary transition-colors'>{patient.name || 'Unknown User'}</p>
@@ -263,7 +361,7 @@ const DoctorPatients = () => {
                                                                 {patient.gender || 'N/A'}
                                                             </span>
                                                             <span className='text-xs font-bold text-gray-400'>
-                                                                {patient.dob ? `${new Date().getFullYear() - new Date(patient.dob).getFullYear()} Years` : 'Age N/A'}
+                                                                {calculateAge(patient.dob)}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -271,25 +369,25 @@ const DoctorPatients = () => {
                                             </td>
                                             <td className='py-6 px-8'>
                                                 <div className='space-y-1.5'>
-                                                    <p className='text-sm font-bold text-gray-700 flex items-center gap-2.5'>
-                                                        <div className='w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center'>
+                                                    <div className='text-sm font-bold text-gray-700 flex items-center gap-2.5'>
+                                                        <span className='w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center'>
                                                             <svg className='w-3.5 h-3.5 text-gray-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='3' d='M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' /></svg>
-                                                        </div>
+                                                        </span>
                                                         {patient.email || 'N/A'}
-                                                    </p>
-                                                    <p className='text-sm text-gray-500 flex items-center gap-2.5'>
-                                                        <div className='w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center'>
+                                                    </div>
+                                                    <div className='text-sm text-gray-500 flex items-center gap-2.5'>
+                                                        <span className='w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center'>
                                                             <svg className='w-3.5 h-3.5 text-gray-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='3' d='M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z' /></svg>
-                                                        </div>
+                                                        </span>
                                                         {patient.phone || 'No phone'}
-                                                    </p>
+                                                    </div>
                                                 </div>
                                             </td>
                                             <td className='py-6 px-8'>
                                                 <div className='flex items-center gap-6'>
                                                     <div className='flex flex-col'>
                                                         <span className='text-sm font-black text-gray-900'>
-                                                            {patient.lastVisit ? new Date(patient.lastVisit).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }) : 'Pending'}
+                                                            {formatDisplayDate(patient.lastVisit, 'Pending')}
                                                         </span>
                                                         <span className='text-[10px] font-black text-gray-400 uppercase tracking-wider'>Last Engagement</span>
                                                     </div>
@@ -300,6 +398,9 @@ const DoctorPatients = () => {
                                                         </span>
                                                         <span className='text-[10px] font-black text-gray-400 uppercase tracking-wider mt-1'>Visits</span>
                                                     </div>
+                                                    <span className={`px-3 py-1 rounded-full border text-[10px] font-black uppercase tracking-wider ${getEngagementStatus(patient.lastVisit).chip}`}>
+                                                        {getEngagementStatus(patient.lastVisit).label}
+                                                    </span>
                                                 </div>
                                             </td>
                                             <td className='py-6 px-8 text-right'>
@@ -332,7 +433,7 @@ const DoctorPatients = () => {
                             <div className='relative flex flex-col md:flex-row items-center justify-between gap-8'>
                                 <div className='flex flex-col md:flex-row items-center gap-8'>
                                     <div className='relative'>
-                                        <img src={selectedPatient.image} className='w-32 h-32 rounded-[2.5rem] object-cover border-8 border-white/20 shadow-2xl' alt="" />
+                                        <img src={selectedPatient.image || assets.profile_pic} className='w-32 h-32 rounded-[2.5rem] object-cover border-8 border-white/20 shadow-2xl' alt='' />
                                         <div className='absolute -top-2 -right-2 w-10 h-10 bg-white text-primary rounded-2xl flex items-center justify-center shadow-lg font-black'>
                                             {selectedPatient.totalVisits}
                                         </div>
@@ -344,7 +445,7 @@ const DoctorPatients = () => {
                                             <span className='px-4 py-2 bg-white/10 backdrop-blur-md rounded-2xl font-black text-xs uppercase'>{selectedPatient.gender}</span>
                                             <span className='w-1.5 h-1.5 bg-white/30 rounded-full'></span>
                                             <span className='px-4 py-2 bg-white/10 backdrop-blur-md rounded-2xl font-black text-xs uppercase'>
-                                                {selectedPatient.dob ? `${new Date().getFullYear() - new Date(selectedPatient.dob).getFullYear()} Years` : 'Age N/A'}
+                                                {calculateAge(selectedPatient.dob)}
                                             </span>
                                             <span className='w-1.5 h-1.5 bg-white/30 rounded-full'></span>
                                             <span className='px-4 py-2 bg-white/10 backdrop-blur-md rounded-2xl font-black text-xs uppercase truncate max-w-[200px]'>
@@ -372,15 +473,21 @@ const DoctorPatients = () => {
                                         <div className='space-y-6'>
                                             <div className='flex justify-between items-center'>
                                                 <span className='text-sm font-bold text-gray-500'>First Visit</span>
-                                                <span className='text-sm font-black text-gray-900'>Oct 2023</span>
+                                                <span className='text-sm font-black text-gray-900'>{historySummary.firstVisit}</span>
+                                            </div>
+                                            <div className='flex justify-between items-center'>
+                                                <span className='text-sm font-bold text-gray-500'>Last Visit</span>
+                                                <span className='text-sm font-black text-gray-900'>{historySummary.lastVisit}</span>
                                             </div>
                                             <div className='flex justify-between items-center'>
                                                 <span className='text-sm font-bold text-gray-500'>Last Notes</span>
-                                                <span className='text-sm font-black text-gray-900'>Normal</span>
+                                                <span className='text-xs font-black text-gray-900 text-right max-w-[140px] line-clamp-2'>
+                                                    {historySummary.lastNotes}
+                                                </span>
                                             </div>
                                             <div className='flex justify-between items-center'>
-                                                <span className='text-sm font-bold text-gray-500'>Vitals Avg.</span>
-                                                <span className='text-sm font-black text-green-500'>Stable</span>
+                                                <span className='text-sm font-bold text-gray-500'>Follow-through</span>
+                                                <span className='text-sm font-black text-green-600'>{historySummary.adherence}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -391,7 +498,9 @@ const DoctorPatients = () => {
                                             <h4 className='text-sm font-black uppercase tracking-wider'>Notes</h4>
                                         </div>
                                         <p className='text-xs font-bold text-primary/80 leading-relaxed italic'>
-                                            "Patient shows consistent recovery progress. Recommend continued monitoring of adherence to prescribed dosage."
+                                            {historySummary.completedSessions > 0
+                                                ? `Clinical record includes ${historySummary.completedSessions} completed session${historySummary.completedSessions > 1 ? 's' : ''}. Continue evidence-based follow-up plan.`
+                                                : 'No completed sessions recorded yet. Use the next consultation to establish baseline treatment goals.'}
                                         </p>
                                     </div>
                                 </div>
@@ -400,20 +509,35 @@ const DoctorPatients = () => {
                                 <div className='lg:col-span-3'>
                                     <div className='flex items-center justify-between mb-8'>
                                         <h3 className='text-3xl font-black text-gray-900 font-outfit'>Clinical Journey</h3>
-                                        <div className='px-4 py-2 bg-white rounded-xl shadow-sm border border-gray-100 text-xs font-black text-gray-500 uppercase tracking-widest'>
-                                            {patientHistory.length} Sessions Record
+                                        <div className='flex items-center gap-3'>
+                                            <button
+                                                onClick={() => selectedPatient && viewPatientHistory(selectedPatient)}
+                                                disabled={historyLoading}
+                                                className='px-4 py-2 bg-white rounded-xl shadow-sm border border-gray-100 text-xs font-black text-gray-600 uppercase tracking-widest hover:bg-gray-50 transition-all disabled:opacity-60 disabled:cursor-not-allowed'
+                                            >
+                                                {historyLoading ? 'Refreshing...' : 'Refresh History'}
+                                            </button>
+                                            <div className='px-4 py-2 bg-white rounded-xl shadow-sm border border-gray-100 text-xs font-black text-gray-500 uppercase tracking-widest'>
+                                                {patientHistory.length} Sessions Record
+                                            </div>
                                         </div>
                                     </div>
 
                                     {historyLoading ? (
-                                        <div className='flex flex-col items-center justify-center py-20 grayscale opacity-50'>
-                                            <div className='w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-4 text-primary'></div>
-                                            <p className='font-black text-xs uppercase tracking-widest text-gray-400'>Syncing Records...</p>
+                                        <div className='space-y-5 py-8'>
+                                            {[1, 2, 3].map((item) => (
+                                                <div key={item} className='bg-white border border-gray-100 rounded-3xl p-6 animate-pulse'>
+                                                    <div className='h-5 w-40 bg-gray-200 rounded mb-4'></div>
+                                                    <div className='h-4 w-full bg-gray-100 rounded mb-2'></div>
+                                                    <div className='h-4 w-5/6 bg-gray-100 rounded'></div>
+                                                </div>
+                                            ))}
                                         </div>
                                     ) : patientHistory.length === 0 ? (
                                         <div className='bg-white p-20 rounded-[3rem] border-4 border-dashed border-gray-100 text-center'>
                                             <div className='text-6xl mb-6'>📁</div>
                                             <p className='text-gray-400 font-black uppercase tracking-widest'>No clinical history found</p>
+                                            <p className='text-sm text-gray-500 mt-3'>This patient has no appointment timeline yet.</p>
                                         </div>
                                     ) : (
                                         <div className='relative space-y-10 before:absolute before:left-[2.75rem] before:top-4 before:bottom-4 before:w-1.5 before:bg-gray-100 before:rounded-full'>

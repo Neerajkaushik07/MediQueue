@@ -64,8 +64,11 @@ const WheelPicker = ({ value, onChange, options, label }) => {
 const DoctorSchedule = () => {
     const { backendUrl, token, userRole, isDemoMode } = useContext(AppContext)
     const [scheduleData, setScheduleData] = useState(null)
+    const [snapshotData, setSnapshotData] = useState(null)
     const [isEdit, setIsEdit] = useState(false)
-    const [loading, setLoading] = useState(false)
+    const [saving, setSaving] = useState(false)
+    const [refreshing, setRefreshing] = useState(false)
+    const [lastUpdated, setLastUpdated] = useState(null)
     const [is24Hour, setIs24Hour] = useState(true)
 
     const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -74,39 +77,40 @@ const DoctorSchedule = () => {
     const minutes = Array.from({ length: 60 }, (_, i) => i < 10 ? `0${i}` : `${i}`);
     const durations = Array.from({ length: 60 }, (_, i) => i + 1);
     const ampm = ['AM', 'PM'];
+    const defaultSchedule = {
+        workingDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        startTime: '09:00',
+        endTime: '17:00',
+        slotDuration: 30
+    }
 
-    const getSchedule = useCallback(async () => {
+    const getSchedule = useCallback(async (showRefreshing = false) => {
+        if (showRefreshing) setRefreshing(true)
         try {
             if (isDemoMode) {
-                setScheduleData({
-                    workingDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-                    startTime: '09:00',
-                    endTime: '17:00',
-                    slotDuration: 30
-                })
+                setScheduleData(defaultSchedule)
+                setSnapshotData(defaultSchedule)
+                setLastUpdated(new Date())
                 return
             }
             if (userRole === 'doctor' && token) {
                 const { data } = await axios.get(backendUrl + '/api/doctor/schedule', { headers: { Authorization: `Bearer ${token}` } })
                 if (data.success && data.schedule) {
                     setScheduleData(data.schedule)
+                    setSnapshotData(data.schedule)
                 } else {
-                    setScheduleData({
-                        workingDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-                        startTime: '09:00',
-                        endTime: '17:00',
-                        slotDuration: 30
-                    })
+                    setScheduleData(defaultSchedule)
+                    setSnapshotData(defaultSchedule)
                 }
+                setLastUpdated(new Date())
             }
         } catch (error) {
 
-            setScheduleData({
-                workingDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-                startTime: '09:00',
-                endTime: '17:00',
-                slotDuration: 30
-            })
+            setScheduleData(defaultSchedule)
+            setSnapshotData(defaultSchedule)
+            setLastUpdated(new Date())
+        } finally {
+            setRefreshing(false)
         }
     }, [backendUrl, token, userRole, isDemoMode])
 
@@ -120,14 +124,68 @@ const DoctorSchedule = () => {
         })
     }
 
+    const applyWorkingDayPreset = (preset) => {
+        if (!isEdit) return
+        if (preset === 'weekdays') {
+            setScheduleData(prev => ({ ...prev, workingDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'] }))
+        } else if (preset === 'all') {
+            setScheduleData(prev => ({ ...prev, workingDays: [...daysOfWeek] }))
+        } else if (preset === 'weekend') {
+            setScheduleData(prev => ({ ...prev, workingDays: ['Saturday', 'Sunday'] }))
+        }
+    }
+
+    const toMinutes = (time) => {
+        if (!time || !time.includes(':')) return 0
+        const [h, m] = time.split(':').map(Number)
+        return (h * 60) + m
+    }
+
+    const validateSchedule = (data) => {
+        if (!data.workingDays || data.workingDays.length === 0) {
+            return 'Please select at least one working day.'
+        }
+
+        if (toMinutes(data.endTime) <= toMinutes(data.startTime)) {
+            return 'End time must be later than start time.'
+        }
+
+        if (!data.slotDuration || Number(data.slotDuration) <= 0) {
+            return 'Slot duration must be at least 1 minute.'
+        }
+
+        const shiftMinutes = toMinutes(data.endTime) - toMinutes(data.startTime)
+        if (Number(data.slotDuration) > shiftMinutes) {
+            return 'Slot duration cannot be longer than your clinic hours.'
+        }
+
+        return ''
+    }
+
+    const handleStartEdit = () => {
+        setSnapshotData(scheduleData)
+        setIsEdit(true)
+    }
+
+    const handleCancelEdit = () => {
+        setScheduleData(snapshotData || scheduleData)
+        setIsEdit(false)
+    }
+
     const updateSchedule = async () => {
         if (isDemoMode) {
             toast.info('Changes cannot be saved in Demo Mode')
             setIsEdit(false)
             return
         }
-        if (loading) return;
-        setLoading(true);
+        const validationMessage = validateSchedule(scheduleData)
+        if (validationMessage) {
+            toast.error(validationMessage)
+            return
+        }
+
+        if (saving) return;
+        setSaving(true);
         try {
             const { data } = await axios.post(
                 backendUrl + '/api/doctor/update-schedule',
@@ -146,7 +204,7 @@ const DoctorSchedule = () => {
 
             toast.error(error.response?.data?.message || error.message || 'Failed to update schedule')
         } finally {
-            setLoading(false);
+            setSaving(false);
         }
     }
 
@@ -203,6 +261,10 @@ const DoctorSchedule = () => {
         return `${h}:${m} ${p}`;
     };
 
+    const totalMinutes = toMinutes(scheduleData.endTime) - toMinutes(scheduleData.startTime)
+    const totalHours = totalMinutes > 0 ? (totalMinutes / 60).toFixed(1) : '0.0'
+    const slotsPerDay = totalMinutes > 0 ? Math.floor(totalMinutes / Number(scheduleData.slotDuration || 1)) : 0
+
     return (
         <div className='m-4 md:m-5 max-w-4xl mx-auto'>
             {/* Header Section - More Compact */}
@@ -214,24 +276,58 @@ const DoctorSchedule = () => {
                             <button onClick={() => setIs24Hour(true)} className={`px-2 py-0.5 text-[8px] font-black rounded ${is24Hour ? 'bg-white text-primary shadow-sm' : 'text-gray-400'}`}>24H</button>
                             <button onClick={() => setIs24Hour(false)} className={`px-2 py-0.5 text-[8px] font-black rounded ${!is24Hour ? 'bg-white text-primary shadow-sm' : 'text-gray-400'}`}>12H</button>
                         </div>
+                        <p className='text-[10px] font-bold text-gray-400 uppercase tracking-wider'>
+                            Updated {lastUpdated ? lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'just now'}
+                        </p>
                     </div>
                 </div>
                 <div className='flex items-center gap-2'>
+                    <button
+                        onClick={() => getSchedule(true)}
+                        disabled={refreshing}
+                        className={`px-4 py-1.5 border border-cyan-200 text-cyan-700 rounded-lg font-black text-[10px] uppercase tracking-wider transition-colors ${refreshing ? 'opacity-50 cursor-not-allowed' : 'hover:bg-cyan-50'}`}
+                    >
+                        {refreshing ? 'Refreshing...' : 'Refresh'}
+                    </button>
                     {isEdit ? (
                         <div className='flex gap-2'>
-                            <button onClick={() => setIsEdit(false)} disabled={loading} className='px-4 py-1.5 border border-gray-200 text-gray-500 rounded-lg font-black text-[10px] uppercase tracking-wider hover:bg-gray-50 disabled:opacity-50'>Cancel</button>
-                            <button onClick={updateSchedule} disabled={loading} className='px-5 py-1.5 bg-primary text-white rounded-lg font-black text-[10px] uppercase tracking-wider shadow-sm hover:bg-primary-dark active:scale-95 disabled:bg-gray-400'>{loading ? 'Saving...' : 'Save'}</button>
+                            <button onClick={handleCancelEdit} disabled={saving} className='px-4 py-1.5 border border-gray-200 text-gray-500 rounded-lg font-black text-[10px] uppercase tracking-wider hover:bg-gray-50 disabled:opacity-50'>Cancel</button>
+                            <button onClick={updateSchedule} disabled={saving} className='px-5 py-1.5 bg-primary text-white rounded-lg font-black text-[10px] uppercase tracking-wider shadow-sm hover:bg-primary-dark active:scale-95 disabled:bg-gray-400'>{saving ? 'Saving...' : 'Save'}</button>
                         </div>
                     ) : (
-                        <button onClick={() => setIsEdit(true)} className='px-5 py-1.5 bg-white border border-primary text-primary rounded-lg font-black text-[10px] uppercase tracking-wider hover:bg-primary hover:text-white transition-all shadow-sm'>Edit Settings</button>
+                        <button onClick={handleStartEdit} className='px-5 py-1.5 bg-white border border-primary text-primary rounded-lg font-black text-[10px] uppercase tracking-wider hover:bg-primary hover:text-white transition-all shadow-sm'>Edit Settings</button>
                     )}
+                </div>
+            </div>
+
+            <div className='grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5'>
+                <div className='bg-white rounded-xl border border-gray-100 p-3.5'>
+                    <p className='text-[9px] font-black text-gray-400 uppercase tracking-widest'>Working Days</p>
+                    <p className='text-xl font-black text-gray-900 mt-1'>{(scheduleData.workingDays || []).length}</p>
+                </div>
+                <div className='bg-white rounded-xl border border-gray-100 p-3.5'>
+                    <p className='text-[9px] font-black text-gray-400 uppercase tracking-widest'>Daily Hours</p>
+                    <p className='text-xl font-black text-gray-900 mt-1'>{totalHours}h</p>
+                </div>
+                <div className='bg-white rounded-xl border border-gray-100 p-3.5'>
+                    <p className='text-[9px] font-black text-gray-400 uppercase tracking-widest'>Slots / Day</p>
+                    <p className='text-xl font-black text-gray-900 mt-1'>{slotsPerDay}</p>
                 </div>
             </div>
 
             <div className='bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden'>
                 {/* Days Grid - Hyper Compact */}
                 <div className='p-5 border-b border-gray-50'>
-                    <h2 className='text-[8px] font-black text-gray-400 uppercase tracking-widest mb-4'>Operational Days</h2>
+                    <div className='flex items-center justify-between mb-4 gap-2'>
+                        <h2 className='text-[8px] font-black text-gray-400 uppercase tracking-widest'>Operational Days</h2>
+                        {isEdit && (
+                            <div className='flex items-center gap-2'>
+                                <button onClick={() => applyWorkingDayPreset('weekdays')} className='text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded bg-gray-100 text-gray-600 hover:bg-gray-200'>Weekdays</button>
+                                <button onClick={() => applyWorkingDayPreset('all')} className='text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded bg-gray-100 text-gray-600 hover:bg-gray-200'>All</button>
+                                <button onClick={() => applyWorkingDayPreset('weekend')} className='text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded bg-gray-100 text-gray-600 hover:bg-gray-200'>Weekend</button>
+                            </div>
+                        )}
+                    </div>
                     <div className='grid grid-cols-4 sm:grid-cols-7 gap-2'>
                         {daysOfWeek.map(day => {
                             const isActive = (scheduleData.workingDays || []).includes(day);
@@ -250,6 +346,9 @@ const DoctorSchedule = () => {
                             );
                         })}
                     </div>
+                    {isEdit && (scheduleData.workingDays || []).length === 0 && (
+                        <p className='mt-3 text-[10px] font-bold text-red-500 uppercase tracking-wider'>Select at least one working day.</p>
+                    )}
                 </div>
 
                 {/* Time Grid - Smaller Cards */}

@@ -14,6 +14,21 @@ const AppContextProvider = (props) => {
     const [token, setToken] = useState(localStorage.getItem('token') || sessionStorage.getItem('token') || null)
     const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || sessionStorage.getItem('userRole') || null)
     const [isDemoMode, setIsDemoMode] = useState(sessionStorage.getItem('isDemoMode') === 'true' || false)
+    const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light')
+
+    useEffect(() => {
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+        localStorage.setItem('theme', theme)
+    }, [theme])
+
+    const toggleTheme = () => {
+        setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light')
+    }
+
     const [userData, setUserData] = useState({
         name: 'Demo User',
         image: assets.profile_pic,
@@ -277,6 +292,7 @@ const AppContextProvider = (props) => {
 
 
     const value = {
+        theme, toggleTheme,
         doctors, getDoctorsData,
         currencySymbol,
         backendUrl,

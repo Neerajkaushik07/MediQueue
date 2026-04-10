@@ -2,15 +2,21 @@ import express from 'express';
 import cors from 'cors';
 import compression from 'compression';
 import 'dotenv/config';
+import http from 'http';
+import { socketInit } from './config/socket.js';
 import connectDB from './config/mongodb.js';
 import connectCloudinary from './config/cloudinary.js';
-import doctorRouter from './routes/doctorRoute.js';
-import adminRouter from './routes/adminRoute.js';
-import userRouter from './routes/userRoute.js';
-import healthRouter from './routes/healthRoute.js';
-import familyHealthRouter from './routes/familyHealthRoute.js';
-import contentRouter from './routes/contentRoute.js';
-import advancedHealthRouter from './routes/advancedHealthRoute.js';
+import appointmentModel from './modules/user/appointment.model.js';
+import doctorModel from './modules/doctor/doctor.model.js';
+import doctorRouter from './modules/doctor/doctor.routes.js';
+import adminRouter from './modules/admin/admin.routes.js';
+import userRouter from './modules/user/user.routes.js';
+import healthRouter from './modules/health/health.routes.js';
+import familyHealthRouter from './modules/family/familyHealth.routes.js';
+import contentRouter from './modules/content/content.routes.js';
+import advancedHealthRouter from './modules/advancedHealth/advancedHealth.routes.js';
+import communityRouter from './modules/community/community.routes.js';
+import chatRouter from './modules/chat/chat.routes.js';
 import { setupSwagger } from './config/swagger.js';
 import { securityConfig, corsOptions } from './config/security.js';
 import { generalLimiter } from './middlewares/rateLimiter.js';
@@ -21,6 +27,8 @@ import logger from './config/logger.js';
 // app config
 const app = express();
 const port = process.env.PORT || 4000;
+const server = http.createServer(app);
+socketInit(server);
 
 // Connect to database
 connectDB();
@@ -73,6 +81,8 @@ app.use('/api/health', healthRouter);
 app.use('/api/family-health', familyHealthRouter);
 app.use('/api/content', contentRouter);
 app.use('/api/advanced-health', advancedHealthRouter);
+app.use('/api/community', communityRouter);
+app.use('/api/chat', chatRouter);
 
 // 404 handler
 app.use(notFound);
@@ -80,8 +90,33 @@ app.use(notFound);
 // Error handling middleware (must be last)
 app.use(errorHandler);
 
+// Background Sweeper for Temporary Slot Locks
+// Runs every 1 minute to delete unpaid appointments older than 10 minutes
+setInterval(async () => {
+  try {
+    const tenMinsAgo = Date.now() - 10 * 60 * 1000;
+    const expiredLocks = await appointmentModel.find({ payment: false, date: { $lt: tenMinsAgo } });
+    
+    if (expiredLocks.length > 0) {
+      for (const appointment of expiredLocks) {
+        const { _id, docId, slotDate, slotTime } = appointment;
+        const docData = await doctorModel.findById(docId);
+        if (docData && docData.slots_booked && docData.slots_booked[slotDate]) {
+          let slots_booked = docData.slots_booked;
+          slots_booked[slotDate] = slots_booked[slotDate].filter(e => e !== slotTime);
+          await doctorModel.findByIdAndUpdate(docId, { slots_booked });
+        }
+        await appointmentModel.findByIdAndDelete(_id);
+        logger.info(`Released expired hold for appointment ${_id}`);
+      }
+    }
+  } catch (error) {
+    logger.error('Error in lock sweeper:', error);
+  }
+}, 60 * 1000);
+
 // Start server
-app.listen(port, () => {
+server.listen(port, () => {
   logger.info(`Server started on PORT: ${port}`);
   logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
   logger.info(`API Documentation: http://localhost:${port}/api-docs`);
@@ -101,3 +136,4 @@ process.on('uncaughtException', (err) => {
 });
 
 export default app;
+

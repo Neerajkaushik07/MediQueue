@@ -1,12 +1,40 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import Home from './pages/Home'
-import Doctors from './pages/Doctors'
-import Login from './pages/Login'
-import AdminLogin from './pages/AdminLogin'
-import AddDoctor from './pages/AddDoctor'
 
-import DoctorLogin from './pages/Doctor/DoctorLogin'
+// Auth Pages
+import Login from './pages/Auth/Login'
+import AdminLogin from './pages/Auth/AdminLogin'
+import DoctorLogin from './pages/Auth/DoctorLogin'
+
+// Public Pages
+import Home from './pages/General/Home'
+import Doctors from './pages/General/Doctors'
+import AboutContact from './pages/General/AboutContact'
+import HealthFeatures from './pages/General/HealthFeatures'
+import HealthBlog from './pages/General/HealthBlog'
+import EmergencyServices from './pages/General/EmergencyServices'
+import HealthTips from './pages/General/HealthTips'
+import Community from './pages/General/Community'
+
+// Patient Pages
+import MyProfile from './pages/Patient/MyProfile'
+import MyAppointment from './pages/Patient/MyAppointment'
+import Favorites from './pages/Patient/Favorites'
+import MedicalRecords from './pages/Patient/MedicalRecords'
+import Medications from './pages/Patient/Medications'
+import HealthMetrics from './pages/Patient/HealthMetrics'
+import HealthProfile from './pages/Patient/HealthProfile'
+import LabReports from './pages/Patient/LabReports'
+import PatientDashboard from './pages/Patient/PatientDashboard'
+import HealthDashboard from './pages/Patient/HealthDashboard'
+import FamilyHealth from './pages/Patient/FamilyHealth'
+
+// Feature Pages
+import Appointment from './pages/Features/Appointment'
+import InsuranceMarketplace from './pages/Features/InsuranceMarketplace'
+import Telemedicine from './pages/Features/Telemedicine'
+
+// Doctor Pages
 import DoctorDashboard from './pages/Doctor/DoctorDashboard'
 import DoctorAppointments from './pages/Doctor/DoctorAppointments'
 import DoctorProfile from './pages/Doctor/DoctorProfile'
@@ -15,31 +43,17 @@ import DoctorPatients from './pages/Doctor/DoctorPatients'
 import DoctorFinances from './pages/Doctor/DoctorFinances'
 import DoctorReviews from './pages/Doctor/DoctorReviews'
 
-import AboutContact from './pages/AboutContact'
-import MyProfile from './pages/MyProfile'
-import MyAppointment from './pages/MyAppointment'
-import Appointment from './pages/Appointment'
-import Favorites from './pages/Favorites'
-import HealthBlog from './pages/HealthBlog'
-import EmergencyServices from './pages/EmergencyServices'
-import HealthTips from './pages/HealthTips'
-import MedicalRecords from './pages/MedicalRecords'
-import Medications from './pages/Medications'
-import HealthMetrics from './pages/HealthMetrics'
-import HealthProfile from './pages/HealthProfile'
-import LabReports from './pages/LabReports'
-import PatientDashboard from './pages/PatientDashboard'
-import HealthDashboard from './pages/HealthDashboard'
-import HealthFeatures from './pages/HealthFeatures'
-import FamilyHealth from './pages/FamilyHealth'
-import InsuranceMarketplace from './pages/InsuranceMarketplace'
-import Telemedicine from './pages/Telemedicine'
-import Community from './pages/Community'
+// Admin Pages
+import AddDoctor from './pages/Admin/AddDoctor'
 
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
-import ProtectedRoute from './components/ProtectedRoute'
-import DemoAccess from './components/DemoAccess'
+// Layout Components
+import Navbar from './components/Layout/Navbar'
+import Footer from './components/Layout/Footer'
+
+// Auth Components
+import ProtectedRoute from './components/Auth/ProtectedRoute'
+import DemoAccess from './components/Auth/DemoAccess'
+
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -59,8 +73,8 @@ const App = () => {
         theme="light"
         toastClassName="glass-card"
       />
+      <Navbar />
       <div className='mx-4 sm:mx-[10%] relative z-10'>
-        <Navbar />
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/doctors' element={<Doctors />} />

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useCallback } from 'react'
+import React, { useContext, useEffect, useState, useCallback, useMemo } from 'react'
 import { AppContext } from '../../context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
@@ -17,6 +17,8 @@ const DoctorAppointments = () => {
     const [diagnosis, setDiagnosis] = useState('')
     const [medications, setMedications] = useState('')
     const [notes, setNotes] = useState('')
+    const [actionLoadingId, setActionLoadingId] = useState('')
+    const [savingPrescription, setSavingPrescription] = useState(false)
 
     const getAppointments = useCallback(async () => {
         try {
@@ -81,6 +83,7 @@ const DoctorAppointments = () => {
             return
         }
         try {
+            setSavingPrescription(true)
             const medArray = medications.split(',').map(m => m.trim()).filter(m => m !== '')
             const payload = {
                 appointmentId: selectedAppointment._id,
@@ -105,6 +108,8 @@ const DoctorAppointments = () => {
         } catch (error) {
 
             toast.error('Failed to save prescription details')
+        } finally {
+            setSavingPrescription(false)
         }
     }
 
@@ -114,6 +119,7 @@ const DoctorAppointments = () => {
             return
         }
         try {
+            setActionLoadingId(appointmentId)
             const { data } = await axios.post(backendUrl + '/api/doctor/cancel-appointment', { appointmentId }, { headers: { Authorization: `Bearer ${token}` } })
             if (data.success) {
                 toast.success('Appointment cancelled')
@@ -124,6 +130,8 @@ const DoctorAppointments = () => {
         } catch (error) {
 
             toast.error(error.message || 'Failed to cancel appointment')
+        } finally {
+            setActionLoadingId('')
         }
     }
 
@@ -143,8 +151,10 @@ const DoctorAppointments = () => {
         // Apply search filter
         if (searchTerm) {
             filtered = filtered.filter(apt =>
-                apt.userData.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                apt.slotDate.toLowerCase().includes(searchTerm.toLowerCase())
+                apt.userData?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                apt.slotDate?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                apt.slotTime?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                apt.userData?.email?.toLowerCase().includes(searchTerm.toLowerCase())
             )
         }
 
@@ -159,27 +169,75 @@ const DoctorAppointments = () => {
         if (!dob) return 'N/A'
         const today = new Date()
         const birthDate = new Date(dob)
+        if (Number.isNaN(birthDate.getTime())) return 'N/A'
         let age = today.getFullYear() - birthDate.getFullYear()
+        const m = today.getMonth() - birthDate.getMonth()
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--
+        }
         return age
     }
 
-    const getStatusCounts = () => {
-        return {
-            all: appointments.length,
-            upcoming: appointments.filter(apt => !apt.cancelled && !apt.isCompleted).length,
-            completed: appointments.filter(apt => apt.isCompleted).length,
-            cancelled: appointments.filter(apt => apt.cancelled).length
-        }
+    const formatSlotDate = (slotDate) => {
+        if (!slotDate) return 'N/A'
+        const [day, month, year] = slotDate.split('_')
+        if (!day || !month || !year) return slotDate
+        const parsed = new Date(Number(year), Number(month) - 1, Number(day))
+        if (Number.isNaN(parsed.getTime())) return slotDate
+        return parsed.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
     }
 
-    const statusCounts = getStatusCounts()
+    const statusCounts = useMemo(() => ({
+        all: appointments.length,
+        upcoming: appointments.filter(apt => !apt.cancelled && !apt.isCompleted).length,
+        completed: appointments.filter(apt => apt.isCompleted).length,
+        cancelled: appointments.filter(apt => apt.cancelled).length
+    }), [appointments])
+
+    const revenueSummary = useMemo(() => {
+        return appointments.reduce((acc, apt) => {
+            const amt = Number(apt.amount || 0)
+            acc.total += amt
+            if (apt.payment) acc.paid += amt
+            if (!apt.payment && !apt.cancelled) acc.pending += amt
+            return acc
+        }, { total: 0, paid: 0, pending: 0 })
+    }, [appointments])
 
     return (
         <div className='m-5 max-w-7xl mx-auto'>
             {/* Header */}
-            <div className='mb-6'>
-                <h1 className='text-3xl font-bold text-gray-800 font-poppins'>Appointments Management</h1>
-                <p className='text-gray-600 mt-2 font-medium'>Review appointments, provide diagnoses, and manage patient prescriptions.</p>
+            <div className='mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4'>
+                <div>
+                    <h1 className='text-3xl font-bold text-gray-800 font-poppins'>Appointments Management</h1>
+                    <p className='text-gray-600 mt-2 font-medium'>Review appointments, provide diagnoses, and manage patient prescriptions.</p>
+                </div>
+                <button
+                    onClick={getAppointments}
+                    disabled={loading}
+                    className={`px-4 py-2 rounded-xl font-semibold text-sm transition-colors ${loading ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-cyan-50 text-cyan-700 hover:bg-cyan-100'}`}
+                >
+                    {loading ? 'Refreshing...' : 'Refresh'}
+                </button>
+            </div>
+
+            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6'>
+                <div className='bg-white rounded-xl border border-gray-200 p-4'>
+                    <p className='text-xs font-bold text-gray-400 uppercase'>Total Appointments</p>
+                    <p className='text-2xl font-black text-gray-900 mt-1'>{statusCounts.all}</p>
+                </div>
+                <div className='bg-white rounded-xl border border-gray-200 p-4'>
+                    <p className='text-xs font-bold text-gray-400 uppercase'>Upcoming</p>
+                    <p className='text-2xl font-black text-blue-600 mt-1'>{statusCounts.upcoming}</p>
+                </div>
+                <div className='bg-white rounded-xl border border-gray-200 p-4'>
+                    <p className='text-xs font-bold text-gray-400 uppercase'>Paid Revenue</p>
+                    <p className='text-2xl font-black text-green-600 mt-1'>{currencySymbol}{revenueSummary.paid}</p>
+                </div>
+                <div className='bg-white rounded-xl border border-gray-200 p-4'>
+                    <p className='text-xs font-bold text-gray-400 uppercase'>Pending Collection</p>
+                    <p className='text-2xl font-black text-amber-600 mt-1'>{currencySymbol}{revenueSummary.pending}</p>
+                </div>
             </div>
 
             {/* Search and Filter Bar - Reverted to Original Design */}
@@ -200,7 +258,7 @@ const DoctorAppointments = () => {
                     </div>
 
                     {/* Filter Tabs */}
-                    <div className='flex gap-2 bg-gray-100 p-1 rounded-lg'>
+                    <div className='flex flex-wrap gap-2 bg-gray-100 p-1 rounded-lg'>
                         <button
                             onClick={() => setFilterStatus('all')}
                             className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${filterStatus === 'all'
@@ -237,6 +295,12 @@ const DoctorAppointments = () => {
                         >
                             Cancelled ({statusCounts.cancelled})
                         </button>
+                        <button
+                            onClick={() => { setSearchTerm(''); setFilterStatus('all') }}
+                            className='px-4 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-white transition-all'
+                        >
+                            Clear
+                        </button>
                     </div>
                 </div>
             </div>
@@ -259,14 +323,15 @@ const DoctorAppointments = () => {
             ) : (
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in'>
                     {filteredAppointments.map((item, index) => (
-                        <div key={index} className={`bg-white rounded-3xl border border-gray-100 shadow-soft hover:shadow-card-hover hover:border-primary/20 transition-all duration-300 overflow-hidden flex flex-col group`}>
+                        <div key={item._id || index} className={`bg-white rounded-3xl border border-gray-100 shadow-soft hover:shadow-card-hover hover:border-primary/20 transition-all duration-300 overflow-hidden flex flex-col group`}>
                             {/* Card Header */}
                             <div className='p-6 pb-4 flex items-start gap-4'>
                                 <div className='relative'>
                                     <img
                                         className='w-16 h-16 rounded-2xl object-cover border-2 border-white shadow-soft group-hover:scale-105 transition-transform duration-300'
-                                        src={item.userData.image}
-                                        alt={item.userData.name}
+                                        src={item.userData?.image || assets.profile_pic}
+                                        alt={item.userData?.name || 'Patient'}
+                                        onError={(e) => { e.target.onerror = null; e.target.src = assets.profile_pic }}
                                     />
                                     {item.payment && (
                                         <div className='absolute -bottom-1 -right-1 bg-green-500 text-white p-1 rounded-lg shadow-sm' title="Payment Completed">
@@ -275,8 +340,8 @@ const DoctorAppointments = () => {
                                     )}
                                 </div>
                                 <div className='flex-1 overflow-hidden'>
-                                    <h3 className='font-black text-gray-900 font-poppins text-lg truncate leading-tight group-hover:text-primary transition-colors'>{item.userData.name}</h3>
-                                    <p className='text-xs font-bold text-gray-400 uppercase tracking-widest mt-1'>{calculateAge(item.userData.dob)} Years • {item.userData.email.split('@')[0]}</p>
+                                    <h3 className='font-black text-gray-900 font-poppins text-lg truncate leading-tight group-hover:text-primary transition-colors'>{item.userData?.name || 'Unknown Patient'}</h3>
+                                    <p className='text-xs font-bold text-gray-400 uppercase tracking-widest mt-1'>{calculateAge(item.userData?.dob)} Years • {(item.userData?.email || 'unknown@patient').split('@')[0]}</p>
                                 </div>
                                 <div className='text-right'>
                                     <p className='text-xs font-black text-gray-400 uppercase tracking-tighter'>Amt</p>
@@ -291,7 +356,7 @@ const DoctorAppointments = () => {
                                         <span className='bg-white p-1.5 rounded-lg text-gray-400 shadow-sm'>
                                             <svg className='w-3.5 h-3.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' /></svg>
                                         </span>
-                                        <span className='text-sm font-bold text-gray-700'>{item.slotDate}</span>
+                                        <span className='text-sm font-bold text-gray-700'>{formatSlotDate(item.slotDate)}</span>
                                     </div>
                                     <div className='flex items-center gap-2'>
                                         <span className='bg-white p-1.5 rounded-lg text-gray-400 shadow-sm'>
@@ -322,9 +387,10 @@ const DoctorAppointments = () => {
                                             <>
                                                 <button
                                                     onClick={() => cancelAppointment(item._id)}
-                                                    className='flex-1 h-11 flex items-center justify-center bg-gray-100 text-gray-500 hover:bg-red-50 hover:text-red-500 rounded-xl font-bold text-xs uppercase transition-all'
+                                                    disabled={actionLoadingId === item._id}
+                                                    className='flex-1 h-11 flex items-center justify-center bg-gray-100 text-gray-500 hover:bg-red-50 hover:text-red-500 rounded-xl font-bold text-xs uppercase transition-all disabled:opacity-50 disabled:cursor-not-allowed'
                                                 >
-                                                    Cancel Call
+                                                    {actionLoadingId === item._id ? 'Working...' : 'Cancel Call'}
                                                 </button>
                                                 <button
                                                     onClick={() => openPrescriptionModal(item)}
@@ -438,9 +504,10 @@ const DoctorAppointments = () => {
                             </button>
                             <button
                                 onClick={handlePrescriptionSubmit}
-                                className='px-10 py-3 bg-primary text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl hover:bg-primary-dark transition-all shadow-medical active:scale-95'
+                                disabled={savingPrescription}
+                                className='px-10 py-3 bg-primary text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl hover:bg-primary-dark transition-all shadow-medical active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed'
                             >
-                                {selectedAppointment.isCompleted ? 'Verify Changes' : 'Approve & Finalize'}
+                                {savingPrescription ? 'Saving...' : (selectedAppointment.isCompleted ? 'Verify Changes' : 'Approve & Finalize')}
                             </button>
                         </div>
                     </div>
