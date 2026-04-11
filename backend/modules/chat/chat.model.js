@@ -24,9 +24,20 @@ const messageSchema = new mongoose.Schema({
     required: true,
     index: true,
   },
+  messageType: {
+    type: String,
+    enum: ['text', 'image'],
+    default: 'text'
+  },
   text: {
     type: String,
-    required: true,
+  },
+  imageUrl: {
+    type: String,
+  },
+  isDeleted: {
+    type: Boolean,
+    default: false
   },
   timestamp: {
     type: Date,

@@ -9,6 +9,19 @@ import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || 'pk_test_placeholder');
 
+const stripeAppearance = {
+  theme: 'stripe',
+  variables: {
+    colorPrimary: '#2563eb',
+    colorBackground: '#ffffff',
+    colorText: '#1f2937',
+    colorDanger: '#ef4444',
+    fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+    spacingUnit: '4px',
+    borderRadius: '8px',
+  }
+};
+
 const StripeCheckoutForm = ({ appointmentId, onSuccess, onCancel }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -18,45 +31,72 @@ const StripeCheckoutForm = ({ appointmentId, onSuccess, onCancel }) => {
     e.preventDefault();
     if (!stripe || !elements) return;
 
-    setIsProcessing(true);
-    const { error, paymentIntent } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: window.location.origin + '/my-appointments',
-      },
-      redirect: 'if_required' 
-    });
+    const { error: submitError } = await elements.submit();
+    if (submitError) {
+      toast.error(submitError.message);
+      return;
+    }
 
-    if (error) {
-      toast.error(error.message);
-      setIsProcessing(false);
-    } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-      onSuccess(paymentIntent.id, appointmentId);
-    } else {
-      toast.error('Payment failed');
+    setIsProcessing(true);
+
+    try {
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: window.location.origin + '/my-appointments',
+        },
+        redirect: 'if_required'
+      });
+
+      if (error) {
+        toast.error(error.message);
+        setIsProcessing(false);
+      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        onSuccess(paymentIntent.id, appointmentId);
+      } else {
+        toast.error('Payment failed');
+        setIsProcessing(false);
+      }
+    } catch (err) {
+      toast.error(err.message || 'Payment failed');
       setIsProcessing(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <PaymentElement />
+    <form onSubmit={handleSubmit} className="space-y-6 pt-2">
+      <div className="p-4 bg-gray-50 border border-gray-100 rounded-xl shadow-inner">
+        <PaymentElement options={{ layout: "accordion" }} />
+      </div>
       <div className="flex gap-4 mt-6">
-         <button
-            type="button"
-            onClick={onCancel}
-            disabled={isProcessing}
-            className="flex-1 px-4 py-3 border border-gray-200 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-colors"
-         >
-            Cancel
-         </button>
-         <button
-            type="submit"
-            disabled={!stripe || isProcessing}
-            className="flex-1 bg-gradient-primary text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-500/30 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
-         >
-            {isProcessing ? 'Processing...' : 'Pay Now'}
-         </button>
+        <button
+          type="button"
+          onClick={onCancel}
+          disabled={isProcessing}
+          className="flex-1 px-4 py-3 border border-gray-200 text-gray-600 font-semibold rounded-xl hover:bg-gray-100 hover:text-gray-900 transition-all duration-200 disabled:opacity-50"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          disabled={!stripe || isProcessing}
+          className="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-500/30 hover:shadow-xl hover:from-blue-700 hover:to-blue-600 hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70 disabled:hover:scale-100 disabled:shadow-none flex items-center justify-center gap-2"
+        >
+          {isProcessing ? (
+            <>
+              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Processing...
+            </>
+          ) : (
+            <>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+              Pay Securely
+            </>
+          )}
+        </button>
       </div>
     </form>
   );
@@ -213,7 +253,7 @@ const MyAppointments = () => {
         toast.error(data.message);
       }
     } catch (error) {
-       toast.error(error.response?.data?.message || 'Payment verification failed');
+      toast.error(error.response?.data?.message || 'Payment verification failed');
     }
   }
 
@@ -591,26 +631,27 @@ const MyAppointments = () => {
 
       {/* Stripe Payment Modal */}
       {showStripeModal && stripeClientSecret && (
-        <div className='fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in'>
-          <div className='bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl transform transition-all'>
-             <div className='flex justify-between items-center mb-6'>
-               <h2 className='text-2xl font-bold text-gray-900'>Complete Payment</h2>
-               <button
-                 onClick={() => {
-                   setShowStripeModal(false);
-                   setStripeClientSecret('');
-                   setPaymentAppointmentId(null);
-                 }}
-                 className='p-2 hover:bg-gray-100 rounded-full transition-colors'
-               >
-                 <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-               </button>
-             </div>
-             
-             {/* Stripe Elements Provider wraps the checkout form */}
-             <Elements stripe={stripePromise} options={{ clientSecret: stripeClientSecret }}>
-                <StripeCheckoutForm 
-                  appointmentId={paymentAppointmentId} 
+        <div className='fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in p-4 sm:p-6'>
+          <div className='bg-white rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl transform transition-all flex flex-col max-h-[85vh] sm:max-h-[80vh] mt-10'>
+            <div className='flex justify-between items-center mb-6 shrink-0'>
+              <h2 className='text-2xl font-bold text-gray-900'>Complete Payment</h2>
+              <button
+                onClick={() => {
+                  setShowStripeModal(false);
+                  setStripeClientSecret('');
+                  setPaymentAppointmentId(null);
+                }}
+                className='p-2 hover:bg-gray-100 rounded-full transition-colors shrink-0'
+              >
+                <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+
+            {/* Stripe Elements Provider wraps the checkout form */}
+            <div className='overflow-y-auto flex-1 -mx-2 px-2'>
+              <Elements stripe={stripePromise} options={{ clientSecret: stripeClientSecret, appearance: stripeAppearance }}>
+                <StripeCheckoutForm
+                  appointmentId={paymentAppointmentId}
                   onSuccess={handleStripeSuccess}
                   onCancel={() => {
                     setShowStripeModal(false);
@@ -618,7 +659,8 @@ const MyAppointments = () => {
                     setPaymentAppointmentId(null);
                   }}
                 />
-             </Elements>
+              </Elements>
+            </div>
           </div>
         </div>
       )}
