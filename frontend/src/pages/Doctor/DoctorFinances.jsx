@@ -195,16 +195,16 @@ const DoctorFinances = () => {
             {/* Header Section */}
             <div className='flex flex-col md:flex-row justify-between items-start md:items-center gap-6'>
                 <div>
-                    <h1 className='text-4xl font-black text-gray-900 tracking-tight'>Financial Dashboard</h1>
-                    <p className='text-gray-500 mt-2 text-lg'>Monitor your professional revenue, settlements, and growth analytics.</p>
+                    <h1 className='text-4xl font-black text-gray-900 dark:text-white tracking-tight'>Financial Dashboard</h1>
+                    <p className='text-gray-500 dark:text-gray-400 mt-2 text-lg'>Monitor your professional revenue, settlements, and growth analytics.</p>
                     <p className='text-xs font-bold text-gray-400 uppercase tracking-widest mt-3'>
                         Last synced: {lastUpdated ? lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Not synced yet'}
                     </p>
                 </div>
                 <div className='flex items-center gap-3'>
-                    <div className='flex items-center gap-3 bg-white px-5 py-3 rounded-2xl shadow-soft border border-gray-100'>
+                    <div className='flex items-center gap-3 bg-white dark:bg-gray-800 px-5 py-3 rounded-2xl shadow-soft border border-gray-100'>
                         <div className='w-3 h-3 bg-green-500 rounded-full animate-pulse'></div>
-                        <span className='text-sm font-black text-gray-500 uppercase tracking-widest'>Live Revenue Stream</span>
+                        <span className='text-sm font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest'>Live Revenue Stream</span>
                     </div>
                     <button
                         onClick={() => getFinancialStats(true)}
@@ -218,7 +218,7 @@ const DoctorFinances = () => {
 
             {/* Premium Stats Grid */}
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
-                <div className='bg-white p-6 rounded-[2rem] shadow-card border border-gray-50 group hover:-translate-y-2 transition-all duration-500'>
+                <div className='bg-white dark:bg-gray-800 p-6 rounded-[2rem] shadow-card border border-gray-50 group hover:-translate-y-2 transition-all duration-500'>
                     <div className='flex justify-between items-start mb-6'>
                         <div className='w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center'>
                             <svg className='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2.5' d='M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' /></svg>
@@ -228,39 +228,39 @@ const DoctorFinances = () => {
                         </span>
                     </div>
                     <p className='text-xs font-black text-gray-400 uppercase tracking-widest'>Gross Revenue</p>
-                    <h3 className='text-3xl font-black text-gray-900 mt-1'>{formatMoney(statsOverview.totalRevenue)}</h3>
+                    <h3 className='text-3xl font-black text-gray-900 dark:text-white mt-1'>{formatMoney(statsOverview.totalRevenue)}</h3>
                 </div>
 
-                <div className='bg-white p-6 rounded-[2rem] shadow-card border border-gray-50 group hover:-translate-y-2 transition-all duration-500'>
+                <div className='bg-white dark:bg-gray-800 p-6 rounded-[2rem] shadow-card border border-gray-50 group hover:-translate-y-2 transition-all duration-500'>
                     <div className='w-12 h-12 bg-secondary/10 text-secondary rounded-2xl flex items-center justify-center mb-6'>
                         <svg className='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2.5' d='M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' /></svg>
                     </div>
                     <p className='text-xs font-black text-gray-400 uppercase tracking-widest'>Monthly Average</p>
-                    <h3 className='text-3xl font-black text-gray-900 mt-1'>{formatMoney(statsOverview.avgMonthly)}</h3>
+                    <h3 className='text-3xl font-black text-gray-900 dark:text-white mt-1'>{formatMoney(statsOverview.avgMonthly)}</h3>
                 </div>
 
-                <div className='bg-white p-6 rounded-[2rem] shadow-card border border-gray-50 group hover:-translate-y-2 transition-all duration-500'>
+                <div className='bg-white dark:bg-gray-800 p-6 rounded-[2rem] shadow-card border border-gray-50 group hover:-translate-y-2 transition-all duration-500'>
                     <div className='w-12 h-12 bg-trust-blue/10 text-trust-blue rounded-2xl flex items-center justify-center mb-6'>
                         <svg className='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2.5' d='M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' /></svg>
                     </div>
                     <p className='text-xs font-black text-gray-400 uppercase tracking-widest'>Active Patients</p>
-                    <h3 className='text-3xl font-black text-gray-900 mt-1'>{statsOverview.activePatients}</h3>
+                    <h3 className='text-3xl font-black text-gray-900 dark:text-white mt-1'>{statsOverview.activePatients}</h3>
                 </div>
 
-                <div className='bg-white p-6 rounded-[2rem] shadow-card border border-gray-50 group hover:-translate-y-2 transition-all duration-500'>
+                <div className='bg-white dark:bg-gray-800 p-6 rounded-[2rem] shadow-card border border-gray-50 group hover:-translate-y-2 transition-all duration-500'>
                     <div className='w-12 h-12 bg-amber-500/10 text-amber-600 rounded-2xl flex items-center justify-center mb-6'>
                         <svg className='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2.5' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' /></svg>
                     </div>
                     <p className='text-xs font-black text-gray-400 uppercase tracking-widest'>Pending Claims</p>
-                    <h3 className='text-3xl font-black text-gray-900 mt-1'>{formatMoney(statsOverview.pendingClaims)}</h3>
+                    <h3 className='text-3xl font-black text-gray-900 dark:text-white mt-1'>{formatMoney(statsOverview.pendingClaims)}</h3>
                 </div>
             </div>
 
             <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
                 {/* Advanced Chart Section */}
-                <div className='lg:col-span-2 bg-white p-10 rounded-[3rem] shadow-medical border border-gray-100 relative overflow-hidden'>
+                <div className='lg:col-span-2 bg-white dark:bg-gray-800 p-10 rounded-[3rem] shadow-medical border border-gray-100 relative overflow-hidden'>
                     <div className='absolute top-0 right-0 p-8'>
-                        <button onClick={() => getFinancialStats(true)} className='p-3 bg-gray-50 hover:bg-gray-100 rounded-2xl transition-colors text-gray-400 hover:text-primary'>
+                        <button onClick={() => getFinancialStats(true)} className='p-3 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:bg-gray-800 rounded-2xl transition-colors text-gray-400 hover:text-primary'>
                             <svg className={`w-5 h-5 ${refreshing ? 'animate-spin' : ''}`} fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' /></svg>
                         </button>
                     </div>
@@ -268,9 +268,9 @@ const DoctorFinances = () => {
                     <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-12'>
                         <div className='flex items-center gap-4'>
                             <div className='w-2 h-10 bg-primary rounded-full'></div>
-                            <h2 className='text-2xl font-black text-gray-900 tracking-tight'>Revenue Growth</h2>
+                            <h2 className='text-2xl font-black text-gray-900 dark:text-white tracking-tight'>Revenue Growth</h2>
                         </div>
-                        <div className='inline-flex items-center p-1 rounded-2xl bg-gray-100'>
+                        <div className='inline-flex items-center p-1 rounded-2xl bg-gray-100 dark:bg-gray-800'>
                             {[
                                 { value: '3m', label: '3M' },
                                 { value: '6m', label: '6M' },
@@ -281,8 +281,8 @@ const DoctorFinances = () => {
                                     onClick={() => setSelectedRange(range.value)}
                                     className={`px-3 py-1.5 rounded-xl text-xs font-black tracking-wider transition-all ${
                                         selectedRange === range.value
-                                            ? 'bg-white text-primary shadow-sm'
-                                            : 'text-gray-500 hover:text-gray-800'
+                                            ? 'bg-white dark:bg-gray-800 text-primary shadow-sm dark:shadow-none'
+                                            : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:text-gray-100'
                                     }`}
                                 >
                                     {range.label}
@@ -292,9 +292,9 @@ const DoctorFinances = () => {
                     </div>
 
                     {filteredChartData.length === 0 ? (
-                        <div className='h-[300px] rounded-3xl border-2 border-dashed border-gray-200 bg-gray-50/50 flex flex-col items-center justify-center text-center px-6'>
+                        <div className='h-[300px] rounded-3xl border-2 border-dashed border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 flex flex-col items-center justify-center text-center px-6'>
                             <p className='text-sm font-black uppercase tracking-widest text-gray-400'>No revenue data available</p>
-                            <p className='text-xs text-gray-500 mt-2'>Once earnings are recorded, trend analytics will appear here.</p>
+                            <p className='text-xs text-gray-500 dark:text-gray-400 mt-2'>Once earnings are recorded, trend analytics will appear here.</p>
                         </div>
                     ) : (
                         <div className='flex items-end justify-between h-[300px] gap-4 mb-4 relative'>
@@ -327,7 +327,7 @@ const DoctorFinances = () => {
                 <div className='flex flex-col gap-8'>
                     {/* Premium Balance Card */}
                     <div className='bg-gradient-primary p-1 rounded-[3rem] shadow-medical group cursor-default transition-all hover:scale-[1.02]'>
-                        <div className='bg-white rounded-[2.8rem] p-10 h-full relative overflow-hidden'>
+                        <div className='bg-white dark:bg-gray-800 rounded-[2.8rem] p-10 h-full relative overflow-hidden'>
                             {/* Decorative Blur */}
                             <div className='absolute -top-20 -right-20 w-48 h-48 bg-primary/5 rounded-full blur-3xl'></div>
 
@@ -338,7 +338,7 @@ const DoctorFinances = () => {
                                         <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z' /></svg>
                                     </div>
                                 </div>
-                                <h3 className='text-5xl font-black text-gray-900 mb-10 tracking-tighter'>{formatMoney(statsOverview.currentBalance)}</h3>
+                                <h3 className='text-5xl font-black text-gray-900 dark:text-white mb-10 tracking-tighter'>{formatMoney(statsOverview.currentBalance)}</h3>
                                 <button
                                     onClick={() => toast.info('Withdrawal flow will be enabled when settlement endpoints are connected.')}
                                     disabled={statsOverview.currentBalance <= 0}
@@ -354,7 +354,7 @@ const DoctorFinances = () => {
                     </div>
 
                     {/* Breakdown Card */}
-                    <div className='bg-white p-10 rounded-[3rem] shadow-card border border-gray-100'>
+                    <div className='bg-white dark:bg-gray-800 p-10 rounded-[3rem] shadow-card border border-gray-100'>
                         <h4 className='text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-8 flex items-center gap-3'>
                             <div className='w-1.5 h-6 bg-secondary rounded-full'></div>
                             Earning Breakdown
@@ -362,28 +362,28 @@ const DoctorFinances = () => {
                         <div className='space-y-6'>
                             <div className='space-y-3'>
                                 <div className='flex justify-between items-end'>
-                                    <span className='text-sm font-black text-gray-700'>Consultations</span>
+                                    <span className='text-sm font-black text-gray-700 dark:text-gray-200'>Consultations</span>
                                     <span className='text-sm font-black text-emerald-600'>{formatMoney(statsOverview.breakdown.consultations)}</span>
                                 </div>
-                                <div className='w-full h-2 bg-gray-50 rounded-full overflow-hidden'>
+                                <div className='w-full h-2 bg-gray-50 dark:bg-gray-900 rounded-full overflow-hidden'>
                                     <div className='h-full bg-emerald-500 rounded-full' style={{ width: `${(statsOverview.breakdown.consultations / maxBreakdownValue) * 100}%` }}></div>
                                 </div>
                             </div>
                             <div className='space-y-3'>
                                 <div className='flex justify-between items-end'>
-                                    <span className='text-sm font-black text-gray-700'>Procedures</span>
+                                    <span className='text-sm font-black text-gray-700 dark:text-gray-200'>Procedures</span>
                                     <span className='text-sm font-black text-blue-600'>{formatMoney(statsOverview.breakdown.procedures)}</span>
                                 </div>
-                                <div className='w-full h-2 bg-gray-50 rounded-full overflow-hidden'>
+                                <div className='w-full h-2 bg-gray-50 dark:bg-gray-900 rounded-full overflow-hidden'>
                                     <div className='h-full bg-blue-500 rounded-full' style={{ width: `${(statsOverview.breakdown.procedures / maxBreakdownValue) * 100}%` }}></div>
                                 </div>
                             </div>
                             <div className='space-y-3'>
                                 <div className='flex justify-between items-end'>
-                                    <span className='text-sm font-black text-gray-700'>Incentives</span>
+                                    <span className='text-sm font-black text-gray-700 dark:text-gray-200'>Incentives</span>
                                     <span className='text-sm font-black text-purple-600'>{formatMoney(statsOverview.breakdown.incentives)}</span>
                                 </div>
-                                <div className='w-full h-2 bg-gray-50 rounded-full overflow-hidden'>
+                                <div className='w-full h-2 bg-gray-50 dark:bg-gray-900 rounded-full overflow-hidden'>
                                     <div className='h-full bg-purple-500 rounded-full' style={{ width: `${(statsOverview.breakdown.incentives / maxBreakdownValue) * 100}%` }}></div>
                                 </div>
                             </div>
@@ -393,15 +393,15 @@ const DoctorFinances = () => {
             </div>
 
             {/* Payout History Section */}
-            <div className='bg-white rounded-[3rem] shadow-card border border-gray-100 overflow-hidden'>
-                <div className='p-10 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 bg-gray-50/30'>
+            <div className='bg-white dark:bg-gray-800 rounded-[3rem] shadow-card border border-gray-100 overflow-hidden'>
+                <div className='p-10 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 bg-gray-50 dark:bg-gray-900/30'>
                     <div>
-                        <h3 className='text-2xl font-black text-gray-900 tracking-tight'>Settlement History</h3>
+                        <h3 className='text-2xl font-black text-gray-900 dark:text-white tracking-tight'>Settlement History</h3>
                         <p className='text-sm font-bold text-gray-400 mt-1 uppercase tracking-wider'>Track your bank transfers, status, and net payouts</p>
                     </div>
                     <button
                         onClick={exportCsvReport}
-                        className='px-6 py-3 bg-white border-2 border-gray-200 text-gray-600 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:border-primary hover:text-primary transition-all shadow-sm'
+                        className='px-6 py-3 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:border-primary hover:text-primary transition-all shadow-sm dark:shadow-none'
                     >
                         Export CSV Report
                     </button>
@@ -423,12 +423,12 @@ const DoctorFinances = () => {
                                 <tr className='group'>
                                     <td colSpan='5' className='py-32'>
                                         <div className='flex flex-col items-center opacity-40 grayscale'>
-                                            <div className='w-24 h-24 bg-gray-100 rounded-[2.5rem] flex items-center justify-center mb-8 border-4 border-white shadow-soft'>
+                                            <div className='w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-[2.5rem] flex items-center justify-center mb-8 border-4 border-white shadow-soft'>
                                                 <svg className='w-10 h-10 text-gray-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                                                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z' />
                                                 </svg>
                                             </div>
-                                            <h4 className='font-black text-2xl text-gray-800 tracking-tight'>No Active Settlements</h4>
+                                            <h4 className='font-black text-2xl text-gray-800 dark:text-gray-100 tracking-tight'>No Active Settlements</h4>
                                             <p className='text-sm font-bold text-gray-400 mt-3 max-w-xs text-center uppercase tracking-wider'>
                                                 Your first transaction record will be visible here after a successful withdrawal.
                                             </p>
@@ -437,24 +437,24 @@ const DoctorFinances = () => {
                                 </tr>
                             ) : (
                                 payouts.map((entry, index) => (
-                                    <tr key={entry.refId || index} className='border-b border-gray-50 hover:bg-gray-50/60 transition-colors'>
-                                        <td className='px-8 py-6 text-sm font-black text-gray-700'>{entry.refId || '-'}</td>
-                                        <td className='px-8 py-6 text-sm font-bold text-gray-600'>
+                                    <tr key={entry.refId || index} className='border-b border-gray-50 hover:bg-gray-50 dark:bg-gray-900/60 transition-colors'>
+                                        <td className='px-8 py-6 text-sm font-black text-gray-700 dark:text-gray-200'>{entry.refId || '-'}</td>
+                                        <td className='px-8 py-6 text-sm font-bold text-gray-600 dark:text-gray-300'>
                                             {entry.settlementDate ? new Date(entry.settlementDate).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}
                                         </td>
-                                        <td className='px-8 py-6 text-sm font-bold text-gray-600'>{entry.accountType || 'Primary Account'}</td>
+                                        <td className='px-8 py-6 text-sm font-bold text-gray-600 dark:text-gray-300'>{entry.accountType || 'Primary Account'}</td>
                                         <td className='px-8 py-6'>
                                             <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
                                                 entry.status?.toLowerCase() === 'settled'
                                                     ? 'bg-green-50 text-green-700 border border-green-200'
                                                     : entry.status?.toLowerCase() === 'processing'
                                                         ? 'bg-amber-50 text-amber-700 border border-amber-200'
-                                                        : 'bg-gray-100 text-gray-600 border border-gray-200'
+                                                        : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700'
                                             }`}>
                                                 {entry.status || 'Pending'}
                                             </span>
                                         </td>
-                                        <td className='px-8 py-6 text-right text-sm font-black text-gray-900'>{formatMoney(entry.netAmount)}</td>
+                                        <td className='px-8 py-6 text-right text-sm font-black text-gray-900 dark:text-white'>{formatMoney(entry.netAmount)}</td>
                                     </tr>
                                 ))
                             )}

@@ -198,9 +198,9 @@ const Doctors = () => {
                                 onChange={() => setShowAvailableOnly(!showAvailableOnly)}
                             />
                             <div className={`w-10 h-6 rounded-full shadow-inner transition-colors ${showAvailableOnly ? 'bg-primary' : 'bg-gray-200'}`}></div>
-                            <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full shadow transition-transform ${showAvailableOnly ? 'translate-x-4' : ''}`}></div>
+                            <div className={`absolute top-1 left-1 bg-white dark:bg-gray-800 w-4 h-4 rounded-full shadow transition-transform ${showAvailableOnly ? 'translate-x-4' : ''}`}></div>
                         </div>
-                        <span className="text-sm font-medium text-gray-700">Available Only</span>
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-200">Available Only</span>
                     </label>
                 </div>
 
@@ -341,7 +341,7 @@ const Doctors = () => {
                 )}
 
                 {/* Results Count */}
-                <div className="ml-auto text-sm text-gray-600 font-medium">
+                <div className="ml-auto text-sm text-gray-600 dark:text-gray-300 font-medium">
                     <span className="text-primary font-bold">{filterDoc.length}</span> {filterDoc.length === 1 ? 'doctor' : 'doctors'}
                 </div>
             </div>
@@ -378,15 +378,15 @@ const Doctors = () => {
                                     onClick={() => paginate(currentPage - 1)}
                                     disabled={currentPage === 1}
                                     className={`p-2 rounded-full border ${currentPage === 1
-                                        ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-                                        : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'}`}
+                                        ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 border-gray-200 dark:border-gray-700 cursor-not-allowed'
+                                        : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:bg-gray-900'}`}
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                                     </svg>
                                 </button>
 
-                                <span className="text-gray-600 font-medium">
+                                <span className="text-gray-600 dark:text-gray-300 font-medium">
                                     Page {currentPage} of {totalPages}
                                 </span>
 
@@ -394,8 +394,8 @@ const Doctors = () => {
                                     onClick={() => paginate(currentPage + 1)}
                                     disabled={currentPage === totalPages}
                                     className={`p-2 rounded-full border ${currentPage === totalPages
-                                        ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-                                        : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'}`}
+                                        ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 border-gray-200 dark:border-gray-700 cursor-not-allowed'
+                                        : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:bg-gray-900'}`}
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

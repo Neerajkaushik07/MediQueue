@@ -64,11 +64,11 @@ const StripeCheckoutForm = ({ appointmentId, onSuccess, onCancel }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 pt-2">
-      <div className="p-4 bg-gray-50 border border-gray-100 rounded-xl shadow-inner">
+      <div className="p-4 bg-gray-50 dark:bg-gray-900 border border-gray-100 rounded-xl shadow-inner">
         <PaymentElement options={{ layout: "accordion" }} />
       </div>
       <div className="flex gap-4 mt-6">
-        <button type="button" onClick={onCancel} disabled={isProcessing} className="flex-1 px-4 py-3 border border-gray-200 text-gray-600 font-semibold rounded-xl hover:bg-gray-100 hover:text-gray-900 transition-all duration-200 disabled:opacity-50">Cancel</button>
+        <button type="button" onClick={onCancel} disabled={isProcessing} className="flex-1 px-4 py-3 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 font-semibold rounded-xl hover:bg-gray-100 dark:bg-gray-800 hover:text-gray-900 dark:text-white transition-all duration-200 disabled:opacity-50">Cancel</button>
         <button type="submit" disabled={!stripe || isProcessing} className="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-500/30 hover:shadow-xl hover:from-blue-700 hover:to-blue-600 hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70 disabled:hover:scale-100 disabled:shadow-none flex items-center justify-center gap-2">
           {isProcessing ? (
             <>
@@ -255,11 +255,11 @@ const Appointment = () => {
           <div>
             <img className='bg-primary w-full sm:max-w-72 rounded-lg' src={docInfo.image} alt="" />
           </div>
-          <div className='flex-1 border border-[#ADADAD] rounded-lg p-8 py-7 bg-white mx-2 sm:mx-0 mt-[-80px] sm:mt-0'>
-            <p className='flex items-center gap-2 text-3xl font-medium text-gray-700'>
+          <div className='flex-1 border border-[#ADADAD] rounded-lg p-8 py-7 bg-white dark:bg-gray-800 mx-2 sm:mx-0 mt-[-80px] sm:mt-0'>
+            <p className='flex items-center gap-2 text-3xl font-medium text-gray-700 dark:text-gray-200'>
               {docInfo.name} <img src={assets.verified_icon} alt="" />
             </p>
-            <div className='flex items-center gap-2 mt-1 text-gray-600'>
+            <div className='flex items-center gap-2 mt-1 text-gray-600 dark:text-gray-300'>
               <p>{docInfo.degree} - {docInfo.speciality}</p>
               <button className='py-0.5 px-2 border text-xs rounded-full'>{docInfo.experience}</button>
             </div>
@@ -267,10 +267,10 @@ const Appointment = () => {
               <p className='flex items-center gap-1 text-sm font-medium text-[#262626] mt-3'>
                 About <img src={assets.info_icon} alt="" />
               </p>
-              <p className='text-sm text-gray-600 max-w-[700px] mt-1'>{docInfo.about}</p>
+              <p className='text-sm text-gray-600 dark:text-gray-300 max-w-[700px] mt-1'>{docInfo.about}</p>
             </div>
-            <p className='text-gray-600 font-medium mt-4'>
-              Appointment fee: <span className='text-gray-800'>{currencySymbol} {docInfo.fees}</span>
+            <p className='text-gray-600 dark:text-gray-300 font-medium mt-4'>
+              Appointment fee: <span className='text-gray-800 dark:text-gray-100'>{currencySymbol} {docInfo.fees}</span>
             </p>
           </div>
         </div>
@@ -325,13 +325,13 @@ const Appointment = () => {
         {/* Stripe Payment Modal */}
         {showStripeModal && stripeClientSecret && (
           <div className='fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in p-4 sm:p-6'>
-            <div className='bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[85vh] sm:max-h-[80vh] mt-10'>
+            <div className='bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[85vh] sm:max-h-[80vh] mt-10'>
               <div className='bg-gradient-to-r from-blue-50 to-blue-100/50 p-6 border-b border-blue-100 flex justify-between items-center shrink-0'>
                 <div>
-                  <h3 className='text-xl font-bold text-gray-800'>Complete Payment</h3>
+                  <h3 className='text-xl font-bold text-gray-800 dark:text-gray-100'>Complete Payment</h3>
                   <p className='text-sm text-blue-600 font-medium mt-1'>Slot is locked for 10 minutes</p>
                 </div>
-                <button onClick={handleCancelHold} className='text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-white rounded-full shrink-0'>
+                <button onClick={handleCancelHold} className='text-gray-400 hover:text-gray-600 dark:text-gray-300 transition-colors p-2 hover:bg-white dark:bg-gray-800 rounded-full shrink-0'>
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>

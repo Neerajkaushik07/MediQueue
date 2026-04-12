@@ -27,7 +27,7 @@ const WheelPicker = ({ value, onChange, options, label }) => {
     return (
         <div className='flex flex-col items-center flex-1 group/wheel min-w-[55px]'>
             <span className='text-[7px] font-black text-gray-400 uppercase tracking-[0.3em] mb-1.5 group-hover/wheel:text-primary transition-all duration-300'>{label}</span>
-            <div className='relative h-[110px] w-full overflow-hidden bg-white rounded-xl border border-gray-100 shadow-[inset_0_1px_5px_rgba(0,0,0,0.01)]'>
+            <div className='relative h-[110px] w-full overflow-hidden bg-white dark:bg-gray-800 rounded-xl border border-gray-100 shadow-[inset_0_1px_5px_rgba(0,0,0,0.01)]'>
                 <div className='absolute inset-0 pointer-events-none z-20'>
                     <div className='absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-white via-white/40 to-transparent'></div>
                     <div className='absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white via-white/40 to-transparent'></div>
@@ -270,11 +270,11 @@ const DoctorSchedule = () => {
             {/* Header Section - More Compact */}
             <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4'>
                 <div>
-                    <h1 className='text-2xl font-black text-gray-900 font-poppins tracking-tight'>Availability</h1>
+                    <h1 className='text-2xl font-black text-gray-900 dark:text-white font-poppins tracking-tight'>Availability</h1>
                     <div className='flex items-center gap-3 mt-1'>
-                        <div className='flex items-center bg-gray-100 p-0.5 rounded-lg'>
-                            <button onClick={() => setIs24Hour(true)} className={`px-2 py-0.5 text-[8px] font-black rounded ${is24Hour ? 'bg-white text-primary shadow-sm' : 'text-gray-400'}`}>24H</button>
-                            <button onClick={() => setIs24Hour(false)} className={`px-2 py-0.5 text-[8px] font-black rounded ${!is24Hour ? 'bg-white text-primary shadow-sm' : 'text-gray-400'}`}>12H</button>
+                        <div className='flex items-center bg-gray-100 dark:bg-gray-800 p-0.5 rounded-lg'>
+                            <button onClick={() => setIs24Hour(true)} className={`px-2 py-0.5 text-[8px] font-black rounded ${is24Hour ? 'bg-white dark:bg-gray-800 text-primary shadow-sm dark:shadow-none' : 'text-gray-400'}`}>24H</button>
+                            <button onClick={() => setIs24Hour(false)} className={`px-2 py-0.5 text-[8px] font-black rounded ${!is24Hour ? 'bg-white dark:bg-gray-800 text-primary shadow-sm dark:shadow-none' : 'text-gray-400'}`}>12H</button>
                         </div>
                         <p className='text-[10px] font-bold text-gray-400 uppercase tracking-wider'>
                             Updated {lastUpdated ? lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'just now'}
@@ -291,40 +291,40 @@ const DoctorSchedule = () => {
                     </button>
                     {isEdit ? (
                         <div className='flex gap-2'>
-                            <button onClick={handleCancelEdit} disabled={saving} className='px-4 py-1.5 border border-gray-200 text-gray-500 rounded-lg font-black text-[10px] uppercase tracking-wider hover:bg-gray-50 disabled:opacity-50'>Cancel</button>
-                            <button onClick={updateSchedule} disabled={saving} className='px-5 py-1.5 bg-primary text-white rounded-lg font-black text-[10px] uppercase tracking-wider shadow-sm hover:bg-primary-dark active:scale-95 disabled:bg-gray-400'>{saving ? 'Saving...' : 'Save'}</button>
+                            <button onClick={handleCancelEdit} disabled={saving} className='px-4 py-1.5 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 rounded-lg font-black text-[10px] uppercase tracking-wider hover:bg-gray-50 dark:bg-gray-900 disabled:opacity-50'>Cancel</button>
+                            <button onClick={updateSchedule} disabled={saving} className='px-5 py-1.5 bg-primary text-white rounded-lg font-black text-[10px] uppercase tracking-wider shadow-sm dark:shadow-none hover:bg-primary-dark active:scale-95 disabled:bg-gray-400'>{saving ? 'Saving...' : 'Save'}</button>
                         </div>
                     ) : (
-                        <button onClick={handleStartEdit} className='px-5 py-1.5 bg-white border border-primary text-primary rounded-lg font-black text-[10px] uppercase tracking-wider hover:bg-primary hover:text-white transition-all shadow-sm'>Edit Settings</button>
+                        <button onClick={handleStartEdit} className='px-5 py-1.5 bg-white dark:bg-gray-800 border border-primary text-primary rounded-lg font-black text-[10px] uppercase tracking-wider hover:bg-primary hover:text-white transition-all shadow-sm dark:shadow-none'>Edit Settings</button>
                     )}
                 </div>
             </div>
 
             <div className='grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5'>
-                <div className='bg-white rounded-xl border border-gray-100 p-3.5'>
+                <div className='bg-white dark:bg-gray-800 rounded-xl border border-gray-100 p-3.5'>
                     <p className='text-[9px] font-black text-gray-400 uppercase tracking-widest'>Working Days</p>
-                    <p className='text-xl font-black text-gray-900 mt-1'>{(scheduleData.workingDays || []).length}</p>
+                    <p className='text-xl font-black text-gray-900 dark:text-white mt-1'>{(scheduleData.workingDays || []).length}</p>
                 </div>
-                <div className='bg-white rounded-xl border border-gray-100 p-3.5'>
+                <div className='bg-white dark:bg-gray-800 rounded-xl border border-gray-100 p-3.5'>
                     <p className='text-[9px] font-black text-gray-400 uppercase tracking-widest'>Daily Hours</p>
-                    <p className='text-xl font-black text-gray-900 mt-1'>{totalHours}h</p>
+                    <p className='text-xl font-black text-gray-900 dark:text-white mt-1'>{totalHours}h</p>
                 </div>
-                <div className='bg-white rounded-xl border border-gray-100 p-3.5'>
+                <div className='bg-white dark:bg-gray-800 rounded-xl border border-gray-100 p-3.5'>
                     <p className='text-[9px] font-black text-gray-400 uppercase tracking-widest'>Slots / Day</p>
-                    <p className='text-xl font-black text-gray-900 mt-1'>{slotsPerDay}</p>
+                    <p className='text-xl font-black text-gray-900 dark:text-white mt-1'>{slotsPerDay}</p>
                 </div>
             </div>
 
-            <div className='bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden'>
+            <div className='bg-white dark:bg-gray-800 rounded-3xl shadow-sm dark:shadow-none border border-gray-100 overflow-hidden'>
                 {/* Days Grid - Hyper Compact */}
                 <div className='p-5 border-b border-gray-50'>
                     <div className='flex items-center justify-between mb-4 gap-2'>
                         <h2 className='text-[8px] font-black text-gray-400 uppercase tracking-widest'>Operational Days</h2>
                         {isEdit && (
                             <div className='flex items-center gap-2'>
-                                <button onClick={() => applyWorkingDayPreset('weekdays')} className='text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded bg-gray-100 text-gray-600 hover:bg-gray-200'>Weekdays</button>
-                                <button onClick={() => applyWorkingDayPreset('all')} className='text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded bg-gray-100 text-gray-600 hover:bg-gray-200'>All</button>
-                                <button onClick={() => applyWorkingDayPreset('weekend')} className='text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded bg-gray-100 text-gray-600 hover:bg-gray-200'>Weekend</button>
+                                <button onClick={() => applyWorkingDayPreset('weekdays')} className='text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200'>Weekdays</button>
+                                <button onClick={() => applyWorkingDayPreset('all')} className='text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200'>All</button>
+                                <button onClick={() => applyWorkingDayPreset('weekend')} className='text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200'>Weekend</button>
                             </div>
                         )}
                     </div>
@@ -337,8 +337,8 @@ const DoctorSchedule = () => {
                                     onClick={() => toggleWorkingDay(day)}
                                     disabled={!isEdit}
                                     className={`py-2 rounded-xl border-2 text-center transition-all ${isActive
-                                        ? 'border-primary bg-primary text-white shadow-sm'
-                                        : 'border-gray-50 bg-gray-50/20 text-gray-400 opacity-60'
+                                        ? 'border-primary bg-primary text-white shadow-sm dark:shadow-none'
+                                        : 'border-gray-50 bg-gray-50 dark:bg-gray-900/20 text-gray-400 opacity-60'
                                         }`}
                                 >
                                     <span className='font-black text-[9px] uppercase tracking-tighter'>{day.slice(0, 3)}</span>
@@ -352,10 +352,10 @@ const DoctorSchedule = () => {
                 </div>
 
                 {/* Time Grid - Smaller Cards */}
-                <div className='p-5 bg-gray-50/30'>
+                <div className='p-5 bg-gray-50 dark:bg-gray-900/30'>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                         {/* Start Card */}
-                        <div className='bg-white p-4 rounded-2xl border border-gray-100 shadow-sm'>
+                        <div className='bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 shadow-sm dark:shadow-none'>
                             <h3 className='text-[8px] font-black text-gray-400 uppercase tracking-widest mb-3 italic'>Clinic Open</h3>
                             {isEdit ? (
                                 <div className='flex items-center gap-2'>
@@ -382,12 +382,12 @@ const DoctorSchedule = () => {
                                     )}
                                 </div>
                             ) : (
-                                <p className='text-3xl font-black text-gray-900 font-poppins tracking-tighter'>{renderTimeDisplay(scheduleData.startTime)}</p>
+                                <p className='text-3xl font-black text-gray-900 dark:text-white font-poppins tracking-tighter'>{renderTimeDisplay(scheduleData.startTime)}</p>
                             )}
                         </div>
 
                         {/* End Card */}
-                        <div className='bg-white p-4 rounded-2xl border border-gray-100 shadow-sm'>
+                        <div className='bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 shadow-sm dark:shadow-none'>
                             <h3 className='text-[8px] font-black text-gray-400 uppercase tracking-widest mb-3 italic'>Clinic Close</h3>
                             {isEdit ? (
                                 <div className='flex items-center gap-2'>
@@ -414,19 +414,19 @@ const DoctorSchedule = () => {
                                     )}
                                 </div>
                             ) : (
-                                <p className='text-3xl font-black text-gray-900 font-poppins tracking-tighter'>{renderTimeDisplay(scheduleData.endTime)}</p>
+                                <p className='text-3xl font-black text-gray-900 dark:text-white font-poppins tracking-tighter'>{renderTimeDisplay(scheduleData.endTime)}</p>
                             )}
                         </div>
                     </div>
 
                     {/* Slot Control - Compact */}
-                    <div className='mt-4 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between'>
+                    <div className='mt-4 bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-100 shadow-sm dark:shadow-none flex items-center justify-between'>
                         <div>
                             <h4 className='text-[8px] font-black text-gray-400 uppercase tracking-widest'>Slot Timing</h4>
-                            <p className='text-lg font-black text-gray-900 font-poppins'>{scheduleData.slotDuration} min</p>
+                            <p className='text-lg font-black text-gray-900 dark:text-white font-poppins'>{scheduleData.slotDuration} min</p>
                         </div>
                         {isEdit && (
-                            <div className='flex items-center gap-4 bg-gray-50 p-2 rounded-2xl border border-gray-100'>
+                            <div className='flex items-center gap-4 bg-gray-50 dark:bg-gray-900 p-2 rounded-2xl border border-gray-100'>
                                 <WheelPicker
                                     label="DUR (MIN)"
                                     value={scheduleData.slotDuration}
@@ -439,7 +439,7 @@ const DoctorSchedule = () => {
                 </div>
 
                 {/* Simple Footer */}
-                <div className='p-4 px-6 bg-white flex justify-between items-center text-[9px] font-bold text-gray-400 uppercase tracking-widest'>
+                <div className='p-4 px-6 bg-white dark:bg-gray-800 flex justify-between items-center text-[9px] font-bold text-gray-400 uppercase tracking-widest'>
                     <span>Operational Continuity</span>
                     <span className='text-primary'>Sync Status: Active</span>
                 </div>

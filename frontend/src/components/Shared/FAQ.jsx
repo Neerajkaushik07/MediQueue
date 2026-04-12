@@ -9,7 +9,7 @@ const FAQ = () => {
     }
 
     return (
-        <div className='flex flex-col items-center gap-4 py-16 text-gray-800' id='faq'>
+        <div className='flex flex-col items-center gap-4 py-16 text-gray-800 dark:text-gray-100' id='faq'>
             <h1 className='text-3xl font-medium'>Frequently Asked Questions</h1>
             <p className='sm:w-1/3 text-center text-sm'>Common questions about our services and booking process.</p>
 
@@ -17,13 +17,13 @@ const FAQ = () => {
                 {faqs.map((item, index) => (
                     <div
                         key={index}
-                        className={`border rounded-xl overflow-hidden transition-all duration-300 ${activeIndex === index ? 'border-[var(--primary)] bg-indigo-50 shadow-sm' : 'border-gray-200 hover:border-gray-300'}`}
+                        className={`border rounded-xl overflow-hidden transition-all duration-300 ${activeIndex === index ? 'border-[var(--primary)] bg-indigo-50 shadow-sm dark:shadow-none' : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:border-gray-600'}`}
                     >
                         <button
                             className='w-full px-6 py-4 flex items-center justify-between text-left focus:outline-none'
                             onClick={() => toggleAccordion(index)}
                         >
-                            <span className={`font-medium text-lg ${activeIndex === index ? 'text-[var(--primary)]' : 'text-gray-900'}`}>{item.question}</span>
+                            <span className={`font-medium text-lg ${activeIndex === index ? 'text-[var(--primary)]' : 'text-gray-900 dark:text-white'}`}>{item.question}</span>
                             <span className='flex-shrink-0 ml-4'>
                                 <svg
                                     className={`w-6 h-6 transform transition-transform duration-300 ${activeIndex === index ? 'rotate-180 text-[var(--primary)]' : 'text-gray-400'}`}
@@ -38,7 +38,7 @@ const FAQ = () => {
                         <div
                             className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${activeIndex === index ? 'max-h-40 py-4 opacity-100' : 'max-h-0 py-0 opacity-0'}`}
                         >
-                            <p className='text-gray-600 leading-relaxed'>{item.answer}</p>
+                            <p className='text-gray-600 dark:text-gray-300 leading-relaxed'>{item.answer}</p>
                         </div>
                     </div>
                 ))}

@@ -23,23 +23,23 @@ const AppointmentList = ({ appointments, title = "Recent Appointments", onViewAl
                         const displayUser = appointment.docData || appointment.userData;
 
                         return (
-                            <div key={index} className='flex flex-col sm:flex-row items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors gap-4'>
+                            <div key={index} className='flex flex-col sm:flex-row items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 rounded-xl hover:bg-gray-100 dark:bg-gray-800 transition-colors gap-4'>
                                 <div className='flex items-center gap-4 w-full sm:w-auto'>
                                     <img
                                         src={displayUser?.image || '/default-avatar.png'}
                                         alt={displayUser?.name}
-                                        className='w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm'
+                                        className='w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm dark:shadow-none'
                                     />
                                     <div>
-                                        <h3 className='font-semibold text-gray-800'>{displayUser?.name}</h3>
-                                        <p className='text-sm text-gray-600'>{displayUser?.speciality || displayUser?.email}</p>
+                                        <h3 className='font-semibold text-gray-800 dark:text-gray-100'>{displayUser?.name}</h3>
+                                        <p className='text-sm text-gray-600 dark:text-gray-300'>{displayUser?.speciality || displayUser?.email}</p>
                                     </div>
                                 </div>
                                 <div className='text-right w-full sm:w-auto'>
-                                    <p className='text-sm font-semibold text-gray-700'>
+                                    <p className='text-sm font-semibold text-gray-700 dark:text-gray-200'>
                                         {appointment.slotDate?.replace(/_/g, '-')}
                                     </p>
-                                    <p className='text-sm text-gray-600'>{appointment.slotTime}</p>
+                                    <p className='text-sm text-gray-600 dark:text-gray-300'>{appointment.slotTime}</p>
                                     <span className={`inline-block mt-1 px-3 py-1 rounded-full text-xs font-semibold ${appointment.cancelled ? 'bg-red-100 text-red-600' :
                                         appointment.isCompleted ? 'bg-green-100 text-green-600' :
                                             appointment.payment ? 'bg-blue-100 text-blue-600' :
@@ -57,7 +57,7 @@ const AppointmentList = ({ appointments, title = "Recent Appointments", onViewAl
             ) : (
                 <div className='text-center py-12'>
                     <FaCalendarAlt className='text-6xl text-gray-300 mx-auto mb-4' />
-                    <p className='text-gray-500'>{emptyMessage}</p>
+                    <p className='text-gray-500 dark:text-gray-400'>{emptyMessage}</p>
                 </div>
             )}
         </div>

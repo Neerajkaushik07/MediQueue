@@ -249,7 +249,7 @@ const HealthProfile = () => {
             case 'high': return 'bg-red-100 text-red-700'
             case 'medium': return 'bg-yellow-100 text-yellow-700'
             case 'low': return 'bg-green-100 text-green-700'
-            default: return 'bg-gray-100 text-gray-700'
+            default: return 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200'
         }
     }
 
@@ -259,7 +259,7 @@ const HealthProfile = () => {
             <div className='flex items-center justify-between mb-8'>
                 <div>
                     <h1 className='text-4xl font-bold medical-heading mb-2'>Health Profile</h1>
-                    <p className='text-gray-600'>Comprehensive health information in one place</p>
+                    <p className='text-gray-600 dark:text-gray-300'>Comprehensive health information in one place</p>
                 </div>
 
             </div>
@@ -281,22 +281,22 @@ const HealthProfile = () => {
                 <div className='grid grid-cols-2 md:grid-cols-4 gap-6'>
                     <div className='text-center p-4 bg-gradient-to-br from-red-50 to-red-100 rounded-xl'>
                         <div className='text-3xl mb-2'>🩸</div>
-                        <p className='text-sm text-gray-600 mb-1'>Blood Group</p>
+                        <p className='text-sm text-gray-600 dark:text-gray-300 mb-1'>Blood Group</p>
                         <p className='text-2xl font-bold text-red-600'>{profile.bloodGroup || '?'}</p>
                     </div>
                     <div className='text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl'>
                         <div className='text-3xl mb-2'>📏</div>
-                        <p className='text-sm text-gray-600 mb-1'>Height</p>
+                        <p className='text-sm text-gray-600 dark:text-gray-300 mb-1'>Height</p>
                         <p className='text-2xl font-bold text-blue-600'>{profile.height || '0'} cm</p>
                     </div>
                     <div className='text-center p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-xl'>
                         <div className='text-3xl mb-2'>⚖️</div>
-                        <p className='text-sm text-gray-600 mb-1'>Weight</p>
+                        <p className='text-sm text-gray-600 dark:text-gray-300 mb-1'>Weight</p>
                         <p className='text-2xl font-bold text-green-600'>{profile.weight || '0'} kg</p>
                     </div>
                     <div className='text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl'>
                         <div className='text-3xl mb-2'>📈</div>
-                        <p className='text-sm text-gray-600 mb-1'>BMI</p>
+                        <p className='text-sm text-gray-600 dark:text-gray-300 mb-1'>BMI</p>
                         <p className='text-2xl font-bold text-purple-600'>{profile.bmi || '0'}</p>
                     </div>
                 </div>
@@ -326,11 +326,11 @@ const HealthProfile = () => {
                                         {allergy.severity.toUpperCase()}
                                     </span>
                                 </div>
-                                <p className='text-gray-600 text-sm'>Reaction: {allergy.reaction}</p>
+                                <p className='text-gray-600 dark:text-gray-300 text-sm'>Reaction: {allergy.reaction}</p>
                             </div>
                             <button
                                 onClick={() => setModalConfig({ show: true, type: 'allergy', data: { ...allergy }, isEditing: true, editIndex: index })}
-                                className='px-4 py-2 bg-white text-gray-700 rounded-lg text-sm hover:bg-gray-100'
+                                className='px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 rounded-lg text-sm hover:bg-gray-100 dark:bg-gray-800'
                             >
                                 Edit
                             </button>
@@ -358,14 +358,14 @@ const HealthProfile = () => {
                         <div key={condition.id} className='flex items-center justify-between p-4 bg-orange-50 border border-orange-200 rounded-lg'>
                             <div className='flex-1'>
                                 <h3 className='font-bold text-lg mb-2'>{condition.name}</h3>
-                                <div className='text-sm text-gray-600 space-y-1'>
+                                <div className='text-sm text-gray-600 dark:text-gray-300 space-y-1'>
                                     <p>Diagnosed: {new Date(condition.diagnosedDate).toLocaleDateString()}</p>
                                     <p>Managed by: {condition.managedBy}</p>
                                 </div>
                             </div>
                             <button
                                 onClick={() => setModalConfig({ show: true, type: 'condition', data: { ...condition }, isEditing: true, editIndex: index })}
-                                className='px-4 py-2 bg-white text-gray-700 rounded-lg text-sm hover:bg-gray-100'
+                                className='px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 rounded-lg text-sm hover:bg-gray-100 dark:bg-gray-800'
                             >
                                 Manage
                             </button>
@@ -391,10 +391,10 @@ const HealthProfile = () => {
                     </div>
                     <div className='space-y-3'>
                         {profile.emergencyContacts.map((contact, index) => (
-                            <div key={contact.id} className='flex items-center justify-between p-3 bg-gray-50 rounded-lg'>
+                            <div key={contact.id} className='flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 rounded-lg'>
                                 <div>
                                     <p className='font-bold'>{contact.name}</p>
-                                    <p className='text-sm text-gray-600'>{contact.relationship}</p>
+                                    <p className='text-sm text-gray-600 dark:text-gray-300'>{contact.relationship}</p>
                                     <p className='text-sm text-primary'>{contact.phone}</p>
                                 </div>
                             </div>
@@ -418,10 +418,10 @@ const HealthProfile = () => {
                     </div>
                     <div className='space-y-3'>
                         {profile.familyMembers.map((member) => (
-                            <div key={member.id} className='flex items-center justify-between p-3 bg-gray-50 rounded-lg'>
+                            <div key={member.id} className='flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 rounded-lg'>
                                 <div>
                                     <p className='font-bold'>{member.name}</p>
-                                    <p className='text-sm text-gray-600'>
+                                    <p className='text-sm text-gray-600 dark:text-gray-300'>
                                         {member.relationship} • {member.age} years • {member.bloodGroup}
                                     </p>
                                 </div>
@@ -451,25 +451,25 @@ const HealthProfile = () => {
                 {profile?.insurance ? (
                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
                         <div className='p-4 bg-blue-50 rounded-lg'>
-                            <p className='text-sm text-gray-600 mb-1'>Provider</p>
+                            <p className='text-sm text-gray-600 dark:text-gray-300 mb-1'>Provider</p>
                             <p className='font-bold'>{profile.insurance.provider}</p>
                         </div>
                         <div className='p-4 bg-green-50 rounded-lg'>
-                            <p className='text-sm text-gray-600 mb-1'>Policy Number</p>
+                            <p className='text-sm text-gray-600 dark:text-gray-300 mb-1'>Policy Number</p>
                             <p className='font-bold'>{profile.insurance.policyNumber}</p>
                         </div>
                         <div className='p-4 bg-purple-50 rounded-lg'>
-                            <p className='text-sm text-gray-600 mb-1'>Coverage</p>
+                            <p className='text-sm text-gray-600 dark:text-gray-300 mb-1'>Coverage</p>
                             <p className='font-bold'>₹{profile.insurance.coverageAmount?.toLocaleString()}</p>
                         </div>
                         <div className='p-4 bg-orange-50 rounded-lg'>
-                            <p className='text-sm text-gray-600 mb-1'>Valid Until</p>
+                            <p className='text-sm text-gray-600 dark:text-gray-300 mb-1'>Valid Until</p>
                             <p className='font-bold'>{profile.insurance.validUntil ? new Date(profile.insurance.validUntil).toLocaleDateString() : 'N/A'}</p>
                         </div>
                     </div>
                 ) : (
-                    <div className='text-center py-8 bg-gray-50 rounded-xl'>
-                        <p className='text-gray-500 font-semibold mb-2'>No insurance policy found</p>
+                    <div className='text-center py-8 bg-gray-50 dark:bg-gray-900 rounded-xl'>
+                        <p className='text-gray-500 dark:text-gray-400 font-semibold mb-2'>No insurance policy found</p>
                         <p className='text-sm text-gray-400'>Add your details to ease hospital admission processes.</p>
                     </div>
                 )}
@@ -506,7 +506,7 @@ const HealthProfile = () => {
             {/* Modals */}
             {modalConfig.show && (
                 <div className='fixed inset-0 bg-black/50 flex items-start pt-[10vh] sm:pt-[15vh] justify-center z-50 p-4 overflow-y-auto'>
-                    <div className='bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl mb-20'>
+                    <div className='bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-md w-full shadow-2xl mb-20'>
                         <h2 className='text-2xl font-bold mb-6 capitalize'>
                             {modalConfig.type === 'allergy' && (modalConfig.isEditing ? 'Edit Allergy' : 'Add Allergy')}
                             {modalConfig.type === 'condition' && (modalConfig.isEditing ? 'Manage Condition' : 'Add Condition')}
@@ -526,17 +526,17 @@ const HealthProfile = () => {
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='col-span-2'>
                                         <label className='block text-sm font-semibold mb-1'>Blood Group</label>
-                                        <select value={modalConfig.data.bloodGroup} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, bloodGroup: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl'>
+                                        <select value={modalConfig.data.bloodGroup} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, bloodGroup: e.target.value } }))} className='w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl'>
                                             {['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map(bg => <option key={bg} value={bg}>{bg}</option>)}
                                         </select>
                                     </div>
                                     <div>
                                         <label className='block text-sm font-semibold mb-1'>Height (cm)</label>
-                                        <input type='number' value={modalConfig.data.height} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, height: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl' />
+                                        <input type='number' value={modalConfig.data.height} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, height: e.target.value } }))} className='w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl' />
                                     </div>
                                     <div>
                                         <label className='block text-sm font-semibold mb-1'>Weight (kg)</label>
-                                        <input type='number' value={modalConfig.data.weight} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, weight: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl' />
+                                        <input type='number' value={modalConfig.data.weight} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, weight: e.target.value } }))} className='w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl' />
                                     </div>
                                 </div>
                             )}
@@ -544,7 +544,7 @@ const HealthProfile = () => {
                             {modalConfig.type === 'goal' && (
                                 <div>
                                     <label className='block text-sm font-semibold mb-1'>New Health Goal *</label>
-                                    <input required type='text' placeholder='e.g. Drink 2L water' value={modalConfig.data.goal} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, goal: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl' />
+                                    <input required type='text' placeholder='e.g. Drink 2L water' value={modalConfig.data.goal} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, goal: e.target.value } }))} className='w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl' />
                                 </div>
                             )}
 
@@ -552,15 +552,15 @@ const HealthProfile = () => {
                                 <>
                                     <div>
                                         <label className='block text-sm font-semibold mb-1'>Name *</label>
-                                        <input required type='text' value={modalConfig.data.name} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, name: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl' />
+                                        <input required type='text' value={modalConfig.data.name} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, name: e.target.value } }))} className='w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl' />
                                     </div>
                                     <div>
                                         <label className='block text-sm font-semibold mb-1'>Relationship</label>
-                                        <input type='text' value={modalConfig.data.relationship} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, relationship: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl' />
+                                        <input type='text' value={modalConfig.data.relationship} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, relationship: e.target.value } }))} className='w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl' />
                                     </div>
                                     <div>
                                         <label className='block text-sm font-semibold mb-1'>Phone *</label>
-                                        <input required type='text' value={modalConfig.data.phone} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, phone: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl' />
+                                        <input required type='text' value={modalConfig.data.phone} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, phone: e.target.value } }))} className='w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl' />
                                     </div>
                                 </>
                             )}
@@ -568,7 +568,7 @@ const HealthProfile = () => {
                             {(modalConfig.type === 'allergy' || modalConfig.type === 'condition') && (
                                 <div>
                                     <label className='block text-sm font-semibold mb-1'>Name *</label>
-                                    <input required type='text' value={modalConfig.data.name} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, name: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl' />
+                                    <input required type='text' value={modalConfig.data.name} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, name: e.target.value } }))} className='w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl' />
                                 </div>
                             )}
 
@@ -576,7 +576,7 @@ const HealthProfile = () => {
                                 <>
                                     <div>
                                         <label className='block text-sm font-semibold mb-1'>Full Name *</label>
-                                        <input required type='text' value={modalConfig.data.name} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, name: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl' />
+                                        <input required type='text' value={modalConfig.data.name} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, name: e.target.value } }))} className='w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl' />
                                     </div>
                                     <div className='grid grid-cols-2 gap-4'>
                                         <div>
@@ -585,7 +585,7 @@ const HealthProfile = () => {
                                                 <button 
                                                     type='button' 
                                                     onClick={() => setShowRelationDropdown(!showRelationDropdown)}
-                                                    className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-left flex justify-between items-center'
+                                                    className='w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-left flex justify-between items-center'
                                                 >
                                                     <span className='capitalize'>{modalConfig.data.relationship}</span>
                                                     <svg className={`w-4 h-4 text-gray-400 transition-transform ${showRelationDropdown ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -593,11 +593,11 @@ const HealthProfile = () => {
                                                 {showRelationDropdown && (
                                                     <>
                                                         <div className="fixed inset-0 z-40" onClick={() => setShowRelationDropdown(false)}></div>
-                                                        <div className='absolute z-50 w-full mt-1 bg-white border border-gray-100 rounded-xl shadow-xl max-h-48 overflow-y-auto top-full left-0'>
+                                                        <div className='absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-100 rounded-xl shadow-xl max-h-48 overflow-y-auto top-full left-0'>
                                                             {['husband', 'wife', 'son', 'daughter', 'father', 'mother', 'brother', 'sister', 'grandfather', 'grandmother', 'uncle', 'aunt', 'cousin', 'nephew', 'niece', 'other'].map(rel => (
                                                                 <div 
                                                                     key={rel}
-                                                                    className={`p-3 hover:bg-primary/5 cursor-pointer capitalize text-sm ${modalConfig.data.relationship === rel ? 'bg-primary/10 text-primary font-bold' : 'text-gray-700'}`}
+                                                                    className={`p-3 hover:bg-primary/5 cursor-pointer capitalize text-sm ${modalConfig.data.relationship === rel ? 'bg-primary/10 text-primary font-bold' : 'text-gray-700 dark:text-gray-200'}`}
                                                                     onClick={() => {
                                                                         setModalConfig(prev => ({ ...prev, data: { ...prev.data, relationship: rel } }))
                                                                         setShowRelationDropdown(false)
@@ -613,7 +613,7 @@ const HealthProfile = () => {
                                         </div>
                                         <div>
                                             <label className='block text-sm font-semibold mb-1'>Gender *</label>
-                                            <select required value={modalConfig.data.gender} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, gender: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl'>
+                                            <select required value={modalConfig.data.gender} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, gender: e.target.value } }))} className='w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl'>
                                                 <option value='male'>Male</option>
                                                 <option value='female'>Female</option>
                                                 <option value='other'>Other</option>
@@ -623,11 +623,11 @@ const HealthProfile = () => {
                                     <div className='grid grid-cols-2 gap-4'>
                                         <div>
                                             <label className='block text-sm font-semibold mb-1'>Date of Birth *</label>
-                                            <input required type='date' value={modalConfig.data.dob} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, dob: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl' />
+                                            <input required type='date' value={modalConfig.data.dob} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, dob: e.target.value } }))} className='w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl' />
                                         </div>
                                         <div>
                                             <label className='block text-sm font-semibold mb-1'>Blood Group</label>
-                                            <select value={modalConfig.data.bloodGroup} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, bloodGroup: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl'>
+                                            <select value={modalConfig.data.bloodGroup} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, bloodGroup: e.target.value } }))} className='w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl'>
                                                 {['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map(bg => <option key={bg} value={bg}>{bg}</option>)}
                                             </select>
                                         </div>
@@ -639,7 +639,7 @@ const HealthProfile = () => {
                                 <>
                                     <div>
                                         <label className='block text-sm font-semibold mb-1'>Severity</label>
-                                        <select value={modalConfig.data.severity} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, severity: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl'>
+                                        <select value={modalConfig.data.severity} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, severity: e.target.value } }))} className='w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl'>
                                             <option value='low'>Low</option>
                                             <option value='medium'>Medium</option>
                                             <option value='high'>High</option>
@@ -647,7 +647,7 @@ const HealthProfile = () => {
                                     </div>
                                     <div>
                                         <label className='block text-sm font-semibold mb-1'>Reaction</label>
-                                        <input type='text' value={modalConfig.data.reaction} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, reaction: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl' />
+                                        <input type='text' value={modalConfig.data.reaction} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, reaction: e.target.value } }))} className='w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl' />
                                     </div>
                                 </>
                             )}
@@ -656,16 +656,16 @@ const HealthProfile = () => {
                                 <>
                                     <div>
                                         <label className='block text-sm font-semibold mb-1'>Diagnosed Date</label>
-                                        <input type='date' value={modalConfig.data.diagnosedDate} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, diagnosedDate: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl' />
+                                        <input type='date' value={modalConfig.data.diagnosedDate} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, diagnosedDate: e.target.value } }))} className='w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl' />
                                     </div>
                                     <div>
                                         <label className='block text-sm font-semibold mb-1'>Managed By</label>
-                                        <input type='text' value={modalConfig.data.managedBy} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, managedBy: e.target.value } }))} className='w-full p-3 bg-gray-50 border border-gray-200 rounded-xl' />
+                                        <input type='text' value={modalConfig.data.managedBy} onChange={(e) => setModalConfig(prev => ({ ...prev, data: { ...prev.data, managedBy: e.target.value } }))} className='w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl' />
                                     </div>
                                 </>
                             )}
                             <div className='flex gap-4 pt-4'>
-                                <button type='button' onClick={() => setModalConfig({ show: false, type: '', data: {}, isEditing: false, editIndex: -1 })} className='flex-1 px-6 py-3 bg-gray-100 text-gray-700 font-bold rounded-xl'>Cancel</button>
+                                <button type='button' onClick={() => setModalConfig({ show: false, type: '', data: {}, isEditing: false, editIndex: -1 })} className='flex-1 px-6 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 font-bold rounded-xl'>Cancel</button>
                                 <button type='submit' className='flex-1 px-6 py-3 bg-gradient-primary text-white font-bold rounded-xl shadow-lg'>Save</button>
                             </div>
                         </form>

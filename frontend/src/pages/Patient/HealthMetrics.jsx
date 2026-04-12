@@ -224,7 +224,7 @@ const HealthMetrics = () => {
             case 'low': return 'text-yellow-600 bg-yellow-100'
             case 'high': return 'text-orange-600 bg-orange-100'
             case 'critical': return 'text-red-600 bg-red-100'
-            default: return 'text-gray-600 bg-gray-100'
+            default: return 'text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800'
         }
     }
 
@@ -272,8 +272,8 @@ const HealthMetrics = () => {
                     <div className='relative flex flex-col lg:flex-row gap-6 lg:items-center lg:justify-between'>
                         <div>
                             <p className='text-xs md:text-sm font-semibold uppercase tracking-wide text-cyan-700 mb-2'>Health Intelligence</p>
-                            <h1 className='text-3xl md:text-4xl font-black text-slate-900 mb-2'>Health Metrics</h1>
-                            <p className='text-slate-600 max-w-xl'>Track trends, log fresh readings, and stay ahead of changes in your vitals.</p>
+                            <h1 className='text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-2'>Health Metrics</h1>
+                            <p className='text-slate-600 dark:text-slate-300 max-w-xl'>Track trends, log fresh readings, and stay ahead of changes in your vitals.</p>
                         </div>
                         <button
                             onClick={() => setShowAddModal(true)}
@@ -295,12 +295,12 @@ const HealthMetrics = () => {
                                 onClick={() => setSelectedMetric(key)}
                                 className={`rounded-2xl border p-4 text-left transition-all ${isSelected
                                     ? 'bg-cyan-600 text-white border-cyan-600 shadow-lg -translate-y-0.5'
-                                    : 'bg-white border-slate-200 hover:shadow-md hover:border-cyan-200'
+                                    : 'bg-white dark:bg-gray-800 border-slate-200 dark:border-gray-700 hover:shadow-md hover:border-cyan-200'
                                     }`}
                             >
                                 <div className='text-3xl mb-2'>{config.icon}</div>
-                                <p className={`font-semibold text-sm mb-1 ${isSelected ? 'text-white' : 'text-slate-800'}`}>{config.name}</p>
-                                <p className={`text-xs ${isSelected ? 'text-cyan-100' : 'text-slate-600'}`}>
+                                <p className={`font-semibold text-sm mb-1 ${isSelected ? 'text-white' : 'text-slate-800 dark:text-slate-100'}`}>{config.name}</p>
+                                <p className={`text-xs ${isSelected ? 'text-cyan-100' : 'text-slate-600 dark:text-slate-300'}`}>
                                     {latest
                                         ? (latest.value !== undefined ? `${latest.value} ${config.unit}` : `${latest.systolic}/${latest.diastolic} ${config.unit}`)
                                         : 'No data'}
@@ -311,48 +311,48 @@ const HealthMetrics = () => {
                 </section>
 
                 <section className='grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8'>
-                    <div className='rounded-2xl border border-slate-200 bg-white p-6 shadow-sm'>
-                        <h3 className='text-lg font-bold text-slate-900 mb-4'>Latest Reading</h3>
+                    <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-none'>
+                        <h3 className='text-lg font-bold text-slate-900 dark:text-white mb-4'>Latest Reading</h3>
                         {latestForType ? (
                             <div className='text-center'>
                                 <div className='text-6xl mb-4'>{currentMetricConfig.icon}</div>
-                                <h4 className='text-xl font-bold text-slate-900 mb-2'>{currentMetricConfig.name}</h4>
+                                <h4 className='text-xl font-bold text-slate-900 dark:text-white mb-2'>{currentMetricConfig.name}</h4>
                                 <div className='text-4xl font-black text-cyan-700 mb-2'>
                                     {latestForType.value !== undefined
                                         ? `${latestForType.value}`
                                         : `${latestForType.systolic}/${latestForType.diastolic}`}
                                 </div>
-                                <p className='text-slate-600 mb-4'>{currentMetricConfig.unit}</p>
+                                <p className='text-slate-600 dark:text-slate-300 mb-4'>{currentMetricConfig.unit}</p>
                                 <span className={`px-4 py-2 rounded-full text-sm font-semibold ${getStatusColor(latestForType.status)}`}>
                                     {(latestForType.status || 'NORMAL').toUpperCase()}
                                 </span>
-                                <p className='text-sm text-slate-500 mt-4'>
+                                <p className='text-sm text-slate-500 dark:text-slate-400 mt-4'>
                                     Last updated: {new Date(latestForType.recordedAt || latestForType.date).toLocaleDateString()}
                                 </p>
                             </div>
                         ) : (
                             <div className='text-center py-12'>
-                                <p className='text-slate-500'>No readings recorded yet</p>
+                                <p className='text-slate-500 dark:text-slate-400'>No readings recorded yet</p>
                             </div>
                         )}
-                        <div className='mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4 text-left'>
-                            <p className='text-xs uppercase tracking-wide font-semibold text-slate-500 mb-1'>Range Summary</p>
-                            <p className='text-sm text-slate-700'>Readings in selected range: <span className='font-bold'>{readingsThisRange}</span></p>
+                        <div className='mt-6 rounded-xl border border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-900 p-4 text-left'>
+                            <p className='text-xs uppercase tracking-wide font-semibold text-slate-500 dark:text-slate-400 mb-1'>Range Summary</p>
+                            <p className='text-sm text-slate-700 dark:text-slate-200'>Readings in selected range: <span className='font-bold'>{readingsThisRange}</span></p>
                             {bpAverages && (
-                                <p className='text-sm text-slate-700 mt-1'>Average BP: <span className='font-bold'>{bpAverages.sys}/{bpAverages.dia}</span></p>
+                                <p className='text-sm text-slate-700 dark:text-slate-200 mt-1'>Average BP: <span className='font-bold'>{bpAverages.sys}/{bpAverages.dia}</span></p>
                             )}
                         </div>
                     </div>
 
-                    <div className='lg:col-span-2 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm'>
+                    <div className='lg:col-span-2 rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-none'>
                         <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6'>
-                            <h3 className='text-lg font-bold text-slate-900'>Trend (Last {timeRange})</h3>
+                            <h3 className='text-lg font-bold text-slate-900 dark:text-white'>Trend (Last {timeRange})</h3>
                             <div className='flex gap-2'>
                                 {['7D', '30D', '90D'].map(range => (
                                     <button
                                         key={range}
                                         onClick={() => setRange(range)}
-                                        className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${timeRange === range ? 'bg-cyan-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                                        className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${timeRange === range ? 'bg-cyan-600 text-white' : 'bg-slate-100 dark:bg-gray-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200'
                                             }`}
                                     >
                                         {range}
@@ -408,12 +408,12 @@ const HealthMetrics = () => {
                     </div>
                 </section>
 
-                <section className='rounded-2xl border border-slate-200 bg-white p-6 shadow-sm'>
+                <section className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-none'>
                     <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6'>
-                        <h3 className='text-lg font-bold text-slate-900'>Recent Readings</h3>
+                        <h3 className='text-lg font-bold text-slate-900 dark:text-white'>Recent Readings</h3>
                         <button
                             onClick={handleExportData}
-                            className='px-4 py-2 bg-slate-100 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-200 flex items-center gap-2'
+                            className='px-4 py-2 bg-slate-100 dark:bg-gray-800 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200 flex items-center gap-2'
                         >
                             <span>📥</span> Export Data
                         </button>
@@ -422,23 +422,23 @@ const HealthMetrics = () => {
                         <table className='w-full'>
                             <thead>
                                 <tr className='border-b border-slate-100'>
-                                    <th className='text-left py-3 px-4 font-semibold text-slate-700'>Date</th>
-                                    <th className='text-left py-3 px-4 font-semibold text-slate-700'>Reading</th>
-                                    <th className='text-left py-3 px-4 font-semibold text-slate-700'>Status</th>
-                                    <th className='text-left py-3 px-4 font-semibold text-slate-700'>Notes</th>
-                                    <th className='text-center py-3 px-4 font-semibold text-slate-700'>Actions</th>
+                                    <th className='text-left py-3 px-4 font-semibold text-slate-700 dark:text-slate-200'>Date</th>
+                                    <th className='text-left py-3 px-4 font-semibold text-slate-700 dark:text-slate-200'>Reading</th>
+                                    <th className='text-left py-3 px-4 font-semibold text-slate-700 dark:text-slate-200'>Status</th>
+                                    <th className='text-left py-3 px-4 font-semibold text-slate-700 dark:text-slate-200'>Notes</th>
+                                    <th className='text-center py-3 px-4 font-semibold text-slate-700 dark:text-slate-200'>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {metricRecords.length === 0 ? (
-                                    <tr><td colSpan='5' className='py-8 text-center text-slate-500'>No history recorded</td></tr>
+                                    <tr><td colSpan='5' className='py-8 text-center text-slate-500 dark:text-slate-400'>No history recorded</td></tr>
                                 ) : (
                                     metricRecords.map((reading, index) => (
-                                        <tr key={index} className='border-b border-slate-100 hover:bg-slate-50/80'>
-                                            <td className='py-4 px-4 text-slate-700'>
+                                        <tr key={index} className='border-b border-slate-100 hover:bg-slate-50 dark:bg-gray-900/80'>
+                                            <td className='py-4 px-4 text-slate-700 dark:text-slate-200'>
                                                 {new Date(reading.recordedAt).toLocaleDateString()}
                                             </td>
-                                            <td className='py-4 px-4 font-semibold text-slate-900'>
+                                            <td className='py-4 px-4 font-semibold text-slate-900 dark:text-white'>
                                                 {reading.value !== undefined
                                                     ? `${reading.value} ${currentMetricConfig.unit}`
                                                     : `${reading.systolic}/${reading.diastolic} ${currentMetricConfig.unit}`}
@@ -448,7 +448,7 @@ const HealthMetrics = () => {
                                                     {(reading.status || 'NORMAL').toUpperCase()}
                                                 </span>
                                             </td>
-                                            <td className='py-4 px-4 text-slate-600'>
+                                            <td className='py-4 px-4 text-slate-600 dark:text-slate-300'>
                                                 {reading.notes || 'Manual entry'}
                                             </td>
                                             <td className='py-4 px-4 text-center'>
@@ -473,10 +473,10 @@ const HealthMetrics = () => {
                 {/* Log New Reading Modal */}
                 {showAddModal && (
                     <div className='fixed inset-0 bg-black/55 backdrop-blur-sm flex items-center justify-center z-50 p-4'>
-                        <div className='bg-white rounded-3xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden'>
-                            <div className='px-6 py-5 border-b border-slate-200 bg-gradient-to-r from-cyan-50 to-emerald-50 flex items-center justify-between'>
-                                <h2 className='text-2xl font-bold text-slate-900'>Log {currentMetricConfig.name}</h2>
-                                <button onClick={() => setShowAddModal(false)} className='text-slate-400 hover:text-slate-600'>
+                        <div className='bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full shadow-2xl border border-slate-200 dark:border-gray-700 overflow-hidden'>
+                            <div className='px-6 py-5 border-b border-slate-200 dark:border-gray-700 bg-gradient-to-r from-cyan-50 to-emerald-50 flex items-center justify-between'>
+                                <h2 className='text-2xl font-bold text-slate-900 dark:text-white'>Log {currentMetricConfig.name}</h2>
+                                <button onClick={() => setShowAddModal(false)} className='text-slate-400 hover:text-slate-600 dark:text-slate-300'>
                                     <svg className='w-6 h-6' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
                                         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M6 18L18 6M6 6l12 12' />
                                     </svg>
@@ -489,30 +489,30 @@ const HealthMetrics = () => {
                                     {selectedMetric === 'blood_pressure' ? (
                                         <div className='grid grid-cols-2 gap-4'>
                                             <div>
-                                                <label className='block text-sm font-semibold text-slate-700 mb-1'>Systolic *</label>
-                                                <input required type='number' value={formData.systolic} onChange={(e) => setFormData(prev => ({ ...prev, systolic: e.target.value }))} className='w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' placeholder='120' />
+                                                <label className='block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1'>Systolic *</label>
+                                                <input required type='number' value={formData.systolic} onChange={(e) => setFormData(prev => ({ ...prev, systolic: e.target.value }))} className='w-full p-3 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' placeholder='120' />
                                             </div>
                                             <div>
-                                                <label className='block text-sm font-semibold text-slate-700 mb-1'>Diastolic *</label>
-                                                <input required type='number' value={formData.diastolic} onChange={(e) => setFormData(prev => ({ ...prev, diastolic: e.target.value }))} className='w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' placeholder='80' />
+                                                <label className='block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1'>Diastolic *</label>
+                                                <input required type='number' value={formData.diastolic} onChange={(e) => setFormData(prev => ({ ...prev, diastolic: e.target.value }))} className='w-full p-3 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' placeholder='80' />
                                             </div>
                                         </div>
                                     ) : (
                                         <div>
-                                            <label className='block text-sm font-semibold text-slate-700 mb-1'>Reading ({currentMetricConfig.unit}) *</label>
-                                            <input required type='number' step='0.1' value={formData.value} onChange={(e) => setFormData(prev => ({ ...prev, value: e.target.value }))} className='w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' placeholder='Enter value' />
+                                            <label className='block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1'>Reading ({currentMetricConfig.unit}) *</label>
+                                            <input required type='number' step='0.1' value={formData.value} onChange={(e) => setFormData(prev => ({ ...prev, value: e.target.value }))} className='w-full p-3 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' placeholder='Enter value' />
                                         </div>
                                     )}
                                     <div>
-                                        <label className='block text-sm font-semibold text-slate-700 mb-1'>Date</label>
-                                        <input type='date' value={formData.recordedAt} onChange={(e) => setFormData(prev => ({ ...prev, recordedAt: e.target.value }))} className='w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' />
+                                        <label className='block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1'>Date</label>
+                                        <input type='date' value={formData.recordedAt} onChange={(e) => setFormData(prev => ({ ...prev, recordedAt: e.target.value }))} className='w-full p-3 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' />
                                     </div>
                                     <div>
-                                        <label className='block text-sm font-semibold text-slate-700 mb-1'>Notes</label>
-                                        <textarea value={formData.notes} onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))} rows='2' className='w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' placeholder='Any notes...'></textarea>
+                                        <label className='block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1'>Notes</label>
+                                        <textarea value={formData.notes} onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))} rows='2' className='w-full p-3 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' placeholder='Any notes...'></textarea>
                                     </div>
                                     <div className='flex gap-4 pt-4'>
-                                        <button type='button' onClick={() => setShowAddModal(false)} className='flex-1 px-6 py-3 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 transition-colors'>Cancel</button>
+                                        <button type='button' onClick={() => setShowAddModal(false)} className='flex-1 px-6 py-3 bg-slate-100 dark:bg-gray-800 text-slate-700 dark:text-slate-200 font-bold rounded-xl hover:bg-slate-200 transition-colors'>Cancel</button>
                                         <button type='submit' className='flex-1 px-6 py-3 bg-gradient-to-r from-cyan-600 to-sky-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all'>Save Reading</button>
                                     </div>
                                 </form>
@@ -526,9 +526,9 @@ const HealthMetrics = () => {
                     <div className='flex items-start gap-4'>
                         <div className='text-4xl'>💡</div>
                         <div>
-                            <h3 className='text-lg font-bold text-slate-900 mb-1'>{recommendationTone.title}</h3>
-                            <p className='text-sm text-slate-600 mb-3'>{recommendationTone.summary}</p>
-                            <ul className='space-y-2 text-slate-700'>
+                            <h3 className='text-lg font-bold text-slate-900 dark:text-white mb-1'>{recommendationTone.title}</h3>
+                            <p className='text-sm text-slate-600 dark:text-slate-300 mb-3'>{recommendationTone.summary}</p>
+                            <ul className='space-y-2 text-slate-700 dark:text-slate-200'>
                                 <li className='flex items-start gap-2'>
                                     <span className='text-green-600 mt-1'>✓</span>
                                     <span>Your {currentMetricConfig.name.toLowerCase()} is within the normal range. Keep up the good work!</span>

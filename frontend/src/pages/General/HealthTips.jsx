@@ -166,9 +166,9 @@ const HealthTips = () => {
     return (
         <div className='min-h-screen pb-16'>
             {/* Header Section */}
-            <div className='text-center text-2xl pt-10 text-gray-500 mb-8'>
+            <div className='text-center text-2xl pt-10 text-gray-500 dark:text-gray-400 mb-8'>
                 <p>HEALTH <span className='text-primary font-medium'>TIPS</span></p>
-                <p className='text-sm text-gray-500 mt-2'>Your daily dose of wellness advice</p>
+                <p className='text-sm text-gray-500 dark:text-gray-400 mt-2'>Your daily dose of wellness advice</p>
             </div>
 
             {/* Featured Tip of the Day */}
@@ -192,7 +192,7 @@ const HealthTips = () => {
                         onClick={() => setActiveTab(tab)}
                         className={`py-2 px-6 rounded-full text-sm font-medium transition-all ${activeTab === tab
                             ? 'bg-primary text-white shadow-md'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                            : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200'
                             }`}
                     >
                         {tab}
@@ -205,7 +205,7 @@ const HealthTips = () => {
                 {currentTips.map((tip) => (
                     <div
                         key={tip.id}
-                        className='border border-gray-200 rounded-lg p-5 hover:shadow-lg transition-all hover:-translate-y-1'
+                        className='border border-gray-200 dark:border-gray-700 rounded-lg p-5 hover:shadow-lg transition-all hover:-translate-y-1'
                     >
                         <div className='flex items-start justify-between mb-3'>
                             <span className='text-4xl'>{tip.icon}</span>
@@ -219,41 +219,41 @@ const HealthTips = () => {
                         <span className='inline-block bg-blue-50 text-primary text-xs font-medium px-3 py-1 rounded-full mb-3'>
                             {tip.category}
                         </span>
-                        <h3 className='text-lg font-semibold text-gray-800 mb-2'>{tip.title}</h3>
-                        <p className='text-sm text-gray-600 leading-relaxed'>{tip.description}</p>
+                        <h3 className='text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2'>{tip.title}</h3>
+                        <p className='text-sm text-gray-600 dark:text-gray-300 leading-relaxed'>{tip.description}</p>
                     </div>
                 ))}
             </div>
 
             {/* Weekly Challenge Section */}
             <div className='mx-4 mt-12 bg-green-50 border border-green-200 rounded-lg p-6'>
-                <h2 className='text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2'>
+                <h2 className='text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center gap-2'>
                     🏆 Weekly Challenge
                 </h2>
                 <div className='space-y-3'>
                     <div className='flex items-center gap-3'>
                         <input type='checkbox' className='w-5 h-5 accent-green-600' />
-                        <span className='text-gray-700'>Walk 10,000 steps daily</span>
+                        <span className='text-gray-700 dark:text-gray-200'>Walk 10,000 steps daily</span>
                     </div>
                     <div className='flex items-center gap-3'>
                         <input type='checkbox' className='w-5 h-5 accent-green-600' />
-                        <span className='text-gray-700'>Drink 8 glasses of water every day</span>
+                        <span className='text-gray-700 dark:text-gray-200'>Drink 8 glasses of water every day</span>
                     </div>
                     <div className='flex items-center gap-3'>
                         <input type='checkbox' className='w-5 h-5 accent-green-600' />
-                        <span className='text-gray-700'>Sleep 7-8 hours each night</span>
+                        <span className='text-gray-700 dark:text-gray-200'>Sleep 7-8 hours each night</span>
                     </div>
                     <div className='flex items-center gap-3'>
                         <input type='checkbox' className='w-5 h-5 accent-green-600' />
-                        <span className='text-gray-700'>Eat 5 servings of fruits/vegetables</span>
+                        <span className='text-gray-700 dark:text-gray-200'>Eat 5 servings of fruits/vegetables</span>
                     </div>
                     <div className='flex items-center gap-3'>
                         <input type='checkbox' className='w-5 h-5 accent-green-600' />
-                        <span className='text-gray-700'>Practice 10 minutes of meditation</span>
+                        <span className='text-gray-700 dark:text-gray-200'>Practice 10 minutes of meditation</span>
                     </div>
                 </div>
                 <div className='mt-4 pt-4 border-t border-green-200'>
-                    <p className='text-sm text-gray-600'>
+                    <p className='text-sm text-gray-600 dark:text-gray-300'>
                         Complete these daily for 7 days to build healthy habits! 💪
                     </p>
                 </div>
@@ -264,8 +264,8 @@ const HealthTips = () => {
                 <div className='flex items-start gap-3'>
                     <span className='text-2xl'>💡</span>
                     <div>
-                        <p className='font-semibold text-gray-800 mb-1'>Remember</p>
-                        <p className='text-sm text-gray-600'>
+                        <p className='font-semibold text-gray-800 dark:text-gray-100 mb-1'>Remember</p>
+                        <p className='text-sm text-gray-600 dark:text-gray-300'>
                             These tips are for general wellness. Always consult with healthcare professionals
                             for personalized medical advice and before making significant lifestyle changes.
                         </p>

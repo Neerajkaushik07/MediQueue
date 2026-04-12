@@ -98,10 +98,10 @@ const Home = () => {
             <span className='inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-xs md:text-sm font-semibold text-cyan-700'>
               Why MediQueue
             </span>
-            <h2 className='mt-4 text-4xl md:text-5xl font-black text-slate-900' style={{ fontFamily: 'Outfit, sans-serif' }}>
+            <h2 className='mt-4 text-4xl md:text-5xl font-black text-slate-900 dark:text-white' style={{ fontFamily: 'Outfit, sans-serif' }}>
               Care, Technology, And Trust
             </h2>
-            <p className='mt-4 text-slate-600 max-w-2xl mx-auto'>
+            <p className='mt-4 text-slate-600 dark:text-slate-300 max-w-2xl mx-auto'>
               Designed to help patients move from uncertainty to care quickly, safely, and confidently.
             </p>
           </div>
@@ -110,23 +110,23 @@ const Home = () => {
             {featureHighlights.map((feature, index) => (
               <article
                 key={feature.title}
-                className='rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:-translate-y-1 hover:shadow-xl transition-all duration-300 animate-fade-in-up'
+                className='rounded-3xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-none hover:-translate-y-1 hover:shadow-xl transition-all duration-300 animate-fade-in-up'
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className={`w-14 h-14 rounded-2xl bg-gradient-to-r ${feature.tone} text-white flex items-center justify-center mb-5`}>
                   {feature.icon}
                 </div>
-                <h3 className='text-xl font-bold text-slate-900 mb-2' style={{ fontFamily: 'Outfit, sans-serif' }}>
+                <h3 className='text-xl font-bold text-slate-900 dark:text-white mb-2' style={{ fontFamily: 'Outfit, sans-serif' }}>
                   {feature.title}
                 </h3>
-                <p className='text-slate-600 leading-relaxed'>{feature.description}</p>
+                <p className='text-slate-600 dark:text-slate-300 leading-relaxed'>{feature.description}</p>
               </article>
             ))}
           </div>
         </section>
 
         {/* Speciality Menu */}
-        <section className='mb-10 rounded-3xl border border-slate-200 bg-white/80 backdrop-blur-sm px-2 md:px-4'>
+        <section className='mb-10 rounded-3xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800/80 backdrop-blur-sm px-2 md:px-4'>
           <SpecialityMenu />
         </section>
 
@@ -136,7 +136,7 @@ const Home = () => {
         </section>
 
         {/* Care Paths */}
-        <section className='mb-16 rounded-3xl border border-slate-200 bg-slate-900 p-6 md:p-10 relative overflow-hidden'>
+        <section className='mb-16 rounded-3xl border border-slate-200 dark:border-gray-700 bg-slate-900 p-6 md:p-10 relative overflow-hidden'>
           <div className='absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(6,182,212,0.25),transparent_45%),radial-gradient(circle_at_bottom_left,_rgba(16,185,129,0.22),transparent_40%)]'></div>
           <div className='relative'>
             <div className='text-center mb-10'>
@@ -153,7 +153,7 @@ const Home = () => {
               {processSteps.map((item, index) => (
                 <div
                   key={item.step}
-                  className='rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm animate-fade-in-up'
+                  className='rounded-2xl border border-white/10 bg-white dark:bg-gray-800/5 p-6 backdrop-blur-sm animate-fade-in-up'
                   style={{ animationDelay: `${index * 0.12}s` }}
                 >
                   <p className='text-cyan-300 text-sm font-bold mb-3'>STEP {item.step}</p>
@@ -187,10 +187,10 @@ const Home = () => {
               <p className={`text-sm font-semibold uppercase tracking-wider ${isLoggedInPatient ? 'text-cyan-700' : 'text-cyan-300'}`}>
                 Personalized Next Step
               </p>
-              <h3 className={`text-3xl md:text-4xl font-black mt-2 ${isLoggedInPatient ? 'text-slate-900' : 'text-white'}`} style={{ fontFamily: 'Outfit, sans-serif' }}>
+              <h3 className={`text-3xl md:text-4xl font-black mt-2 ${isLoggedInPatient ? 'text-slate-900 dark:text-white' : 'text-white'}`} style={{ fontFamily: 'Outfit, sans-serif' }}>
                 {isLoggedInPatient ? 'Ready for your next appointment?' : 'Start your first booking today'}
               </h3>
-              <p className={`mt-4 leading-relaxed ${isLoggedInPatient ? 'text-slate-600' : 'text-slate-300'}`}>
+              <p className={`mt-4 leading-relaxed ${isLoggedInPatient ? 'text-slate-600 dark:text-slate-300' : 'text-slate-300'}`}>
                 {isLoggedInPatient
                   ? 'Browse available specialists and secure your next consultation with just a few clicks.'
                   : 'Create your profile to book appointments faster, get reminders, and manage healthcare in one place.'}
@@ -199,7 +199,7 @@ const Home = () => {
             <div className='flex flex-wrap gap-3 lg:justify-end'>
               <button
                 onClick={() => { navigate('/doctors'); scrollTo(0, 0) }}
-                className={`px-6 py-3 rounded-xl font-semibold transition-all ${isLoggedInPatient ? 'bg-cyan-600 text-white hover:bg-cyan-700' : 'bg-white text-cyan-800 hover:bg-cyan-50'}`}
+                className={`px-6 py-3 rounded-xl font-semibold transition-all ${isLoggedInPatient ? 'bg-cyan-600 text-white hover:bg-cyan-700' : 'bg-white dark:bg-gray-800 text-cyan-800 hover:bg-cyan-50'}`}
               >
                 Explore Doctors
               </button>

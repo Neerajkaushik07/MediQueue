@@ -15,13 +15,13 @@ const DashboardHeader = ({ name, subtitle, image, status, onStatusToggle }) => {
                         <h1 className='text-3xl font-bold luxury-heading mb-2'>
                             Welcome, {name}!
                         </h1>
-                        <p className='text-gray-600'>{subtitle}</p>
+                        <p className='text-gray-600 dark:text-gray-300'>{subtitle}</p>
                     </div>
                 </div>
 
                 {status && (
                     <div className='text-center md:text-right'>
-                        <p className='text-sm text-gray-600 mb-2'>{status.label}</p>
+                        <p className='text-sm text-gray-600 dark:text-gray-300 mb-2'>{status.label}</p>
                         <button
                             onClick={onStatusToggle}
                             className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all ${status.isActive

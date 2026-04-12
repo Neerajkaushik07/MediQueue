@@ -111,19 +111,19 @@ const Login = () => {
             <h2 className='text-3xl font-bold luxury-heading mb-2'>
               {state === 'Sign Up' ? 'Create Account' : 'Login'}
             </h2>
-            <p className='text-gray-600'>Please {state === 'Sign Up' ? 'sign up' : 'log in'} to continue</p>
+            <p className='text-gray-600 dark:text-gray-300'>Please {state === 'Sign Up' ? 'sign up' : 'log in'} to continue</p>
           </div>
 
           {/* Role Selection */}
           <div className='mb-6'>
-            <label className='text-sm font-medium text-gray-700 mb-3 block'>I am a:</label>
+            <label className='text-sm font-medium text-gray-700 dark:text-gray-200 mb-3 block'>I am a:</label>
             <div className='grid grid-cols-2 gap-4'>
               <button
                 type='button'
                 onClick={() => setRole('patient')}
                 className={`flex items-center justify-center gap-3 p-4 rounded-xl border-2 transition-all ${role === 'patient'
                   ? 'border-primary bg-primary/10 text-primary'
-                  : 'border-gray-300 hover:border-primary/50'
+                  : 'border-gray-300 dark:border-gray-600 hover:border-primary/50'
                   }`}
               >
                 <FaUser size={24} />
@@ -134,7 +134,7 @@ const Login = () => {
                 onClick={() => setRole('doctor')}
                 className={`flex items-center justify-center gap-3 p-4 rounded-xl border-2 transition-all ${role === 'doctor'
                   ? 'border-primary bg-primary/10 text-primary'
-                  : 'border-gray-300 hover:border-primary/50'
+                  : 'border-gray-300 dark:border-gray-600 hover:border-primary/50'
                   }`}
               >
                 <FaUserMd size={24} />
@@ -161,7 +161,7 @@ const Login = () => {
 
               <div className='flex items-center gap-3 my-6'>
                 <div className='flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent'></div>
-                <span className='text-sm text-gray-500 font-medium'>OR</span>
+                <span className='text-sm text-gray-500 dark:text-gray-400 font-medium'>OR</span>
                 <div className='flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent'></div>
               </div>
             </>
@@ -171,7 +171,7 @@ const Login = () => {
           <div className='flex flex-col gap-5'>
             {state === 'Sign Up' && (
               <div className='w-full animate-slide-down'>
-                <label className='text-sm font-medium text-gray-700 mb-2 block'>Full Name</label>
+                <label className='text-sm font-medium text-gray-700 dark:text-gray-200 mb-2 block'>Full Name</label>
                 <input
                   onChange={(e) => setName(e.target.value)}
                   value={name}
@@ -184,7 +184,7 @@ const Login = () => {
             )}
 
             <div className='w-full'>
-              <label className='text-sm font-medium text-gray-700 mb-2 block'>Email</label>
+              <label className='text-sm font-medium text-gray-700 dark:text-gray-200 mb-2 block'>Email</label>
               <input
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
@@ -197,7 +197,7 @@ const Login = () => {
 
             <div className='w-full'>
               <div className='flex justify-between items-center mb-2'>
-                <label className='text-sm font-medium text-gray-700'>Password</label>
+                <label className='text-sm font-medium text-gray-700 dark:text-gray-200'>Password</label>
                 {state === 'Login' && (
                   <a href='#' className='text-xs text-primary hover:text-purple-600 font-medium transition-colors'>
                     Forgot Password?
@@ -216,7 +216,7 @@ const Login = () => {
                 <button
                   type='button'
                   onClick={() => setShowPassword(!showPassword)}
-                  className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors mt-0.5'
+                  className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-200 transition-colors mt-0.5'
                 >
                   {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
                 </button>
@@ -228,7 +228,7 @@ const Login = () => {
               <>
                 <div className='grid grid-cols-2 gap-4'>
                   <div>
-                    <label className='text-sm font-medium text-gray-700 mb-2 block'>Speciality</label>
+                    <label className='text-sm font-medium text-gray-700 dark:text-gray-200 mb-2 block'>Speciality</label>
                     <select
                       onChange={(e) => setSpeciality(e.target.value)}
                       value={speciality}
@@ -242,7 +242,7 @@ const Login = () => {
                     </select>
                   </div>
                   <div>
-                    <label className='text-sm font-medium text-gray-700 mb-2 block'>Degree</label>
+                    <label className='text-sm font-medium text-gray-700 dark:text-gray-200 mb-2 block'>Degree</label>
                     <input
                       onChange={(e) => setDegree(e.target.value)}
                       value={degree}
@@ -256,7 +256,7 @@ const Login = () => {
 
                 <div className='grid grid-cols-2 gap-4'>
                   <div>
-                    <label className='text-sm font-medium text-gray-700 mb-2 block'>Experience (years)</label>
+                    <label className='text-sm font-medium text-gray-700 dark:text-gray-200 mb-2 block'>Experience (years)</label>
                     <input
                       onChange={(e) => setExperience(e.target.value)}
                       value={experience}
@@ -267,7 +267,7 @@ const Login = () => {
                     />
                   </div>
                   <div>
-                    <label className='text-sm font-medium text-gray-700 mb-2 block'>Consultation Fee (₹)</label>
+                    <label className='text-sm font-medium text-gray-700 dark:text-gray-200 mb-2 block'>Consultation Fee (₹)</label>
                     <input
                       onChange={(e) => setFees(e.target.value)}
                       value={fees}
@@ -280,7 +280,7 @@ const Login = () => {
                 </div>
 
                 <div>
-                  <label className='text-sm font-medium text-gray-700 mb-2 block'>Address Line 1</label>
+                  <label className='text-sm font-medium text-gray-700 dark:text-gray-200 mb-2 block'>Address Line 1</label>
                   <input
                     onChange={(e) => setAddress({ ...address, line1: e.target.value })}
                     value={address.line1}
@@ -292,7 +292,7 @@ const Login = () => {
                 </div>
 
                 <div>
-                  <label className='text-sm font-medium text-gray-700 mb-2 block'>Address Line 2</label>
+                  <label className='text-sm font-medium text-gray-700 dark:text-gray-200 mb-2 block'>Address Line 2</label>
                   <input
                     onChange={(e) => setAddress({ ...address, line2: e.target.value })}
                     value={address.line2}
@@ -304,7 +304,7 @@ const Login = () => {
                 </div>
 
                 <div>
-                  <label className='text-sm font-medium text-gray-700 mb-2 block'>About</label>
+                  <label className='text-sm font-medium text-gray-700 dark:text-gray-200 mb-2 block'>About</label>
                   <textarea
                     onChange={(e) => setAbout(e.target.value)}
                     value={about}
@@ -324,14 +324,14 @@ const Login = () => {
                   id="rememberMe"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className='w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2 cursor-pointer'
+                  className='w-4 h-4 text-primary bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-primary focus:ring-2 cursor-pointer'
                 />
-                <label htmlFor="rememberMe" className='ml-2 text-sm text-gray-600 cursor-pointer'>
+                <label htmlFor="rememberMe" className='ml-2 text-sm text-gray-600 dark:text-gray-300 cursor-pointer'>
                   Remember me
                 </label>
               </div>
             ) : (
-              <div className='text-xs text-gray-600'>
+              <div className='text-xs text-gray-600 dark:text-gray-300'>
                 By signing up, you agree to our{' '}
                 <a href='#' className='text-primary hover:underline font-medium'>Terms of Service</a>
                 {' '}and{' '}
@@ -346,7 +346,7 @@ const Login = () => {
               {state === 'Sign Up' ? 'Create Account' : 'Login'}
             </button>
 
-            <div className='text-center text-sm text-gray-600'>
+            <div className='text-center text-sm text-gray-600 dark:text-gray-300'>
               {state === 'Sign Up'
                 ? (
                   <p>

@@ -669,3 +669,20 @@ select {
 .animate-bounce {
     animation: bounce 2s infinite;
 }
+/* Fix for Auth Cards and Inputs in Dark Mode */
+.dark .glass-card {
+    background: rgba(31, 41, 55, 0.95);
+    border: 1px solid rgba(75, 85, 99, 0.5);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}
+
+.dark .glass {
+    background: rgba(17, 24, 39, 0.8);
+    border: 1px solid rgba(75, 85, 99, 0.6) !important;
+    color: white;
+}
+
+.dark .glass::placeholder {
+    color: rgba(156, 163, 175, 0.8);
+}
+

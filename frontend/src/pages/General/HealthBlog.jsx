@@ -236,7 +236,7 @@ const HealthBlog = () => {
                     </button>
 
                     {/* Article Header */}
-                    <div className='rounded-3xl overflow-hidden mb-8 animate-scale-in border border-slate-200 bg-white shadow-sm'>
+                    <div className='rounded-3xl overflow-hidden mb-8 animate-scale-in border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm dark:shadow-none'>
                         <div className='relative h-80 md:h-96'>
                             <img
                                 src={selectedArticle.image}
@@ -245,7 +245,7 @@ const HealthBlog = () => {
                             />
                             <div className='absolute inset-0 bg-gradient-to-t from-slate-900/85 via-slate-900/35 to-transparent'></div>
                             <div className='absolute bottom-0 left-0 right-0 p-8 text-white'>
-                                <span className='inline-block px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-sm font-semibold mb-4 capitalize'>
+                                <span className='inline-block px-4 py-1.5 bg-white dark:bg-gray-800/20 backdrop-blur-md rounded-full text-sm font-semibold mb-4 capitalize'>
                                     {selectedArticle.category}
                                 </span>
                                 <h1 className='text-3xl md:text-5xl font-black mb-4 leading-tight'>
@@ -276,16 +276,16 @@ const HealthBlog = () => {
                     </div>
 
                     {/* Article Content */}
-                    <div className='rounded-3xl p-8 md:p-12 mb-8 border border-slate-200 bg-white shadow-sm'>
+                    <div className='rounded-3xl p-8 md:p-12 mb-8 border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm dark:shadow-none'>
                         <div
-                            className='article-content text-slate-700 leading-relaxed'
+                            className='article-content text-slate-700 dark:text-slate-200 leading-relaxed'
                             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectedArticle.content || '') }}
                         />
                     </div>
 
                     {/* Related Articles */}
                     <div className='mb-8'>
-                        <h3 className='text-2xl font-black text-slate-900 mb-6'>Related Articles</h3>
+                        <h3 className='text-2xl font-black text-slate-900 dark:text-white mb-6'>Related Articles</h3>
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                             {articles
                                 .filter(post => post.category === selectedArticle.category && post.id !== selectedArticle.id)
@@ -294,7 +294,7 @@ const HealthBlog = () => {
                                     <div
                                         key={post.id}
                                         onClick={() => handleCardClick(post)}
-                                        className='rounded-2xl overflow-hidden border border-slate-200 bg-white hover:shadow-md transition-all duration-300 cursor-pointer group'
+                                        className='rounded-2xl overflow-hidden border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-md transition-all duration-300 cursor-pointer group'
                                     >
                                         <div className='relative overflow-hidden h-48'>
                                             <img
@@ -307,10 +307,10 @@ const HealthBlog = () => {
                                             <span className='text-xs font-semibold text-cyan-700 bg-cyan-50 border border-cyan-100 px-3 py-1 rounded-full capitalize'>
                                                 {post.category}
                                             </span>
-                                            <h4 className='text-lg font-bold text-slate-900 mt-3 mb-2 group-hover:text-cyan-700 transition-colors'>
+                                            <h4 className='text-lg font-bold text-slate-900 dark:text-white mt-3 mb-2 group-hover:text-cyan-700 transition-colors'>
                                                 {post.title}
                                             </h4>
-                                            <p className='text-sm text-slate-600 line-clamp-2'>
+                                            <p className='text-sm text-slate-600 dark:text-slate-300 line-clamp-2'>
                                                 {post.excerpt}
                                             </p>
                                         </div>
@@ -346,24 +346,24 @@ const HealthBlog = () => {
                         <span className='inline-block px-4 py-1.5 bg-cyan-100 text-cyan-700 rounded-full text-sm font-semibold mb-4'>
                             Knowledge Hub
                         </span>
-                        <h1 className='text-3xl md:text-5xl font-black text-slate-900 mb-3'>Health Blog</h1>
-                        <p className='text-slate-600 max-w-2xl mx-auto leading-relaxed'>
+                        <h1 className='text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-3'>Health Blog</h1>
+                        <p className='text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed'>
                             Explore expert insights, practical wellness tips, and clear guidance to make better daily health decisions.
                         </p>
                     </div>
                 </div>
 
                 <div className='grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8'>
-                    <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-                        <p className='text-sm text-slate-500 mb-1'>Articles on This Page</p>
-                        <p className='text-3xl font-black text-slate-900'>{filteredPosts.length}</p>
+                    <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-none'>
+                        <p className='text-sm text-slate-500 dark:text-slate-400 mb-1'>Articles on This Page</p>
+                        <p className='text-3xl font-black text-slate-900 dark:text-white'>{filteredPosts.length}</p>
                     </div>
-                    <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-                        <p className='text-sm text-slate-500 mb-1'>Total Content</p>
+                    <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-none'>
+                        <p className='text-sm text-slate-500 dark:text-slate-400 mb-1'>Total Content</p>
                         <p className='text-3xl font-black text-cyan-700'>{pagination.total || filteredPosts.length}</p>
                     </div>
-                    <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-                        <p className='text-sm text-slate-500 mb-1'>Current Page</p>
+                    <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-none'>
+                        <p className='text-sm text-slate-500 dark:text-slate-400 mb-1'>Current Page</p>
                         <p className='text-3xl font-black text-emerald-600'>{page}/{pagination.totalPages || 1}</p>
                     </div>
                 </div>
@@ -377,7 +377,7 @@ const HealthBlog = () => {
                                 placeholder='Search for any health topic (e.g., protein, diabetes, yoga)...'
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className='w-full px-6 py-4 rounded-2xl border border-slate-200 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 transition-all pl-12'
+                                className='w-full px-6 py-4 rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm dark:shadow-none focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 transition-all pl-12'
                             />
                             <svg className='absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' />
@@ -387,12 +387,12 @@ const HealthBlog = () => {
                 </div>
 
                 {/* Filters */}
-                <div className='max-w-6xl mx-auto flex flex-col md:flex-row gap-4 md:items-center md:justify-between mb-8 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm'>
+                <div className='max-w-6xl mx-auto flex flex-col md:flex-row gap-4 md:items-center md:justify-between mb-8 rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm dark:shadow-none'>
                     <div className='flex gap-4 flex-1'>
                         <select
                             value={filters.category}
                             onChange={(e) => handleFilterChange('category', e.target.value)}
-                            className='px-4 py-3 rounded-xl text-sm w-full md:w-1/2 border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400'
+                            className='px-4 py-3 rounded-xl text-sm w-full md:w-1/2 border border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400'
                         >
                             {categories.map(option => (
                                 <option key={option.value} value={option.value}>{option.label}</option>
@@ -401,14 +401,14 @@ const HealthBlog = () => {
                         <select
                             value={filters.contentType}
                             onChange={(e) => handleFilterChange('contentType', e.target.value)}
-                            className='px-4 py-3 rounded-xl text-sm w-full md:w-1/2 border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400'
+                            className='px-4 py-3 rounded-xl text-sm w-full md:w-1/2 border border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400'
                         >
                             {contentTypes.map(option => (
                                 <option key={option.value} value={option.value}>{option.label}</option>
                             ))}
                         </select>
                     </div>
-                    <div className='text-sm text-slate-600 bg-slate-50 border border-slate-200 px-4 py-2 rounded-xl'>
+                    <div className='text-sm text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 px-4 py-2 rounded-xl'>
                         Showing page {page} of {pagination.totalPages || 1}
                     </div>
                 </div>
@@ -417,7 +417,7 @@ const HealthBlog = () => {
                 {loading && (
                     <div className='text-center py-20'>
                         <div className='inline-block animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-cyan-600'></div>
-                        <p className='text-slate-600 mt-4'>Loading articles...</p>
+                        <p className='text-slate-600 dark:text-slate-300 mt-4'>Loading articles...</p>
                     </div>
                 )}
 
@@ -441,7 +441,7 @@ const HealthBlog = () => {
                             <div
                                 key={post.id}
                                 onClick={() => handleCardClick(post)}
-                                className='rounded-3xl overflow-hidden border border-slate-200 bg-white hover:shadow-lg transition-all duration-500 cursor-pointer group animate-scale-in'
+                                className='rounded-3xl overflow-hidden border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-lg transition-all duration-500 cursor-pointer group animate-scale-in'
                                 style={{ animationDelay: `${index * 0.1}s` }}
                             >
                                 <div className='relative overflow-hidden'>
@@ -467,16 +467,16 @@ const HealthBlog = () => {
                                             {post.category}
                                         </span>
                                     </div>
-                                    <h3 className='text-xl font-bold text-slate-900 mb-3 group-hover:text-cyan-700 transition-colors duration-300 line-clamp-2'>
+                                    <h3 className='text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-cyan-700 transition-colors duration-300 line-clamp-2'>
                                         {post.title}
                                     </h3>
-                                    <p className='text-sm text-slate-600 mb-4 leading-relaxed line-clamp-2'>
+                                    <p className='text-sm text-slate-600 dark:text-slate-300 mb-4 leading-relaxed line-clamp-2'>
                                         {post.excerpt}
                                     </p>
-                                    <div className='flex items-center justify-between pt-4 border-t border-slate-200'>
+                                    <div className='flex items-center justify-between pt-4 border-t border-slate-200 dark:border-gray-700'>
                                         <div>
-                                            <p className='text-sm font-medium text-slate-700'>{post.author}</p>
-                                            <p className='text-xs text-slate-500'>{post.date}</p>
+                                            <p className='text-sm font-medium text-slate-700 dark:text-slate-200'>{post.author}</p>
+                                            <p className='text-xs text-slate-500 dark:text-slate-400'>{post.date}</p>
                                         </div>
                                         <button className='text-cyan-700 text-sm font-semibold hover:underline group-hover:translate-x-2 transition-transform duration-300 flex items-center gap-1'>
                                             Read More
@@ -497,15 +497,15 @@ const HealthBlog = () => {
                         <button
                             onClick={() => handlePageChange('prev')}
                             disabled={page <= 1}
-                            className='px-4 py-2 rounded-xl text-sm font-semibold border border-slate-200 bg-white text-slate-700 disabled:opacity-50 disabled:cursor-not-allowed'
+                            className='px-4 py-2 rounded-xl text-sm font-semibold border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-slate-700 dark:text-slate-200 disabled:opacity-50 disabled:cursor-not-allowed'
                         >
                             Previous
                         </button>
-                        <span className='text-sm text-slate-600'>Page {page} of {pagination.totalPages || 1}</span>
+                        <span className='text-sm text-slate-600 dark:text-slate-300'>Page {page} of {pagination.totalPages || 1}</span>
                         <button
                             onClick={() => handlePageChange('next')}
                             disabled={page >= (pagination.totalPages || 1)}
-                            className='px-4 py-2 rounded-xl text-sm font-semibold border border-slate-200 bg-white text-slate-700 disabled:opacity-50 disabled:cursor-not-allowed'
+                            className='px-4 py-2 rounded-xl text-sm font-semibold border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-slate-700 dark:text-slate-200 disabled:opacity-50 disabled:cursor-not-allowed'
                         >
                             Next
                         </button>
@@ -515,11 +515,11 @@ const HealthBlog = () => {
                 {/* No Results Message */}
                 {!loading && !error && filteredPosts.length === 0 && (
                     <div className='text-center py-20 animate-fade-in'>
-                        <div className='inline-block px-8 py-12 rounded-3xl border border-slate-200 bg-white shadow-sm'>
+                        <div className='inline-block px-8 py-12 rounded-3xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm dark:shadow-none'>
                             <svg className='w-20 h-20 text-slate-300 mx-auto mb-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' />
                             </svg>
-                            <p className='text-slate-500 text-lg font-medium'>No articles found</p>
+                            <p className='text-slate-500 dark:text-slate-400 text-lg font-medium'>No articles found</p>
                             <p className='text-slate-400 text-sm mt-2'>Try different keywords or categories</p>
                         </div>
                     </div>

@@ -100,10 +100,10 @@ const HealthFeatures = () => {
                         ✨ COMPREHENSIVE HEALTH FEATURES
                     </div>
                     <h1 className='text-4xl md:text-6xl font-bold mb-6'>
-                        <span className='text-black'>Your Complete </span>
+                        <span className='text-black dark:text-white'>Your Complete </span>
                         <span className='text-transparent bg-clip-text bg-gradient-primary'>Health Dashboard</span>
                     </h1>
-                    <p className='text-gray-600 text-lg md:text-xl mb-12 leading-relaxed max-w-3xl mx-auto'>
+                    <p className='text-gray-600 dark:text-gray-300 text-lg md:text-xl mb-12 leading-relaxed max-w-3xl mx-auto'>
                         Track medical records, medications, health metrics, lab reports, and more - all in one secure, easy-to-use platform
                     </p>
 
@@ -130,7 +130,7 @@ const HealthFeatures = () => {
             <div className='section-padding bg-gradient-primary rounded-3xl mb-16 shadow-luxury'>
                 <div className='max-w-7xl mx-auto'>
                     <div className='text-center mb-12'>
-                        <span className='inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white text-sm font-semibold mb-4'>
+                        <span className='inline-block px-4 py-2 bg-white dark:bg-gray-800/20 backdrop-blur-sm rounded-full text-white text-sm font-semibold mb-4'>
                             All Features
                         </span>
                         <h2 className='text-4xl md:text-5xl font-bold text-white mt-4'>
@@ -152,10 +152,10 @@ const HealthFeatures = () => {
                                 <div className={`w-16 h-16 bg-gradient-primary rounded-xl flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                                     {feature.icon}
                                 </div>
-                                <h3 className='text-xl font-bold text-gray-900 mb-3'>
+                                <h3 className='text-xl font-bold text-gray-900 dark:text-white mb-3'>
                                     {feature.title}
                                 </h3>
-                                <p className='text-gray-600 leading-relaxed mb-4'>
+                                <p className='text-gray-600 dark:text-gray-300 leading-relaxed mb-4'>
                                     {feature.description}
                                 </p>
                                 <div className='flex items-center gap-2 text-primary font-bold group-hover:gap-3 transition-all duration-300'>
@@ -176,14 +176,14 @@ const HealthFeatures = () => {
                     <h2 className='text-3xl md:text-4xl font-bold medical-heading mb-4'>
                         Ready to Take Control of Your Health?
                     </h2>
-                    <p className='text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto'>
+                    <p className='text-gray-600 dark:text-gray-300 mb-8 leading-relaxed max-w-2xl mx-auto'>
                         Join thousands of users who trust MediQueue for their healthcare management needs
                     </p>
                     <div className='flex flex-col sm:flex-row gap-4 justify-center'>
 
                         <button
                             onClick={() => navigate('/community')}
-                            className='bg-white text-primary px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all duration-300 border-2 border-primary/20'
+                            className='bg-white dark:bg-gray-800 text-primary px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-50 dark:bg-gray-900 transition-all duration-300 border-2 border-primary/20'
                         >
                             Join Community
                         </button>

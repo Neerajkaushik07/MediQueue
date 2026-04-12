@@ -209,39 +209,39 @@ const DoctorAppointments = () => {
             {/* Header */}
             <div className='mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4'>
                 <div>
-                    <h1 className='text-3xl font-bold text-gray-800 font-poppins'>Appointments Management</h1>
-                    <p className='text-gray-600 mt-2 font-medium'>Review appointments, provide diagnoses, and manage patient prescriptions.</p>
+                    <h1 className='text-3xl font-bold text-gray-800 dark:text-gray-100 font-poppins'>Appointments Management</h1>
+                    <p className='text-gray-600 dark:text-gray-300 mt-2 font-medium'>Review appointments, provide diagnoses, and manage patient prescriptions.</p>
                 </div>
                 <button
                     onClick={getAppointments}
                     disabled={loading}
-                    className={`px-4 py-2 rounded-xl font-semibold text-sm transition-colors ${loading ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-cyan-50 text-cyan-700 hover:bg-cyan-100'}`}
+                    className={`px-4 py-2 rounded-xl font-semibold text-sm transition-colors ${loading ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed' : 'bg-cyan-50 text-cyan-700 hover:bg-cyan-100'}`}
                 >
                     {loading ? 'Refreshing...' : 'Refresh'}
                 </button>
             </div>
 
             <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6'>
-                <div className='bg-white rounded-xl border border-gray-200 p-4'>
+                <div className='bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4'>
                     <p className='text-xs font-bold text-gray-400 uppercase'>Total Appointments</p>
-                    <p className='text-2xl font-black text-gray-900 mt-1'>{statusCounts.all}</p>
+                    <p className='text-2xl font-black text-gray-900 dark:text-white mt-1'>{statusCounts.all}</p>
                 </div>
-                <div className='bg-white rounded-xl border border-gray-200 p-4'>
+                <div className='bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4'>
                     <p className='text-xs font-bold text-gray-400 uppercase'>Upcoming</p>
                     <p className='text-2xl font-black text-blue-600 mt-1'>{statusCounts.upcoming}</p>
                 </div>
-                <div className='bg-white rounded-xl border border-gray-200 p-4'>
+                <div className='bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4'>
                     <p className='text-xs font-bold text-gray-400 uppercase'>Paid Revenue</p>
                     <p className='text-2xl font-black text-green-600 mt-1'>{currencySymbol}{revenueSummary.paid}</p>
                 </div>
-                <div className='bg-white rounded-xl border border-gray-200 p-4'>
+                <div className='bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4'>
                     <p className='text-xs font-bold text-gray-400 uppercase'>Pending Collection</p>
                     <p className='text-2xl font-black text-amber-600 mt-1'>{currencySymbol}{revenueSummary.pending}</p>
                 </div>
             </div>
 
             {/* Search and Filter Bar - Reverted to Original Design */}
-            <div className='bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6'>
+            <div className='bg-white dark:bg-gray-800 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-700 p-6 mb-6'>
                 <div className='flex flex-col md:flex-row gap-4 items-start md:items-center justify-between'>
                     {/* Search */}
                     <div className='relative flex-1 max-w-md'>
@@ -253,17 +253,17 @@ const DoctorAppointments = () => {
                             placeholder='Search by patient name or date...'
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className='w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20'
+                            className='w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20'
                         />
                     </div>
 
                     {/* Filter Tabs */}
-                    <div className='flex flex-wrap gap-2 bg-gray-100 p-1 rounded-lg'>
+                    <div className='flex flex-wrap gap-2 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg'>
                         <button
                             onClick={() => setFilterStatus('all')}
                             className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${filterStatus === 'all'
-                                ? 'bg-white text-primary shadow-sm'
-                                : 'text-gray-600 hover:text-gray-800'
+                                ? 'bg-white dark:bg-gray-800 text-primary shadow-sm dark:shadow-none'
+                                : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:text-gray-100'
                                 }`}
                         >
                             All ({statusCounts.all})
@@ -271,8 +271,8 @@ const DoctorAppointments = () => {
                         <button
                             onClick={() => setFilterStatus('upcoming')}
                             className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${filterStatus === 'upcoming'
-                                ? 'bg-white text-primary shadow-sm'
-                                : 'text-gray-600 hover:text-gray-800'
+                                ? 'bg-white dark:bg-gray-800 text-primary shadow-sm dark:shadow-none'
+                                : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:text-gray-100'
                                 }`}
                         >
                             Upcoming ({statusCounts.upcoming})
@@ -280,8 +280,8 @@ const DoctorAppointments = () => {
                         <button
                             onClick={() => setFilterStatus('completed')}
                             className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${filterStatus === 'completed'
-                                ? 'bg-white text-primary shadow-sm'
-                                : 'text-gray-600 hover:text-gray-800'
+                                ? 'bg-white dark:bg-gray-800 text-primary shadow-sm dark:shadow-none'
+                                : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:text-gray-100'
                                 }`}
                         >
                             Completed ({statusCounts.completed})
@@ -289,15 +289,15 @@ const DoctorAppointments = () => {
                         <button
                             onClick={() => setFilterStatus('cancelled')}
                             className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${filterStatus === 'cancelled'
-                                ? 'bg-white text-primary shadow-sm'
-                                : 'text-gray-600 hover:text-gray-800'
+                                ? 'bg-white dark:bg-gray-800 text-primary shadow-sm dark:shadow-none'
+                                : 'text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:text-gray-100'
                                 }`}
                         >
                             Cancelled ({statusCounts.cancelled})
                         </button>
                         <button
                             onClick={() => { setSearchTerm(''); setFilterStatus('all') }}
-                            className='px-4 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-white transition-all'
+                            className='px-4 py-2 rounded-md text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:text-gray-100 hover:bg-white dark:bg-gray-800 transition-all'
                         >
                             Clear
                         </button>
@@ -311,9 +311,9 @@ const DoctorAppointments = () => {
                     <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-primary'></div>
                 </div>
             ) : filteredAppointments.length === 0 ? (
-                <div className='text-center py-32 bg-white rounded-3xl shadow-soft border border-gray-100'>
+                <div className='text-center py-32 bg-white dark:bg-gray-800 rounded-3xl shadow-soft border border-gray-100'>
                     <div className='text-7xl mb-6 grayscale opacity-20'>📅</div>
-                    <p className='text-gray-500 text-xl font-bold font-poppins'>
+                    <p className='text-gray-500 dark:text-gray-400 text-xl font-bold font-poppins'>
                         {searchTerm ? 'No matches found' : 'No appointments scheduled'}
                     </p>
                     <p className='text-gray-400 text-sm mt-2 font-medium tracking-wide font-poppins'>
@@ -323,7 +323,7 @@ const DoctorAppointments = () => {
             ) : (
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in'>
                     {filteredAppointments.map((item, index) => (
-                        <div key={item._id || index} className={`bg-white rounded-3xl border border-gray-100 shadow-soft hover:shadow-card-hover hover:border-primary/20 transition-all duration-300 overflow-hidden flex flex-col group`}>
+                        <div key={item._id || index} className={`bg-white dark:bg-gray-800 rounded-3xl border border-gray-100 shadow-soft hover:shadow-card-hover hover:border-primary/20 transition-all duration-300 overflow-hidden flex flex-col group`}>
                             {/* Card Header */}
                             <div className='p-6 pb-4 flex items-start gap-4'>
                                 <div className='relative'>
@@ -334,13 +334,13 @@ const DoctorAppointments = () => {
                                         onError={(e) => { e.target.onerror = null; e.target.src = assets.profile_pic }}
                                     />
                                     {item.payment && (
-                                        <div className='absolute -bottom-1 -right-1 bg-green-500 text-white p-1 rounded-lg shadow-sm' title="Payment Completed">
+                                        <div className='absolute -bottom-1 -right-1 bg-green-500 text-white p-1 rounded-lg shadow-sm dark:shadow-none' title="Payment Completed">
                                             <svg className='w-3 h-3' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='3.5' d='M5 13l4 4L19 7' /></svg>
                                         </div>
                                     )}
                                 </div>
                                 <div className='flex-1 overflow-hidden'>
-                                    <h3 className='font-black text-gray-900 font-poppins text-lg truncate leading-tight group-hover:text-primary transition-colors'>{item.userData?.name || 'Unknown Patient'}</h3>
+                                    <h3 className='font-black text-gray-900 dark:text-white font-poppins text-lg truncate leading-tight group-hover:text-primary transition-colors'>{item.userData?.name || 'Unknown Patient'}</h3>
                                     <p className='text-xs font-bold text-gray-400 uppercase tracking-widest mt-1'>{calculateAge(item.userData?.dob)} Years • {(item.userData?.email || 'unknown@patient').split('@')[0]}</p>
                                 </div>
                                 <div className='text-right'>
@@ -350,25 +350,25 @@ const DoctorAppointments = () => {
                             </div>
 
                             {/* Info Section */}
-                            <div className='px-6 py-4 bg-gray-50/50 flex flex-col gap-2'>
+                            <div className='px-6 py-4 bg-gray-50 dark:bg-gray-900/50 flex flex-col gap-2'>
                                 <div className='flex justify-between items-center'>
                                     <div className='flex items-center gap-2'>
-                                        <span className='bg-white p-1.5 rounded-lg text-gray-400 shadow-sm'>
+                                        <span className='bg-white dark:bg-gray-800 p-1.5 rounded-lg text-gray-400 shadow-sm dark:shadow-none'>
                                             <svg className='w-3.5 h-3.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' /></svg>
                                         </span>
-                                        <span className='text-sm font-bold text-gray-700'>{formatSlotDate(item.slotDate)}</span>
+                                        <span className='text-sm font-bold text-gray-700 dark:text-gray-200'>{formatSlotDate(item.slotDate)}</span>
                                     </div>
                                     <div className='flex items-center gap-2'>
-                                        <span className='bg-white p-1.5 rounded-lg text-gray-400 shadow-sm'>
+                                        <span className='bg-white dark:bg-gray-800 p-1.5 rounded-lg text-gray-400 shadow-sm dark:shadow-none'>
                                             <svg className='w-3.5 h-3.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' /></svg>
                                         </span>
-                                        <span className='text-sm font-bold text-gray-700'>{item.slotTime}</span>
+                                        <span className='text-sm font-bold text-gray-700 dark:text-gray-200'>{item.slotTime}</span>
                                     </div>
                                 </div>
                                 <div className='flex justify-between items-center mt-2'>
                                     <div className='flex items-center gap-2'>
                                         <span className={`w-2 h-2 rounded-full ${item.payment ? 'bg-green-500' : 'bg-orange-500'}`}></span>
-                                        <span className='text-xs font-black uppercase tracking-widest text-gray-500'>{item.payment ? 'Paid Online' : 'Cash Payment'}</span>
+                                        <span className='text-xs font-black uppercase tracking-widest text-gray-500 dark:text-gray-400'>{item.payment ? 'Paid Online' : 'Cash Payment'}</span>
                                     </div>
                                     <div className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-[0.1em] border ${item.cancelled ? 'bg-red-50 text-red-500 border-red-100' :
                                         item.isCompleted ? 'bg-green-50 text-green-500 border-green-100' :
@@ -388,7 +388,7 @@ const DoctorAppointments = () => {
                                                 <button
                                                     onClick={() => cancelAppointment(item._id)}
                                                     disabled={actionLoadingId === item._id}
-                                                    className='flex-1 h-11 flex items-center justify-center bg-gray-100 text-gray-500 hover:bg-red-50 hover:text-red-500 rounded-xl font-bold text-xs uppercase transition-all disabled:opacity-50 disabled:cursor-not-allowed'
+                                                    className='flex-1 h-11 flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-red-50 hover:text-red-500 rounded-xl font-bold text-xs uppercase transition-all disabled:opacity-50 disabled:cursor-not-allowed'
                                                 >
                                                     {actionLoadingId === item._id ? 'Working...' : 'Cancel Call'}
                                                 </button>
@@ -403,7 +403,7 @@ const DoctorAppointments = () => {
                                         ) : (
                                             <button
                                                 onClick={() => openPrescriptionModal(item)}
-                                                className='w-full h-11 flex items-center justify-center gap-2 bg-white border border-primary text-primary rounded-xl font-bold text-xs uppercase hover:bg-primary hover:text-white transition-all shadow-sm'
+                                                className='w-full h-11 flex items-center justify-center gap-2 bg-white dark:bg-gray-800 border border-primary text-primary rounded-xl font-bold text-xs uppercase hover:bg-primary hover:text-white transition-all shadow-sm dark:shadow-none'
                                             >
                                                 <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z' /></svg>
                                                 Edit Rx
@@ -411,7 +411,7 @@ const DoctorAppointments = () => {
                                         )}
                                     </>
                                 ) : (
-                                    <div className='w-full h-11 flex items-center justify-center bg-gray-50 text-gray-400 rounded-xl font-bold text-[10px] uppercase tracking-widest border border-gray-100'>
+                                    <div className='w-full h-11 flex items-center justify-center bg-gray-50 dark:bg-gray-900 text-gray-400 rounded-xl font-bold text-[10px] uppercase tracking-widest border border-gray-100'>
                                         No Actions Available
                                     </div>
                                 )}
@@ -424,7 +424,7 @@ const DoctorAppointments = () => {
             {/* Prescription Modal - Enhanced Aesthetic */}
             {showPrescriptionModal && selectedAppointment && (
                 <div className='fixed inset-0 z-[60] flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm animate-fade-in'>
-                    <div className='bg-white rounded-[2.5rem] shadow-2xl w-full max-w-2xl overflow-hidden animate-fade-in-up border border-white/20'>
+                    <div className='bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-2xl w-full max-w-2xl overflow-hidden animate-fade-in-up border border-white/20'>
                         <div className='px-10 py-8 bg-gradient-primary relative'>
                             <div className='absolute inset-0 opacity-10' style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '16px 16px' }}></div>
                             <div className='relative flex items-center justify-between'>
@@ -434,17 +434,17 @@ const DoctorAppointments = () => {
                                     </h2>
                                     <p className='text-white/70 text-sm font-medium mt-1'>Review and prescribe medications for the patient</p>
                                 </div>
-                                <button onClick={() => setShowPrescriptionModal(false)} className='w-10 h-10 flex items-center justify-center bg-white/20 hover:bg-white/30 text-white rounded-full backdrop-blur-md transition-all'>
+                                <button onClick={() => setShowPrescriptionModal(false)} className='w-10 h-10 flex items-center justify-center bg-white dark:bg-gray-800/20 hover:bg-white dark:bg-gray-800/30 text-white rounded-full backdrop-blur-md transition-all'>
                                     <svg className='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='3.5' d='M6 18L18 6M6 6l12 12' /></svg>
                                 </button>
                             </div>
                         </div>
 
                         <div className='p-10 overflow-y-auto max-h-[60vh] custom-scrollbar'>
-                            <div className='flex items-center gap-5 mb-8 p-5 bg-gray-50 rounded-3xl border border-gray-100'>
+                            <div className='flex items-center gap-5 mb-8 p-5 bg-gray-50 dark:bg-gray-900 rounded-3xl border border-gray-100'>
                                 <img className='w-16 h-16 rounded-2xl object-cover border-4 border-white shadow-soft' src={selectedAppointment.userData.image} alt="" />
                                 <div>
-                                    <h3 className='text-xl font-black text-gray-900 font-poppins'>{selectedAppointment.userData.name}</h3>
+                                    <h3 className='text-xl font-black text-gray-900 dark:text-white font-poppins'>{selectedAppointment.userData.name}</h3>
                                     <p className='text-gray-400 text-xs font-black uppercase tracking-widest mt-0.5'>{calculateAge(selectedAppointment.userData.dob)} Years • Patient #MQ-{selectedAppointment._id.slice(-4).toUpperCase()}</p>
                                 </div>
                             </div>
@@ -460,7 +460,7 @@ const DoctorAppointments = () => {
                                         value={diagnosis}
                                         onChange={(e) => setDiagnosis(e.target.value)}
                                         placeholder='e.g. Acute Viral Bronchitis'
-                                        className='w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-primary/20 focus:ring-4 focus:ring-primary/5 focus:outline-none transition-all font-bold text-gray-800 placeholder:text-gray-400'
+                                        className='w-full px-6 py-4 bg-gray-50 dark:bg-gray-900 border-2 border-transparent rounded-2xl focus:bg-white dark:bg-gray-800 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 focus:outline-none transition-all font-bold text-gray-800 dark:text-gray-100 placeholder:text-gray-400'
                                     />
                                 </div>
 
@@ -474,7 +474,7 @@ const DoctorAppointments = () => {
                                         onChange={(e) => setMedications(e.target.value)}
                                         placeholder='e.g. Amoxicillin 500mg (3x daily), Cetirizine 10mg'
                                         rows={3}
-                                        className='w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-primary/20 focus:ring-4 focus:ring-primary/5 focus:outline-none transition-all font-bold text-gray-800 placeholder:text-gray-400 resize-none'
+                                        className='w-full px-6 py-4 bg-gray-50 dark:bg-gray-900 border-2 border-transparent rounded-2xl focus:bg-white dark:bg-gray-800 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 focus:outline-none transition-all font-bold text-gray-800 dark:text-gray-100 placeholder:text-gray-400 resize-none'
                                     />
                                     <p className='text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-2 px-1'>Use commas to separate multiple prescription items</p>
                                 </div>
@@ -489,16 +489,16 @@ const DoctorAppointments = () => {
                                         onChange={(e) => setNotes(e.target.value)}
                                         placeholder='Patient reports mild fatigue and low-grade fever...'
                                         rows={4}
-                                        className='w-full px-6 py-4 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-primary/20 focus:ring-4 focus:ring-primary/5 focus:outline-none transition-all font-bold text-gray-700 placeholder:text-gray-400 resize-none'
+                                        className='w-full px-6 py-4 bg-gray-50 dark:bg-gray-900 border-2 border-transparent rounded-2xl focus:bg-white dark:bg-gray-800 focus:border-primary/20 focus:ring-4 focus:ring-primary/5 focus:outline-none transition-all font-bold text-gray-700 dark:text-gray-200 placeholder:text-gray-400 resize-none'
                                     />
                                 </div>
                             </div>
                         </div>
 
-                        <div className='flex items-center justify-end gap-4 px-10 py-6 bg-gray-50/50 border-t border-gray-100'>
+                        <div className='flex items-center justify-end gap-4 px-10 py-6 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-100'>
                             <button
                                 onClick={() => setShowPrescriptionModal(false)}
-                                className='px-6 py-3 text-sm font-black text-gray-400 uppercase tracking-widest hover:text-gray-600 transition-colors'
+                                className='px-6 py-3 text-sm font-black text-gray-400 uppercase tracking-widest hover:text-gray-600 dark:text-gray-300 transition-colors'
                             >
                                 Discard
                             </button>

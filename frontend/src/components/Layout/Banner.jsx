@@ -20,19 +20,19 @@ const Banner = () => {
                 {/* ------- Left Side ------- */}
                 <div className='flex-1 text-center md:text-left'>
                     <div className='mb-4'>
-                        <span className='inline-block px-4 py-2 bg-gradient-calm rounded-full text-gray-900 text-sm font-semibold'>
+                        <span className='inline-block px-4 py-2 bg-gradient-calm rounded-full text-gray-900 dark:text-white text-sm font-semibold'>
                             Join Our Healthcare Community
                         </span>
                     </div>
-                    <h2 className='text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4'>
+                    <h2 className='text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4'>
                         Start Your Health Journey Today
                     </h2>
-                    <p className='text-gray-700 text-lg max-w-lg leading-relaxed mb-6'>
+                    <p className='text-gray-700 dark:text-gray-200 text-lg max-w-lg leading-relaxed mb-6'>
                         Connect with 100+ trusted doctors and experience professional healthcare with convenient online booking.
                     </p>
                     <button
                         onClick={() => { navigate('/login'); scrollTo(0, 0) }}
-                        className='bg-gradient-calm text-gray-900 px-8 py-4 rounded-lg font-semibold hover:opacity-90 transition-all duration-300 inline-flex items-center gap-2'
+                        className='bg-gradient-calm text-gray-900 dark:text-white px-8 py-4 rounded-lg font-semibold hover:opacity-90 transition-all duration-300 inline-flex items-center gap-2'
                     >
                         <span>Create Account</span>
                         <svg className='w-5 h-5' fill="none" stroke="currentColor" viewBox="0 0 24 24">

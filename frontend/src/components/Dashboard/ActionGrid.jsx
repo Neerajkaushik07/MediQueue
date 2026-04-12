@@ -14,11 +14,11 @@ const ActionGrid = ({ actions }) => {
                         onClick={() => action.onClick ? action.onClick() : navigate(action.path)}
                         className='glass-card p-6 rounded-2xl hover:scale-105 transition-all duration-300 group text-center md:text-left flex flex-col items-center md:items-start'
                     >
-                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-sm`}>
+                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-sm dark:shadow-none`}>
                             <action.icon className='text-white text-xl' />
                         </div>
-                        <p className='text-sm font-semibold text-gray-700'>{action.title}</p>
-                        {action.subtitle && <p className='text-xs text-gray-500 mt-1'>{action.subtitle}</p>}
+                        <p className='text-sm font-semibold text-gray-700 dark:text-gray-200'>{action.title}</p>
+                        {action.subtitle && <p className='text-xs text-gray-500 dark:text-gray-400 mt-1'>{action.subtitle}</p>}
                     </button>
                 ))}
             </div>

@@ -116,7 +116,7 @@ const InsuranceMarketplace = () => {
             {/* Header */}
             <div className='mb-8 text-center'>
                 <h1 className='text-4xl font-bold medical-heading mb-4'>Insurance Marketplace</h1>
-                <p className='text-gray-600 max-w-2xl mx-auto'>
+                <p className='text-gray-600 dark:text-gray-300 max-w-2xl mx-auto'>
                     Compare and buy the best insurance plans for you and your family.
                     Secure your future with top-rated providers.
                 </p>
@@ -130,7 +130,7 @@ const InsuranceMarketplace = () => {
                         onClick={() => setActiveFilter(filter.id)}
                         className={`px-6 py-2.5 rounded-full font-bold transition-all ${activeFilter === filter.id
                             ? 'bg-gradient-primary text-white shadow-glow'
-                            : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+                            : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700'
                             }`}
                     >
                         {filter.label}
@@ -146,7 +146,7 @@ const InsuranceMarketplace = () => {
                         <div className={`absolute top-0 left-0 w-full h-2 bg-gradient-to-r ${plan.color}`}></div>
 
                         {plan.recommended && (
-                            <div className='absolute top-4 right-4 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded shadow-sm flex items-center gap-1'>
+                            <div className='absolute top-4 right-4 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded shadow-sm dark:shadow-none flex items-center gap-1'>
                                 <FaStar /> Recommended
                             </div>
                         )}
@@ -157,19 +157,19 @@ const InsuranceMarketplace = () => {
                                     <FaShieldAlt />
                                 </div>
                                 <div>
-                                    <p className='text-sm text-gray-500 font-bold uppercase'>{plan.provider}</p>
-                                    <h3 className='text-xl font-bold text-gray-900'>{plan.name}</h3>
+                                    <p className='text-sm text-gray-500 dark:text-gray-400 font-bold uppercase'>{plan.provider}</p>
+                                    <h3 className='text-xl font-bold text-gray-900 dark:text-white'>{plan.name}</h3>
                                 </div>
                             </div>
 
                             <div className='mb-6'>
-                                <p className='text-3xl font-bold text-gray-900'>${plan.premium}<span className='text-sm text-gray-500 font-medium'>/mo</span></p>
+                                <p className='text-3xl font-bold text-gray-900 dark:text-white'>${plan.premium}<span className='text-sm text-gray-500 dark:text-gray-400 font-medium'>/mo</span></p>
                                 <p className='text-sm text-emerald-600 font-bold mt-1'>Coverage: {plan.coverage}</p>
                             </div>
 
                             <ul className='space-y-3 mb-8'>
                                 {plan.features.map((feature, idx) => (
-                                    <li key={idx} className='flex items-center gap-3 text-sm text-gray-600'>
+                                    <li key={idx} className='flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300'>
                                         <div className='w-5 h-5 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xs flex-shrink-0'>
                                             <FaCheck />
                                         </div>
@@ -192,29 +192,29 @@ const InsuranceMarketplace = () => {
             {/* Purchase Modal */}
             {showPurchaseModal && selectedPlan && (
                 <div className='fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in'>
-                    <div className='bg-white rounded-3xl p-8 max-w-md w-full animate-slide-up shadow-2xl relative overflow-hidden'>
+                    <div className='bg-white dark:bg-gray-800 rounded-3xl p-8 max-w-md w-full animate-slide-up shadow-2xl relative overflow-hidden'>
                         {/* Decorative Background */}
                         <div className={`absolute top-0 left-0 w-full h-24 bg-gradient-to-r ${selectedPlan.color}`}></div>
 
                         <div className='relative z-10'>
-                            <div className='w-16 h-16 bg-white rounded-2xl shadow-xl flex items-center justify-center text-3xl mx-auto mb-6'>
+                            <div className='w-16 h-16 bg-white dark:bg-gray-800 rounded-2xl shadow-xl flex items-center justify-center text-3xl mx-auto mb-6'>
                                 📝
                             </div>
 
                             <h2 className='text-2xl font-bold text-center mb-2'>Confirm Purchase</h2>
-                            <p className='text-gray-500 text-center mb-8'>You are about to purchase the <span className='font-bold text-gray-800'>{selectedPlan.name}</span></p>
+                            <p className='text-gray-500 dark:text-gray-400 text-center mb-8'>You are about to purchase the <span className='font-bold text-gray-800 dark:text-gray-100'>{selectedPlan.name}</span></p>
 
-                            <div className='bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-100'>
+                            <div className='bg-gray-50 dark:bg-gray-900 rounded-2xl p-6 mb-8 border border-gray-100'>
                                 <div className='flex justify-between mb-4'>
-                                    <span className='text-gray-500'>Provider</span>
-                                    <span className='font-bold text-gray-800'>{selectedPlan.provider}</span>
+                                    <span className='text-gray-500 dark:text-gray-400'>Provider</span>
+                                    <span className='font-bold text-gray-800 dark:text-gray-100'>{selectedPlan.provider}</span>
                                 </div>
                                 <div className='flex justify-between mb-4'>
-                                    <span className='text-gray-500'>Monthly Premium</span>
-                                    <span className='font-bold text-gray-800'>${selectedPlan.premium}</span>
+                                    <span className='text-gray-500 dark:text-gray-400'>Monthly Premium</span>
+                                    <span className='font-bold text-gray-800 dark:text-gray-100'>${selectedPlan.premium}</span>
                                 </div>
                                 <div className='flex justify-between'>
-                                    <span className='text-gray-500'>Coverage Info</span>
+                                    <span className='text-gray-500 dark:text-gray-400'>Coverage Info</span>
                                     <span className='font-bold text-emerald-600'>{selectedPlan.coverage}</span>
                                 </div>
                             </div>
@@ -222,7 +222,7 @@ const InsuranceMarketplace = () => {
                             <div className='flex gap-4'>
                                 <button
                                     onClick={() => setShowPurchaseModal(false)}
-                                    className='flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-all'
+                                    className='flex-1 py-3 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 text-gray-700 dark:text-gray-200 font-bold rounded-xl transition-all'
                                 >
                                     Cancel
                                 </button>

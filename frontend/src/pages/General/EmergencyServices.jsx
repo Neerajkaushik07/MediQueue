@@ -318,8 +318,8 @@ const EmergencyServices = () => {
                     <div className='relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6'>
                         <div>
                             <p className='text-xs md:text-sm font-semibold uppercase tracking-wide text-red-700 mb-2'>Rapid Response Hub</p>
-                            <h1 className='text-3xl md:text-4xl font-black text-slate-900 mb-2'>Emergency Services</h1>
-                            <p className='text-slate-700 max-w-2xl'>Get immediate emergency numbers, locate nearby hospitals, and follow quick first-aid instructions during critical moments.</p>
+                            <h1 className='text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-2'>Emergency Services</h1>
+                            <p className='text-slate-700 dark:text-slate-200 max-w-2xl'>Get immediate emergency numbers, locate nearby hospitals, and follow quick first-aid instructions during critical moments.</p>
                         </div>
                         <div className='flex flex-wrap gap-2'>
                             <button onClick={() => handleCall('108')} className='px-5 py-2.5 rounded-xl bg-red-600 text-white font-semibold hover:bg-red-700 transition-colors'>Call 108</button>
@@ -329,16 +329,16 @@ const EmergencyServices = () => {
                 </div>
 
                 <div className='grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8'>
-                    <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-                        <p className='text-sm text-slate-500 mb-1'>Emergency Contacts</p>
-                        <p className='text-3xl font-black text-slate-900'>{emergencyContacts.length}</p>
+                    <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-none'>
+                        <p className='text-sm text-slate-500 dark:text-slate-400 mb-1'>Emergency Contacts</p>
+                        <p className='text-3xl font-black text-slate-900 dark:text-white'>{emergencyContacts.length}</p>
                     </div>
-                    <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-                        <p className='text-sm text-slate-500 mb-1'>First Aid Guides</p>
-                        <p className='text-3xl font-black text-slate-900'>{firstAidTips.length}</p>
+                    <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-none'>
+                        <p className='text-sm text-slate-500 dark:text-slate-400 mb-1'>First Aid Guides</p>
+                        <p className='text-3xl font-black text-slate-900 dark:text-white'>{firstAidTips.length}</p>
                     </div>
-                    <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-                        <p className='text-sm text-slate-500 mb-1'>Hospital Finder</p>
+                    <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-none'>
+                        <p className='text-sm text-slate-500 dark:text-slate-400 mb-1'>Hospital Finder</p>
                         <p className='text-3xl font-black text-red-600'>{locationDetected ? nearbyHospitals.length : 0}</p>
                     </div>
                 </div>
@@ -357,13 +357,13 @@ const EmergencyServices = () => {
                     </div>
                 </div>
 
-                <div className='rounded-2xl border border-slate-200 bg-white p-3 mb-8 shadow-sm'>
+                <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-3 mb-8 shadow-sm dark:shadow-none'>
                     <div className='flex flex-wrap gap-2'>
                         <button
                             onClick={() => setActiveTab('contacts')}
                             className={`px-4 md:px-6 py-2.5 rounded-xl text-sm md:text-base font-semibold transition-all ${activeTab === 'contacts'
                                 ? 'bg-red-600 text-white shadow-md'
-                                : 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100'
+                                : 'bg-slate-50 dark:bg-gray-900 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-gray-700 hover:bg-slate-100 dark:bg-gray-800'
                                 }`}
                         >
                             Emergency Contacts
@@ -372,7 +372,7 @@ const EmergencyServices = () => {
                             onClick={() => setActiveTab('hospitals')}
                             className={`px-4 md:px-6 py-2.5 rounded-xl text-sm md:text-base font-semibold transition-all ${activeTab === 'hospitals'
                                 ? 'bg-red-600 text-white shadow-md'
-                                : 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100'
+                                : 'bg-slate-50 dark:bg-gray-900 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-gray-700 hover:bg-slate-100 dark:bg-gray-800'
                                 }`}
                         >
                             Nearby Hospitals
@@ -381,7 +381,7 @@ const EmergencyServices = () => {
                             onClick={() => setActiveTab('firstaid')}
                             className={`px-4 md:px-6 py-2.5 rounded-xl text-sm md:text-base font-semibold transition-all ${activeTab === 'firstaid'
                                 ? 'bg-red-600 text-white shadow-md'
-                                : 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100'
+                                : 'bg-slate-50 dark:bg-gray-900 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-gray-700 hover:bg-slate-100 dark:bg-gray-800'
                                 }`}
                         >
                             First Aid Tips
@@ -394,13 +394,13 @@ const EmergencyServices = () => {
                         {emergencyContacts.map((contact, index) => (
                             <div
                                 key={index}
-                                className='rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-lg transition-all'
+                                className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-none hover:shadow-lg transition-all'
                                 style={{ animationDelay: `${index * 0.08}s` }}
                             >
                                 <div className='flex items-start justify-between mb-5'>
                                     <div>
-                                        <h3 className='text-xl font-bold text-slate-900 mb-1'>{contact.service}</h3>
-                                        <p className='text-sm text-slate-600'>{contact.description}</p>
+                                        <h3 className='text-xl font-bold text-slate-900 dark:text-white mb-1'>{contact.service}</h3>
+                                        <p className='text-sm text-slate-600 dark:text-slate-300'>{contact.description}</p>
                                     </div>
                                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${contact.bgColor} ${contact.borderColor} border`}>
                                         <svg className={`w-5 h-5 ${contact.textColor}`} fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -427,11 +427,11 @@ const EmergencyServices = () => {
 
                 {activeTab === 'hospitals' && (
                     <div className='space-y-6'>
-                        <div className='rounded-2xl border border-slate-200 bg-white p-6 shadow-sm'>
+                        <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-none'>
                             <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4'>
                                 <div>
-                                    <h3 className='text-xl font-bold text-slate-900'>Find Nearby Medical Facilities</h3>
-                                    <p className='text-sm text-slate-600 mt-1'>Use your current location to discover hospitals and clinics around you.</p>
+                                    <h3 className='text-xl font-bold text-slate-900 dark:text-white'>Find Nearby Medical Facilities</h3>
+                                    <p className='text-sm text-slate-600 dark:text-slate-300 mt-1'>Use your current location to discover hospitals and clinics around you.</p>
                                 </div>
                                 <button
                                     onClick={getLocation}
@@ -468,9 +468,9 @@ const EmergencyServices = () => {
                         )}
 
                         {loading && (
-                            <div className='rounded-2xl border border-slate-200 bg-white p-12 text-center'>
+                            <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-12 text-center'>
                                 <div className='inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-600 mb-4'></div>
-                                <p className='text-slate-600'>Searching for nearby hospitals...</p>
+                                <p className='text-slate-600 dark:text-slate-300'>Searching for nearby hospitals...</p>
                             </div>
                         )}
 
@@ -483,13 +483,13 @@ const EmergencyServices = () => {
                                 {nearbyHospitals.map((hospital, index) => (
                                     <div
                                         key={hospital.id}
-                                        className='rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-all'
+                                        className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-none hover:shadow-md transition-all'
                                         style={{ animationDelay: `${index * 0.08}s` }}
                                     >
                                         <div className='flex flex-col gap-4'>
                                             <div>
-                                                <h3 className='text-2xl font-bold text-slate-900 mb-1'>{hospital.name}</h3>
-                                                <div className='flex items-center gap-2 text-slate-600'>
+                                                <h3 className='text-2xl font-bold text-slate-900 dark:text-white mb-1'>{hospital.name}</h3>
+                                                <div className='flex items-center gap-2 text-slate-600 dark:text-slate-300'>
                                                     <svg className='w-4 h-4 text-red-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                                                         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z' />
                                                         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M15 11a3 3 0 11-6 0 3 3 0 016 0z' />
@@ -508,10 +508,10 @@ const EmergencyServices = () => {
                                             </div>
 
                                             <div>
-                                                <p className='text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2'>Services</p>
+                                                <p className='text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2'>Services</p>
                                                 <div className='flex flex-wrap gap-2'>
                                                     {hospital.specialties.map((specialty, idx) => (
-                                                        <span key={idx} className='px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700'>
+                                                        <span key={idx} className='px-3 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-gray-800 text-slate-700 dark:text-slate-200'>
                                                             {specialty}
                                                         </span>
                                                     ))}
@@ -519,7 +519,7 @@ const EmergencyServices = () => {
                                             </div>
 
                                             {hospital.phone !== 'Not available' && (
-                                                <p className='text-sm text-slate-600'>Phone: <span className='font-semibold text-slate-800'>{hospital.phone}</span></p>
+                                                <p className='text-sm text-slate-600 dark:text-slate-300'>Phone: <span className='font-semibold text-slate-800 dark:text-slate-100'>{hospital.phone}</span></p>
                                             )}
 
                                             <div className='flex flex-col sm:flex-row gap-3'>
@@ -551,13 +551,13 @@ const EmergencyServices = () => {
                         )}
 
                         {!loading && !locationDetected && (
-                            <div className='rounded-2xl border border-slate-200 bg-white p-12 text-center'>
+                            <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-12 text-center'>
                                 <svg className='w-16 h-16 text-slate-300 mx-auto mb-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z' />
                                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M15 11a3 3 0 11-6 0 3 3 0 016 0z' />
                                 </svg>
-                                <p className='text-lg font-semibold text-slate-700'>Find Hospitals Near You</p>
-                                <p className='text-sm text-slate-500 mt-1'>Use location detection to load nearby medical facilities and directions.</p>
+                                <p className='text-lg font-semibold text-slate-700 dark:text-slate-200'>Find Hospitals Near You</p>
+                                <p className='text-sm text-slate-500 dark:text-slate-400 mt-1'>Use location detection to load nearby medical facilities and directions.</p>
                             </div>
                         )}
                     </div>
@@ -566,22 +566,22 @@ const EmergencyServices = () => {
                 {activeTab === 'firstaid' && (
                     <div className='space-y-6'>
                         <div className='rounded-2xl border border-blue-200 bg-blue-50 p-6'>
-                            <h3 className='text-xl font-bold text-slate-900 mb-2'>Essential First Aid Guidelines</h3>
-                            <p className='text-slate-700'>These are quick guidance steps for emergencies. They do not replace professional medical support.</p>
+                            <h3 className='text-xl font-bold text-slate-900 dark:text-white mb-2'>Essential First Aid Guidelines</h3>
+                            <p className='text-slate-700 dark:text-slate-200'>These are quick guidance steps for emergencies. They do not replace professional medical support.</p>
                         </div>
 
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                             {firstAidTips.map((tip, index) => (
                                 <div
                                     key={index}
-                                    className='rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-all'
+                                    className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-none hover:shadow-md transition-all'
                                     style={{ animationDelay: `${index * 0.08}s` }}
                                 >
                                     <div className='flex items-start gap-3 mb-4'>
                                         <div className='w-11 h-11 rounded-xl bg-gradient-to-r from-red-500 to-orange-500 text-white flex items-center justify-center flex-shrink-0'>
                                             {tip.icon}
                                         </div>
-                                        <h3 className='text-xl font-bold text-slate-900'>{tip.title}</h3>
+                                        <h3 className='text-xl font-bold text-slate-900 dark:text-white'>{tip.title}</h3>
                                     </div>
                                     <div className='space-y-2'>
                                         {tip.steps.map((step, idx) => (
@@ -589,7 +589,7 @@ const EmergencyServices = () => {
                                                 <div className='w-6 h-6 rounded-full bg-red-600 text-white text-xs font-bold flex items-center justify-center flex-shrink-0'>
                                                     {idx + 1}
                                                 </div>
-                                                <p className='text-sm text-slate-700 leading-relaxed'>{step}</p>
+                                                <p className='text-sm text-slate-700 dark:text-slate-200 leading-relaxed'>{step}</p>
                                             </div>
                                         ))}
                                     </div>
@@ -605,8 +605,8 @@ const EmergencyServices = () => {
 
                 <div className='rounded-3xl border border-red-200 bg-gradient-to-r from-red-50 via-rose-50 to-orange-50 p-6 md:p-8 mt-10'>
                     <div className='text-center'>
-                        <h3 className='text-2xl font-black text-slate-900 mb-2'>Need Immediate Help?</h3>
-                        <p className='text-slate-600 mb-6'>Every second matters in emergencies. Reach the right service without delay.</p>
+                        <h3 className='text-2xl font-black text-slate-900 dark:text-white mb-2'>Need Immediate Help?</h3>
+                        <p className='text-slate-600 dark:text-slate-300 mb-6'>Every second matters in emergencies. Reach the right service without delay.</p>
                         <div className='flex flex-wrap justify-center gap-3'>
                             <button
                                 onClick={() => handleCall('108')}

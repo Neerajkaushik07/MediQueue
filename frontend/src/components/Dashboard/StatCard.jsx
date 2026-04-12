@@ -19,11 +19,11 @@ const StatCard = ({ title, value, subtext, icon: Icon, colorClass, iconColorClas
             aria-label={clickable ? `Open ${title}` : undefined}
         >
             <div className='flex items-center justify-between mb-4'>
-                <h3 className='text-gray-700 font-semibold'>{title}</h3>
+                <h3 className='text-gray-700 dark:text-gray-200 font-semibold'>{title}</h3>
                 {Icon && <Icon className={`text-2xl ${iconColorClass}`} />}
             </div>
-            <p className='text-3xl font-bold text-gray-800'>{loading ? '--' : value}</p>
-            {subtext && <p className='text-sm text-gray-500 mt-2'>{subtext}</p>}
+            <p className='text-3xl font-bold text-gray-800 dark:text-gray-100'>{loading ? '--' : value}</p>
+            {subtext && <p className='text-sm text-gray-500 dark:text-gray-400 mt-2'>{subtext}</p>}
         </div>
     );
 };

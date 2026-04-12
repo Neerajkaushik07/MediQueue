@@ -193,25 +193,25 @@ const DoctorDashboard = () => {
             {/* Professional Welcome Header */}
             <div className='flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4'>
                 <div>
-                    <h1 className='text-4xl font-black text-gray-900 font-poppins tracking-tight'>
+                    <h1 className='text-4xl font-black text-gray-900 dark:text-white font-poppins tracking-tight'>
                         Welcome back, <span className='text-primary'>Dr. {userData?.name.split(' ')[0] || 'Doctor'}</span>! 👋
                     </h1>
-                    <p className='text-gray-500 mt-2 font-medium flex items-center gap-2'>
+                    <p className='text-gray-500 dark:text-gray-400 mt-2 font-medium flex items-center gap-2'>
                         <span className='w-2 h-2 rounded-full bg-green-500 animate-pulse'></span>
                         Your practice is performing excellently today.
                     </p>
                 </div>
-                <div className='flex items-center gap-3 bg-white p-2 rounded-xl shadow-soft border border-gray-100'>
+                <div className='flex items-center gap-3 bg-white dark:bg-gray-800 p-2 rounded-xl shadow-soft border border-gray-100'>
                     <div className='text-right px-2'>
-                        <p className='text-[10px] font-bold text-gray-500 uppercase tracking-widest'>Last Updated</p>
-                        <p className='text-sm font-bold text-gray-800 uppercase'>
+                        <p className='text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest'>Last Updated</p>
+                        <p className='text-sm font-bold text-gray-800 dark:text-gray-100 uppercase'>
                             {lastUpdated ? lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Just Now'}
                         </p>
                     </div>
                     <button
                         onClick={() => getDashData(true)}
                         disabled={refreshing}
-                        className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors ${refreshing ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-cyan-50 text-cyan-700 hover:bg-cyan-100'}`}
+                        className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors ${refreshing ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed' : 'bg-cyan-50 text-cyan-700 hover:bg-cyan-100'}`}
                     >
                         {refreshing ? 'Refreshing...' : 'Refresh'}
                     </button>
@@ -221,15 +221,15 @@ const DoctorDashboard = () => {
             {/* Premium Stats Grid */}
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8'>
                 {statCards.map((stat, i) => (
-                    <div key={i} className='bg-white rounded-2xl p-6 shadow-soft border border-gray-100 hover:shadow-card-hover hover:border-primary/20 transition-all duration-300 group'>
+                    <div key={i} className='bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-soft border border-gray-100 hover:shadow-card-hover hover:border-primary/20 transition-all duration-300 group'>
                         <div className='flex items-center justify-between mb-4'>
                             <div className={`${stat.iconWrap} p-3 rounded-xl group-hover:scale-110 transition-transform duration-300`}>
                                 <svg className='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d={stat.iconPath} /></svg>
                             </div>
-                            <span className='text-[10px] font-black uppercase tracking-wider text-gray-500'>{stat.label.split(' ')[0]}</span>
+                            <span className='text-[10px] font-black uppercase tracking-wider text-gray-500 dark:text-gray-400'>{stat.label.split(' ')[0]}</span>
                         </div>
                         <p className='text-xs font-bold text-gray-400 uppercase tracking-widest'>{stat.label}</p>
-                        <p className='text-3xl font-black text-gray-900 mt-1 font-poppins tracking-tight'>
+                        <p className='text-3xl font-black text-gray-900 dark:text-white mt-1 font-poppins tracking-tight'>
                             {stat.label.includes('Revenue') ? currencySymbol : ''}{stat.value || 0}
                         </p>
                         <div className={`mt-3 flex items-center gap-1.5 text-xs font-bold ${stat.subClass}`}>
@@ -243,11 +243,11 @@ const DoctorDashboard = () => {
             {/* Quick Intelligence & Actions */}
             <div className='grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8'>
                 {/* Operations Center */}
-                <div className='lg:col-span-8 bg-white rounded-2xl shadow-soft border border-gray-100 overflow-hidden'>
-                    <div className='px-8 py-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50'>
+                <div className='lg:col-span-8 bg-white dark:bg-gray-800 rounded-2xl shadow-soft border border-gray-100 overflow-hidden'>
+                    <div className='px-8 py-6 border-b border-gray-100 flex justify-between items-center bg-gray-50 dark:bg-gray-900/50'>
                         <div>
-                            <h3 className='text-lg font-bold text-gray-900 font-poppins'>Operations Center</h3>
-                            <p className='text-xs text-gray-500 font-medium'>Control your digital clinic</p>
+                            <h3 className='text-lg font-bold text-gray-900 dark:text-white font-poppins'>Operations Center</h3>
+                            <p className='text-xs text-gray-500 dark:text-gray-400 font-medium'>Control your digital clinic</p>
                         </div>
 
                     </div>
@@ -258,10 +258,10 @@ const DoctorDashboard = () => {
                                 onClick={() => navigate(action.route)}
                                 className={`flex flex-col items-center p-6 rounded-2xl border transition-all group ${action.className}`}
                             >
-                                <div className='mb-4 w-14 h-14 flex items-center justify-center rounded-2xl bg-white/70 group-hover:scale-110 transition-transform'>
+                                <div className='mb-4 w-14 h-14 flex items-center justify-center rounded-2xl bg-white dark:bg-gray-800/70 group-hover:scale-110 transition-transform'>
                                     <svg className='w-7 h-7' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d={action.icon} /></svg>
                                 </div>
-                                <span className='font-bold text-gray-900'>{action.label}</span>
+                                <span className='font-bold text-gray-900 dark:text-white'>{action.label}</span>
                                 <span className='text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1'>{action.sub}</span>
                             </button>
                         ))}
@@ -271,7 +271,7 @@ const DoctorDashboard = () => {
                 {/* Digital Wallet & Metrics */}
                 <div className='lg:col-span-4 space-y-6'>
                     <div className='bg-gradient-to-br from-indigo-600 to-indigo-900 rounded-2xl p-7 text-white shadow-medical relative overflow-hidden group'>
-                        <div className='absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700'></div>
+                        <div className='absolute -right-10 -bottom-10 w-40 h-40 bg-white dark:bg-gray-800/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700'></div>
                         <h3 className='text-xs font-black uppercase tracking-[0.2em] text-indigo-200/80'>Clinical Wallet</h3>
                         <div className='mt-6 mb-8'>
                             <p className='text-4xl font-black font-poppins truncate'>{currencySymbol}{dashData.earnings || 0}</p>
@@ -283,15 +283,15 @@ const DoctorDashboard = () => {
                         <div className='flex gap-3'>
                             <button
                                 onClick={() => navigate('/doctor-finances')}
-                                className='flex-1 h-11 bg-white text-indigo-700 rounded-xl text-xs font-bold hover:bg-neutral-100 transition-all shadow-lg active:scale-95'
+                                className='flex-1 h-11 bg-white dark:bg-gray-800 text-indigo-700 rounded-xl text-xs font-bold hover:bg-neutral-100 transition-all shadow-lg active:scale-95'
                             >
                                 Withdraw Funds
                             </button>
                         </div>
                     </div>
 
-                    <div className='bg-white rounded-2xl shadow-soft border border-gray-100 p-6'>
-                        <h3 className='text-sm font-black text-gray-900 mb-5 uppercase tracking-wider flex items-center justify-between'>
+                    <div className='bg-white dark:bg-gray-800 rounded-2xl shadow-soft border border-gray-100 p-6'>
+                        <h3 className='text-sm font-black text-gray-900 dark:text-white mb-5 uppercase tracking-wider flex items-center justify-between'>
                             Efficiency
                             <span className='text-[10px] bg-green-50 text-green-600 px-2 py-0.5 rounded-full'>Elite Tier</span>
                         </h3>
@@ -302,10 +302,10 @@ const DoctorDashboard = () => {
                             ].map((m, i) => (
                                 <div key={i}>
                                     <div className='flex justify-between text-xs font-bold mb-2'>
-                                        <span className='text-gray-500'>{m.label}</span>
+                                        <span className='text-gray-500 dark:text-gray-400'>{m.label}</span>
                                         <span className={m.color}>{m.val}%</span>
                                     </div>
-                                    <div className='w-full bg-gray-100 rounded-full h-2 overflow-hidden px-[1px] py-[1px]'>
+                                    <div className='w-full bg-gray-100 dark:bg-gray-800 rounded-full h-2 overflow-hidden px-[1px] py-[1px]'>
                                         <div className={`${m.bg} h-full rounded-full transition-all duration-1000`} style={{ width: `${m.val}%` }}></div>
                                     </div>
                                 </div>
@@ -316,13 +316,13 @@ const DoctorDashboard = () => {
             </div>
 
             {/* Modern Appointment Feed */}
-            <div className='bg-white rounded-2xl shadow-soft border border-gray-100 overflow-hidden'>
+            <div className='bg-white dark:bg-gray-800 rounded-2xl shadow-soft border border-gray-100 overflow-hidden'>
                 <div className='px-8 py-6 border-b border-gray-100 flex justify-between items-center'>
                     <div className='flex items-center gap-3'>
                         <div className='bg-primary/10 p-2.5 rounded-xl'>
                             <svg className='w-5 h-5 text-primary' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' /></svg>
                         </div>
-                        <h2 className='text-xl font-bold text-gray-900 font-poppins'>Recent Medical Activity</h2>
+                        <h2 className='text-xl font-bold text-gray-900 dark:text-white font-poppins'>Recent Medical Activity</h2>
                     </div>
                     <button
                         onClick={() => navigate('/doctor-appointments')}
@@ -335,7 +335,7 @@ const DoctorDashboard = () => {
                 <div className='divide-y divide-gray-50'>
                     {dashData.latestAppointments && dashData.latestAppointments.length > 0 ? (
                         dashData.latestAppointments.slice(0, 6).map((item, index) => (
-                            <div className='flex items-center justify-between p-6 hover:bg-gray-50/50 transition-colors group' key={index}>
+                            <div className='flex items-center justify-between p-6 hover:bg-gray-50 dark:bg-gray-900/50 transition-colors group' key={index}>
                                 <div className='flex items-center gap-5 flex-1'>
                                     <div className='relative'>
                                         <img
@@ -352,7 +352,7 @@ const DoctorDashboard = () => {
                                         )}
                                     </div>
                                     <div>
-                                        <p className='font-bold text-gray-900 font-poppins text-lg leading-tight'>{item.userData?.name || 'Unknown Patient'}</p>
+                                        <p className='font-bold text-gray-900 dark:text-white font-poppins text-lg leading-tight'>{item.userData?.name || 'Unknown Patient'}</p>
                                         <div className='flex items-center gap-3 mt-1.5'>
                                             <p className='text-xs font-bold text-gray-400 flex items-center gap-1'>
                                                 <svg className='w-3 h-3' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' /></svg>
@@ -380,7 +380,7 @@ const DoctorDashboard = () => {
                                             <button
                                                 onClick={() => cancelAppointment(item._id)}
                                                 disabled={actionLoadingId === item._id}
-                                                className='w-10 h-10 flex items-center justify-center bg-gray-100 text-gray-400 hover:bg-red-50 hover:text-red-500 rounded-xl transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed'
+                                                className='w-10 h-10 flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-400 hover:bg-red-50 hover:text-red-500 rounded-xl transition-all shadow-sm dark:shadow-none disabled:opacity-50 disabled:cursor-not-allowed'
                                                 title='Deny'
                                             >
                                                 <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M6 18L18 6M6 6l12 12' /></svg>
@@ -399,9 +399,9 @@ const DoctorDashboard = () => {
                             </div>
                         ))
                     ) : (
-                        <div className='text-center py-20 bg-gray-50/30'>
+                        <div className='text-center py-20 bg-gray-50 dark:bg-gray-900/30'>
                             <div className='text-5xl mb-6 grayscale opacity-30'>📭</div>
-                            <p className='text-gray-500 text-lg font-bold font-poppins'>No Recent Activity</p>
+                            <p className='text-gray-500 dark:text-gray-400 text-lg font-bold font-poppins'>No Recent Activity</p>
                             <p className='text-gray-400 text-sm mt-1 font-medium'>Your schedule is currently clear</p>
                         </div>
                     )}

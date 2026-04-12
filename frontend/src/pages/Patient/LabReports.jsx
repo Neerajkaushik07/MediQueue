@@ -100,7 +100,7 @@ const LabReports = () => {
             case 'abnormal': return 'bg-orange-100 text-orange-700'
             case 'critical': return 'bg-red-100 text-red-700'
             case 'pending': return 'bg-blue-100 text-blue-700'
-            default: return 'bg-gray-100 text-gray-700'
+            default: return 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200'
         }
     }
 
@@ -274,8 +274,8 @@ const LabReports = () => {
                     <div className='relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6'>
                         <div>
                             <p className='text-xs md:text-sm font-semibold uppercase tracking-wide text-cyan-700 mb-2'>Diagnostics Archive</p>
-                            <h1 className='text-3xl md:text-4xl font-black text-slate-900 mb-2'>Lab Reports</h1>
-                            <p className='text-slate-600 max-w-xl'>View trends and keep all your test reports organized in one timeline.</p>
+                            <h1 className='text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-2'>Lab Reports</h1>
+                            <p className='text-slate-600 dark:text-slate-300 max-w-xl'>View trends and keep all your test reports organized in one timeline.</p>
                         </div>
                         <button
                             onClick={() => setShowAddModal(true)}
@@ -287,25 +287,25 @@ const LabReports = () => {
                 </div>
 
                 <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8'>
-                    <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-                        <p className='text-sm text-slate-500 mb-1'>Total Reports</p>
-                        <p className='text-3xl font-black text-slate-900'>{reports.length}</p>
+                    <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-none'>
+                        <p className='text-sm text-slate-500 dark:text-slate-400 mb-1'>Total Reports</p>
+                        <p className='text-3xl font-black text-slate-900 dark:text-white'>{reports.length}</p>
                     </div>
-                    <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-                        <p className='text-sm text-slate-500 mb-1'>Normal</p>
+                    <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-none'>
+                        <p className='text-sm text-slate-500 dark:text-slate-400 mb-1'>Normal</p>
                         <p className='text-3xl font-black text-emerald-600'>{normalCount}</p>
                     </div>
-                    <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-                        <p className='text-sm text-slate-500 mb-1'>Needs Attention</p>
+                    <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-none'>
+                        <p className='text-sm text-slate-500 dark:text-slate-400 mb-1'>Needs Attention</p>
                         <p className='text-3xl font-black text-amber-600'>{abnormalCount + criticalCount}</p>
                     </div>
-                    <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-                        <p className='text-sm text-slate-500 mb-1'>Last 30 Days</p>
+                    <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-none'>
+                        <p className='text-sm text-slate-500 dark:text-slate-400 mb-1'>Last 30 Days</p>
                         <p className='text-3xl font-black text-cyan-700'>{recentCount}</p>
                     </div>
                 </div>
 
-                <div className='rounded-2xl border border-slate-200 bg-white p-4 md:p-5 mb-8 shadow-sm'>
+                <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 md:p-5 mb-8 shadow-sm dark:shadow-none'>
                     <div className='flex flex-wrap gap-2'>
                         {reportTypes.map(type => (
                             <button
@@ -313,7 +313,7 @@ const LabReports = () => {
                                 onClick={() => setActiveFilter(type.value)}
                                 className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 ${activeFilter === type.value
                                     ? 'bg-cyan-600 text-white shadow-md'
-                                    : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
+                                    : 'bg-slate-50 dark:bg-gray-900 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:bg-gray-800 border border-slate-200 dark:border-gray-700'
                                     }`}
                             >
                                 <span>{type.icon}</span>
@@ -329,17 +329,17 @@ const LabReports = () => {
                             <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-600'></div>
                         </div>
                     ) : filteredReports.length === 0 ? (
-                        <div className='col-span-full rounded-2xl border border-slate-200 bg-white p-12 text-center'>
+                        <div className='col-span-full rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-12 text-center'>
                             <div className='text-6xl mb-4'>🔬</div>
-                            <h3 className='text-2xl font-bold text-slate-900 mb-2'>No Reports Found</h3>
-                            <p className='text-slate-600'>No results matching your current filter.</p>
+                            <h3 className='text-2xl font-bold text-slate-900 dark:text-white mb-2'>No Reports Found</h3>
+                            <p className='text-slate-600 dark:text-slate-300'>No results matching your current filter.</p>
                         </div>
                     ) : (
                         filteredReports.map(report => (
                             <div
                                 key={report._id}
                                 onClick={() => { setSelectedReport(report); setShowModal(true) }}
-                                className='rounded-2xl border border-slate-200 bg-white p-6 cursor-pointer hover:shadow-lg transition-all group'
+                                className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 cursor-pointer hover:shadow-lg transition-all group'
                             >
                                 <div className='flex justify-between items-start mb-4'>
                                     <div className='w-12 h-12 bg-gradient-to-r from-cyan-600 to-sky-700 rounded-xl flex items-center justify-center text-2xl text-white'>
@@ -349,8 +349,8 @@ const LabReports = () => {
                                         {report.overallStatus}
                                     </span>
                                 </div>
-                                <h3 className='text-xl font-bold text-slate-900 mb-1 group-hover:text-cyan-700 transition-colors'>{report.title}</h3>
-                                <p className='text-sm text-slate-500 mb-4'>{report.labName}</p>
+                                <h3 className='text-xl font-bold text-slate-900 dark:text-white mb-1 group-hover:text-cyan-700 transition-colors'>{report.title}</h3>
+                                <p className='text-sm text-slate-500 dark:text-slate-400 mb-4'>{report.labName}</p>
 
                                 <div className='flex items-center justify-between text-sm pt-4 border-t border-slate-100'>
                                     <span className='text-slate-400'>
@@ -369,19 +369,19 @@ const LabReports = () => {
             {/* Report Details Modal */}
             {showModal && selectedReport && (
                 <div className='fixed inset-0 bg-black/55 flex items-center justify-center z-50 p-4 backdrop-blur-sm'>
-                    <div className='bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl animate-fade-in border border-slate-200'>
+                    <div className='bg-white dark:bg-gray-800 rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl animate-fade-in border border-slate-200 dark:border-gray-700'>
                         <div className='p-8 overflow-y-auto w-full h-full'>
                             <div className='flex justify-between items-start mb-8'>
                                 <div>
                                     <span className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase mb-3 inline-block ${getStatusStyles(selectedReport.overallStatus)}`}>
                                         {selectedReport.overallStatus} REPORT
                                     </span>
-                                    <h1 className='text-3xl font-bold text-slate-900'>{selectedReport.title}</h1>
-                                    <p className='text-slate-500 mt-1'>{selectedReport.labName} • {new Date(selectedReport.testDate).toLocaleDateString()}</p>
+                                    <h1 className='text-3xl font-bold text-slate-900 dark:text-white'>{selectedReport.title}</h1>
+                                    <p className='text-slate-500 dark:text-slate-400 mt-1'>{selectedReport.labName} • {new Date(selectedReport.testDate).toLocaleDateString()}</p>
                                 </div>
                                 <button
                                     onClick={() => setShowModal(false)}
-                                    className='p-2 hover:bg-slate-100 rounded-full transition-colors'
+                                    className='p-2 hover:bg-slate-100 dark:bg-gray-800 rounded-full transition-colors'
                                 >
                                     <svg className='w-6 h-6 text-slate-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                                         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M6 18L18 6M6 6l12 12' />
@@ -392,13 +392,13 @@ const LabReports = () => {
                             <div className='space-y-6'>
                                 {/* Summary Section */}
                                 <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-                                    <div className='p-4 bg-slate-50 rounded-2xl border border-slate-100'>
+                                    <div className='p-4 bg-slate-50 dark:bg-gray-900 rounded-2xl border border-slate-100'>
                                         <p className='text-xs font-bold text-slate-400 uppercase tracking-wider mb-1'>Report Number</p>
-                                        <p className='font-mono font-bold text-slate-800'>{selectedReport.reportNumber}</p>
+                                        <p className='font-mono font-bold text-slate-800 dark:text-slate-100'>{selectedReport.reportNumber}</p>
                                     </div>
-                                    <div className='p-4 bg-slate-50 rounded-2xl border border-slate-100'>
+                                    <div className='p-4 bg-slate-50 dark:bg-gray-900 rounded-2xl border border-slate-100'>
                                         <p className='text-xs font-bold text-slate-400 uppercase tracking-wider mb-1'>Test Date</p>
-                                        <p className='font-bold text-slate-800'>{new Date(selectedReport.testDate).toLocaleDateString()}</p>
+                                        <p className='font-bold text-slate-800 dark:text-slate-100'>{new Date(selectedReport.testDate).toLocaleDateString()}</p>
                                     </div>
                                 </div>
 
@@ -410,7 +410,7 @@ const LabReports = () => {
                                     <div className='overflow-hidden rounded-2xl border border-slate-100'>
                                         <table className='w-full'>
                                             <thead>
-                                                <tr className='bg-slate-50 text-left text-xs font-bold text-slate-500 uppercase tracking-wider'>
+                                                <tr className='bg-slate-50 dark:bg-gray-900 text-left text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider'>
                                                     <th className='px-6 py-4'>Test Name</th>
                                                     <th className='px-6 py-4 text-center'>Result</th>
                                                     <th className='px-6 py-4'>Reference Range</th>
@@ -419,13 +419,13 @@ const LabReports = () => {
                                             </thead>
                                             <tbody className='divide-y divide-slate-100'>
                                                 {selectedReport.results?.map((res, idx) => (
-                                                    <tr key={idx} className='hover:bg-slate-50 transition-colors'>
-                                                        <td className='px-6 py-4 font-semibold text-slate-800'>{res.testName}</td>
+                                                    <tr key={idx} className='hover:bg-slate-50 dark:bg-gray-900 transition-colors'>
+                                                        <td className='px-6 py-4 font-semibold text-slate-800 dark:text-slate-100'>{res.testName}</td>
                                                         <td className='px-6 py-4 text-center'>
                                                             <span className='font-bold text-cyan-700'>{res.value}</span>
                                                             <span className='text-xs text-slate-400 ml-1'>{res.unit}</span>
                                                         </td>
-                                                        <td className='px-6 py-4 text-sm text-slate-500'>{res.referenceRange}</td>
+                                                        <td className='px-6 py-4 text-sm text-slate-500 dark:text-slate-400'>{res.referenceRange}</td>
                                                         <td className='px-6 py-4'>
                                                             <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${getStatusStyles(res.status)}`}>
                                                                 {res.status}
@@ -461,12 +461,12 @@ const LabReports = () => {
                                                     href={file.url}
                                                     target='_blank'
                                                     rel='noopener noreferrer'
-                                                    className='flex items-center gap-3 px-4 py-3 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200 transition-all group'
+                                                    className='flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-gray-900 hover:bg-slate-100 dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 transition-all group'
                                                 >
                                                     <svg className='w-5 h-5 text-cyan-700' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                                                         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' />
                                                     </svg>
-                                                    <span className='text-sm font-medium text-slate-700 max-w-[150px] truncate'>{file.name}</span>
+                                                    <span className='text-sm font-medium text-slate-700 dark:text-slate-200 max-w-[150px] truncate'>{file.name}</span>
                                                     <svg className='w-4 h-4 text-slate-400 group-hover:text-cyan-700' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                                                         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4' />
                                                     </svg>
@@ -492,11 +492,11 @@ const LabReports = () => {
             {/* Add Report Modal */}
             {showAddModal && (
                 <div className='fixed inset-0 bg-black/55 flex items-center justify-center z-50 p-4 backdrop-blur-sm'>
-                    <div className='bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl animate-fade-in border border-slate-200'>
+                    <div className='bg-white dark:bg-gray-800 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl animate-fade-in border border-slate-200 dark:border-gray-700'>
                         <div className='p-8 overflow-y-auto w-full h-full'>
                             <div className='flex justify-between items-center mb-8'>
-                                <h2 className='text-3xl font-bold text-slate-900'>Add Lab Report</h2>
-                                <button onClick={() => setShowAddModal(false)} className='p-2 hover:bg-slate-100 rounded-full transition-colors'>
+                                <h2 className='text-3xl font-bold text-slate-900 dark:text-white'>Add Lab Report</h2>
+                                <button onClick={() => setShowAddModal(false)} className='p-2 hover:bg-slate-100 dark:bg-gray-800 rounded-full transition-colors'>
                                     <svg className='w-6 h-6 text-slate-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                                         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M6 18L18 6M6 6l12 12' />
                                     </svg>
@@ -506,20 +506,20 @@ const LabReports = () => {
                             <form onSubmit={handleAddReport} className='space-y-6'>
                                 <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                                     <div>
-                                        <label className='block text-sm font-bold text-slate-700 mb-2'>Report Title *</label>
-                                        <input required type='text' value={newReport.title} onChange={(e) => setNewReport(prev => ({ ...prev, title: e.target.value }))} placeholder='e.g. Annual Blood Work' className='w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none' />
+                                        <label className='block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2'>Report Title *</label>
+                                        <input required type='text' value={newReport.title} onChange={(e) => setNewReport(prev => ({ ...prev, title: e.target.value }))} placeholder='e.g. Annual Blood Work' className='w-full p-4 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none' />
                                     </div>
                                     <div>
-                                        <label className='block text-sm font-bold text-slate-700 mb-2'>Lab Name *</label>
-                                        <input required type='text' value={newReport.labName} onChange={(e) => setNewReport(prev => ({ ...prev, labName: e.target.value }))} placeholder='e.g. Central Diagnostic Lab' className='w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none' />
+                                        <label className='block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2'>Lab Name *</label>
+                                        <input required type='text' value={newReport.labName} onChange={(e) => setNewReport(prev => ({ ...prev, labName: e.target.value }))} placeholder='e.g. Central Diagnostic Lab' className='w-full p-4 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none' />
                                     </div>
                                     <div>
-                                        <label className='block text-sm font-bold text-slate-700 mb-2'>Test Date *</label>
-                                        <input required type='date' value={newReport.testDate} onChange={(e) => setNewReport(prev => ({ ...prev, testDate: e.target.value }))} className='w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none' />
+                                        <label className='block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2'>Test Date *</label>
+                                        <input required type='date' value={newReport.testDate} onChange={(e) => setNewReport(prev => ({ ...prev, testDate: e.target.value }))} className='w-full p-4 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none' />
                                     </div>
                                     <div>
-                                        <label className='block text-sm font-bold text-slate-700 mb-2'>Report Type *</label>
-                                        <select value={newReport.reportType} onChange={(e) => setNewReport(prev => ({ ...prev, reportType: e.target.value }))} className='w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400'>
+                                        <label className='block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2'>Report Type *</label>
+                                        <select value={newReport.reportType} onChange={(e) => setNewReport(prev => ({ ...prev, reportType: e.target.value }))} className='w-full p-4 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400'>
                                             {reportTypes.filter(t => t.value !== 'all').map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
                                         </select>
                                     </div>
@@ -532,27 +532,27 @@ const LabReports = () => {
                                     </h3>
                                     <div className='space-y-3'>
                                         {newReport.results.map((result, idx) => (
-                                            <div key={idx} className='grid grid-cols-1 sm:grid-cols-5 gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100 items-end'>
+                                            <div key={idx} className='grid grid-cols-1 sm:grid-cols-5 gap-3 p-4 bg-slate-50 dark:bg-gray-900 rounded-2xl border border-slate-100 items-end'>
                                                 <div className='sm:col-span-1'>
                                                     <label className='block text-[10px] font-bold text-slate-400 uppercase mb-1'>Test Name</label>
-                                                    <input type='text' value={result.testName} onChange={(e) => handleResultChange(idx, 'testName', e.target.value)} placeholder='Hemoglobin' className='w-full p-2 bg-white border border-slate-200 rounded-lg outline-none text-sm' />
+                                                    <input type='text' value={result.testName} onChange={(e) => handleResultChange(idx, 'testName', e.target.value)} placeholder='Hemoglobin' className='w-full p-2 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg outline-none text-sm' />
                                                 </div>
                                                 <div>
                                                     <label className='block text-[10px] font-bold text-slate-400 uppercase mb-1'>Value</label>
-                                                    <input type='text' value={result.value} onChange={(e) => handleResultChange(idx, 'value', e.target.value)} placeholder='14.5' className='w-full p-2 bg-white border border-slate-200 rounded-lg outline-none text-sm' />
+                                                    <input type='text' value={result.value} onChange={(e) => handleResultChange(idx, 'value', e.target.value)} placeholder='14.5' className='w-full p-2 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg outline-none text-sm' />
                                                 </div>
                                                 <div>
                                                     <label className='block text-[10px] font-bold text-slate-400 uppercase mb-1'>Unit</label>
-                                                    <input type='text' value={result.unit} onChange={(e) => handleResultChange(idx, 'unit', e.target.value)} placeholder='g/dL' className='w-full p-2 bg-white border border-slate-200 rounded-lg outline-none text-sm' />
+                                                    <input type='text' value={result.unit} onChange={(e) => handleResultChange(idx, 'unit', e.target.value)} placeholder='g/dL' className='w-full p-2 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg outline-none text-sm' />
                                                 </div>
                                                 <div>
                                                     <label className='block text-[10px] font-bold text-slate-400 uppercase mb-1'>Ref. Range</label>
-                                                    <input type='text' value={result.referenceRange} onChange={(e) => handleResultChange(idx, 'referenceRange', e.target.value)} placeholder='13.5-17.5' className='w-full p-2 bg-white border border-slate-200 rounded-lg outline-none text-sm' />
+                                                    <input type='text' value={result.referenceRange} onChange={(e) => handleResultChange(idx, 'referenceRange', e.target.value)} placeholder='13.5-17.5' className='w-full p-2 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg outline-none text-sm' />
                                                 </div>
                                                 <div className='flex gap-2 items-center'>
                                                     <div className='flex-1'>
                                                         <label className='block text-[10px] font-bold text-slate-400 uppercase mb-1'>Status</label>
-                                                        <select value={result.status} onChange={(e) => handleResultChange(idx, 'status', e.target.value)} className='w-full p-2 bg-white border border-slate-200 rounded-lg outline-none text-sm'>
+                                                        <select value={result.status} onChange={(e) => handleResultChange(idx, 'status', e.target.value)} className='w-full p-2 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg outline-none text-sm'>
                                                             <option value='normal'>Normal</option>
                                                             <option value='abnormal'>Abnormal</option>
                                                             <option value='critical'>Critical</option>
@@ -572,12 +572,12 @@ const LabReports = () => {
                                 </div>
 
                                 <div>
-                                    <label className='block text-sm font-bold text-slate-700 mb-2'>Upload Report Files (PDF/Images)</label>
-                                    <div className='border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center hover:border-cyan-400/60 transition-colors cursor-pointer relative'>
+                                    <label className='block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2'>Upload Report Files (PDF/Images)</label>
+                                    <div className='border-2 border-dashed border-slate-200 dark:border-gray-700 rounded-2xl p-8 text-center hover:border-cyan-400/60 transition-colors cursor-pointer relative'>
                                         <input type='file' multiple onChange={(e) => setUploadFiles(e.target.files)} className='absolute inset-0 opacity-0 cursor-pointer' />
                                         <div className='space-y-2'>
                                             <div className='text-4xl mb-2 text-cyan-700'>📁</div>
-                                            <p className='font-bold text-slate-600'>
+                                            <p className='font-bold text-slate-600 dark:text-slate-300'>
                                                 {uploadFiles.length > 0 ? `${uploadFiles.length} files selected` : 'Click or drop files here'}
                                             </p>
                                             <p className='text-xs text-slate-400'>Supports PDF, JPG, PNG (Max 5 files)</p>
@@ -586,8 +586,8 @@ const LabReports = () => {
                                 </div>
 
                                 <div>
-                                    <label className='block text-sm font-bold text-slate-700 mb-2'>Overall Summary / Status</label>
-                                    <select value={newReport.overallStatus} onChange={(e) => setNewReport(prev => ({ ...prev, overallStatus: e.target.value }))} className='w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400'>
+                                    <label className='block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2'>Overall Summary / Status</label>
+                                    <select value={newReport.overallStatus} onChange={(e) => setNewReport(prev => ({ ...prev, overallStatus: e.target.value }))} className='w-full p-4 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400'>
                                         <option value='normal'>Normal</option>
                                         <option value='abnormal'>Abnormal</option>
                                         <option value='critical'>Critical</option>
@@ -596,12 +596,12 @@ const LabReports = () => {
                                 </div>
 
                                 <div>
-                                    <label className='block text-sm font-bold text-slate-700 mb-2'>Doctor's Notes (Optional)</label>
-                                    <textarea rows='3' value={newReport.doctorNotes} onChange={(e) => setNewReport(prev => ({ ...prev, doctorNotes: e.target.value }))} className='w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400' placeholder='Any additional notes from your physician...'></textarea>
+                                    <label className='block text-sm font-bold text-slate-700 dark:text-slate-200 mb-2'>Doctor's Notes (Optional)</label>
+                                    <textarea rows='3' value={newReport.doctorNotes} onChange={(e) => setNewReport(prev => ({ ...prev, doctorNotes: e.target.value }))} className='w-full p-4 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-2xl outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400' placeholder='Any additional notes from your physician...'></textarea>
                                 </div>
 
                                 <div className='flex gap-4 pt-4'>
-                                    <button type='button' onClick={() => setShowAddModal(false)} className='flex-1 py-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-2xl transition-all'>Cancel</button>
+                                    <button type='button' onClick={() => setShowAddModal(false)} className='flex-1 py-4 bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 font-bold rounded-2xl transition-all'>Cancel</button>
                                     <button type='submit' className='flex-1 py-4 bg-gradient-to-r from-cyan-600 to-sky-700 text-white font-bold rounded-2xl shadow-md hover:shadow-lg transition-all'>Save Report</button>
                                 </div>
                             </form>

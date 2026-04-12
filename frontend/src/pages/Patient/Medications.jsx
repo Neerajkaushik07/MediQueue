@@ -234,8 +234,8 @@ const Medications = () => {
                     <div className='relative flex flex-col lg:flex-row gap-6 lg:items-center lg:justify-between'>
                         <div>
                             <p className='text-xs md:text-sm font-semibold uppercase tracking-wide text-cyan-700 mb-2'>Medication Tracker</p>
-                            <h1 className='text-3xl md:text-4xl font-black text-slate-900 mb-2'>Medications & Reminders</h1>
-                            <p className='text-slate-600 max-w-xl'>Keep prescriptions organized, track adherence, and log each dose from one place.</p>
+                            <h1 className='text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-2'>Medications & Reminders</h1>
+                            <p className='text-slate-600 dark:text-slate-300 max-w-xl'>Keep prescriptions organized, track adherence, and log each dose from one place.</p>
                         </div>
                         <button
                             onClick={() => setShowAddModal(true)}
@@ -250,30 +250,30 @@ const Medications = () => {
                 </div>
 
                 <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8'>
-                    <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-                        <p className='text-sm text-slate-500 mb-1'>Active Medications</p>
-                        <p className='text-3xl font-black text-slate-900'>{activeMeds.length}</p>
+                    <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-none'>
+                        <p className='text-sm text-slate-500 dark:text-slate-400 mb-1'>Active Medications</p>
+                        <p className='text-3xl font-black text-slate-900 dark:text-white'>{activeMeds.length}</p>
                     </div>
-                    <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-                        <p className='text-sm text-slate-500 mb-1'>Daily Doses</p>
+                    <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-none'>
+                        <p className='text-sm text-slate-500 dark:text-slate-400 mb-1'>Daily Doses</p>
                         <p className='text-3xl font-black text-emerald-600'>{totalDailyDoses}</p>
                     </div>
-                    <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-                        <p className='text-sm text-slate-500 mb-1'>Average Adherence</p>
+                    <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-none'>
+                        <p className='text-sm text-slate-500 dark:text-slate-400 mb-1'>Average Adherence</p>
                         <p className='text-3xl font-black text-cyan-700'>{averageAdherence}%</p>
                     </div>
-                    <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-                        <p className='text-sm text-slate-500 mb-1'>Taken Today</p>
+                    <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 shadow-sm dark:shadow-none'>
+                        <p className='text-sm text-slate-500 dark:text-slate-400 mb-1'>Taken Today</p>
                         <p className='text-3xl font-black text-violet-700'>{todayTakenCount}</p>
                     </div>
                 </div>
 
-                <div className='rounded-2xl border border-slate-200 bg-white p-2 mb-8 inline-flex shadow-sm'>
+                <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-2 mb-8 inline-flex shadow-sm dark:shadow-none'>
                     <button
                         onClick={() => setActiveTab('active')}
                         className={`px-6 py-3 rounded-xl text-sm md:text-base font-semibold transition-all ${activeTab === 'active'
                             ? 'bg-cyan-600 text-white shadow-md'
-                            : 'text-slate-600 hover:bg-slate-100'
+                            : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:bg-gray-800'
                             }`}
                     >
                         Active ({activeMeds.length})
@@ -282,7 +282,7 @@ const Medications = () => {
                         onClick={() => setActiveTab('past')}
                         className={`px-6 py-3 rounded-xl text-sm md:text-base font-semibold transition-all ${activeTab === 'past'
                             ? 'bg-cyan-600 text-white shadow-md'
-                            : 'text-slate-600 hover:bg-slate-100'
+                            : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:bg-gray-800'
                             }`}
                     >
                         Past ({pastMeds.length})
@@ -291,17 +291,17 @@ const Medications = () => {
 
                 <div className='space-y-4 mb-8'>
                     {loading && reminders.length === 0 ? (
-                        <div className='rounded-2xl border border-slate-200 bg-white p-12 text-center'>
-                            <div className='inline-flex items-center gap-3 text-slate-600'>
+                        <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-12 text-center'>
+                            <div className='inline-flex items-center gap-3 text-slate-600 dark:text-slate-300'>
                                 <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-600'></div>
                                 <span className='font-semibold'>Loading medications...</span>
                             </div>
                         </div>
                     ) : displayMeds.length === 0 ? (
-                        <div className='rounded-2xl border border-slate-200 bg-white p-12 text-center'>
+                        <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-12 text-center'>
                             <div className='text-6xl mb-4'>💊</div>
-                            <h3 className='text-2xl font-bold text-slate-900 mb-2'>No Medications</h3>
-                            <p className='text-slate-600 mb-6'>
+                            <h3 className='text-2xl font-bold text-slate-900 dark:text-white mb-2'>No Medications</h3>
+                            <p className='text-slate-600 dark:text-slate-300 mb-6'>
                                 You don't have any {activeTab} medications
                             </p>
                             <button
@@ -315,7 +315,7 @@ const Medications = () => {
                         displayMeds.map((med) => (
                             <article
                                 key={med._id}
-                                className='rounded-2xl border border-slate-200 bg-white p-6 hover:shadow-lg transition-all'
+                                className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 hover:shadow-lg transition-all'
                             >
                                 <div className='flex flex-col lg:flex-row lg:items-start lg:justify-between mb-4 gap-4'>
                                     <div className='flex-1'>
@@ -324,15 +324,15 @@ const Medications = () => {
                                                 💊
                                             </div>
                                             <div>
-                                                <h3 className='text-xl font-bold text-slate-900'>{med.name}</h3>
-                                                <p className='text-slate-600 text-sm'>{med.dosage} • {(med.frequency || '').replace('_', ' ')}</p>
+                                                <h3 className='text-xl font-bold text-slate-900 dark:text-white'>{med.name}</h3>
+                                                <p className='text-slate-600 dark:text-slate-300 text-sm'>{med.dosage} • {(med.frequency || '').replace('_', ' ')}</p>
                                             </div>
                                         </div>
                                     </div>
                                     {med.isActive && (
                                         <div className='lg:text-right'>
                                             <div className='flex items-center gap-2 mb-1 lg:justify-end'>
-                                                <span className='text-sm text-slate-600'>Adherence</span>
+                                                <span className='text-sm text-slate-600 dark:text-slate-300'>Adherence</span>
                                                 <span className='font-bold text-lg text-emerald-600'>{calculateAdherence(med)}%</span>
                                             </div>
                                             <div className='w-32 h-2 bg-slate-200 rounded-full overflow-hidden'>
@@ -347,14 +347,14 @@ const Medications = () => {
 
                                 <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
                                     <div>
-                                        <p className='text-sm text-slate-500 mb-1'>Duration</p>
-                                        <p className='font-semibold text-slate-900'>
+                                        <p className='text-sm text-slate-500 dark:text-slate-400 mb-1'>Duration</p>
+                                        <p className='font-semibold text-slate-900 dark:text-white'>
                                             {new Date(med.startDate).toLocaleDateString()} - {med.endDate ? new Date(med.endDate).toLocaleDateString() : 'Ongoing'}
                                         </p>
                                     </div>
                                     <div>
-                                        <p className='text-sm text-slate-500 mb-1'>Prescribed by</p>
-                                        <p className='font-semibold text-slate-900'>{med.doctorName || 'Not specified'}</p>
+                                        <p className='text-sm text-slate-500 dark:text-slate-400 mb-1'>Prescribed by</p>
+                                        <p className='font-semibold text-slate-900 dark:text-white'>{med.doctorName || 'Not specified'}</p>
                                     </div>
                                 </div>
 
@@ -376,7 +376,7 @@ const Medications = () => {
 
                                 {med.isActive && (
                                     <div className='mb-4'>
-                                        <p className='text-sm text-slate-500 mb-2'>Reminder Times</p>
+                                        <p className='text-sm text-slate-500 dark:text-slate-400 mb-2'>Reminder Times</p>
                                         <div className='flex gap-2 flex-wrap'>
                                             {med.reminderTimes.map((time, index) => (
                                                 <span
@@ -411,9 +411,9 @@ const Medications = () => {
 
                 {/* Today's Schedule */}
                 {activeTab === 'active' && todaySchedule.length > 0 && (
-                    <div className='rounded-2xl border border-slate-200 bg-white p-6 shadow-sm mb-8'>
-                        <h2 className='text-2xl font-bold text-slate-900 mb-2'>Today's Medication Schedule</h2>
-                        <p className='text-slate-600 mb-6'>Log each dose to keep adherence accurate.</p>
+                    <div className='rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm dark:shadow-none mb-8'>
+                        <h2 className='text-2xl font-bold text-slate-900 dark:text-white mb-2'>Today's Medication Schedule</h2>
+                        <p className='text-slate-600 dark:text-slate-300 mb-6'>Log each dose to keep adherence accurate.</p>
                         <div className='space-y-8'>
                             {Object.entries(groupedSchedule).map(([period, items]) => {
                                 if (items.length === 0) return null;
@@ -422,7 +422,7 @@ const Medications = () => {
 
                                 return (
                                     <div key={period} className='border-l-4 border-cyan-500 pl-4'>
-                                        <h3 className='text-xl font-bold mb-4 text-slate-800 flex items-center gap-2'>
+                                        <h3 className='text-xl font-bold mb-4 text-slate-800 dark:text-slate-100 flex items-center gap-2'>
                                             <span>{periodIcons[period]}</span> {period}
                                         </h3>
                                         <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
@@ -432,12 +432,12 @@ const Medications = () => {
                                                     className={`flex flex-col p-4 rounded-xl border transition-colors ${item.intakeStatus === 'taken' ? 'bg-green-50 border-green-200' :
                                                         item.intakeStatus === 'skipped' ? 'bg-yellow-50 border-yellow-200' :
                                                             item.intakeStatus === 'missed' ? 'bg-red-50 border-red-200' :
-                                                                'bg-white border-slate-200 hover:shadow-md'
+                                                                'bg-white dark:bg-gray-800 border-slate-200 dark:border-gray-700 hover:shadow-md'
                                                         }`}
                                                 >
                                                     <div className='flex items-start justify-between mb-3'>
                                                         <div className='flex items-center gap-3'>
-                                                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-white shadow-sm ${item.intakeStatus === 'taken' ? 'bg-green-500' :
+                                                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-white shadow-sm dark:shadow-none ${item.intakeStatus === 'taken' ? 'bg-green-500' :
                                                                 item.intakeStatus === 'skipped' ? 'bg-yellow-500' :
                                                                     item.intakeStatus === 'missed' ? 'bg-red-500' :
                                                                         'bg-gradient-to-r from-cyan-600 to-sky-700'
@@ -445,12 +445,12 @@ const Medications = () => {
                                                                 {item.scheduledTime}
                                                             </div>
                                                             <div>
-                                                                <p className='font-bold text-lg text-slate-900'>{item.name}</p>
-                                                                <p className='text-slate-600 text-sm'>{item.dosage}</p>
+                                                                <p className='font-bold text-lg text-slate-900 dark:text-white'>{item.name}</p>
+                                                                <p className='text-slate-600 dark:text-slate-300 text-sm'>{item.dosage}</p>
                                                             </div>
                                                         </div>
                                                         {item.mealTiming && item.mealTiming !== 'none' && (
-                                                            <span className='px-2 py-1 bg-white border border-slate-200 text-slate-600 rounded text-[10px] uppercase font-bold tracking-wider'>
+                                                            <span className='px-2 py-1 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-300 rounded text-[10px] uppercase font-bold tracking-wider'>
                                                                 {(mealTimingLabels[item.mealTiming] || item.mealTiming).replace(/[^a-zA-Z]/g, '').replace('Food', '').trim()}
                                                             </span>
                                                         )}
@@ -461,19 +461,19 @@ const Medications = () => {
                                                             <>
                                                                 <button
                                                                     onClick={() => handleLogIntake(item._id, item.scheduledTime, 'taken')}
-                                                                    className='flex-1 py-2 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold rounded-lg shadow-sm transition-all'
+                                                                    className='flex-1 py-2 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold rounded-lg shadow-sm dark:shadow-none transition-all'
                                                                 >
                                                                     Take ✅
                                                                 </button>
                                                                 <button
                                                                     onClick={() => handleLogIntake(item._id, item.scheduledTime, 'skipped')}
-                                                                    className='flex-1 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-semibold rounded-lg shadow-sm transition-all'
+                                                                    className='flex-1 py-2 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-semibold rounded-lg shadow-sm dark:shadow-none transition-all'
                                                                 >
                                                                     Skip ⏭️
                                                                 </button>
                                                                 <button
                                                                     onClick={() => handleLogIntake(item._id, item.scheduledTime, 'missed')}
-                                                                    className='flex-1 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-lg shadow-sm transition-all'
+                                                                    className='flex-1 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-lg shadow-sm dark:shadow-none transition-all'
                                                                 >
                                                                     Missed ⚠️
                                                                 </button>
@@ -488,7 +488,7 @@ const Medications = () => {
                                                                 </span>
                                                                 <button
                                                                     onClick={() => handleLogIntake(item._id, item.scheduledTime, 'pending')}
-                                                                    className='text-xs text-slate-500 hover:text-slate-800 underline'
+                                                                    className='text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-100 underline'
                                                                 >
                                                                     Undo
                                                                 </button>
@@ -508,13 +508,13 @@ const Medications = () => {
                 {/* Add Medication Modal */}
                 {showAddModal && (
                     <div className='fixed inset-0 bg-black/55 backdrop-blur-sm flex items-center justify-center z-50 p-4'>
-                        <div className='bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-slate-200'>
-                            <div className='px-6 py-5 border-b border-slate-200 bg-gradient-to-r from-cyan-50 to-emerald-50 flex items-center justify-between'>
+                        <div className='bg-white dark:bg-gray-800 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-slate-200 dark:border-gray-700'>
+                            <div className='px-6 py-5 border-b border-slate-200 dark:border-gray-700 bg-gradient-to-r from-cyan-50 to-emerald-50 flex items-center justify-between'>
                                 <div>
-                                    <h2 className='text-2xl font-bold text-slate-900'>Add Medication</h2>
-                                    <p className='text-sm text-slate-600 mt-1'>Set dose timing and care instructions in one go.</p>
+                                    <h2 className='text-2xl font-bold text-slate-900 dark:text-white'>Add Medication</h2>
+                                    <p className='text-sm text-slate-600 dark:text-slate-300 mt-1'>Set dose timing and care instructions in one go.</p>
                                 </div>
-                                <button onClick={() => setShowAddModal(false)} className='text-slate-400 hover:text-slate-600 transition-colors'>
+                                <button onClick={() => setShowAddModal(false)} className='text-slate-400 hover:text-slate-600 dark:text-slate-300 transition-colors'>
                                     <svg className='w-6 h-6' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
                                         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M6 18L18 6M6 6l12 12' />
                                     </svg>
@@ -526,16 +526,16 @@ const Medications = () => {
                                 <form onSubmit={handleAddReminder} className='space-y-4'>
                                     <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                                         <div>
-                                            <label className='block text-sm font-semibold text-slate-700 mb-1'>Medication Name *</label>
-                                            <input required type='text' name='name' value={formData.name} onChange={handleInputChange} className='w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' placeholder='e.g., Aspirin' />
+                                            <label className='block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1'>Medication Name *</label>
+                                            <input required type='text' name='name' value={formData.name} onChange={handleInputChange} className='w-full p-3 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' placeholder='e.g., Aspirin' />
                                         </div>
                                         <div>
-                                            <label className='block text-sm font-semibold text-slate-700 mb-1'>Dosage *</label>
-                                            <input required type='text' name='dosage' value={formData.dosage} onChange={handleInputChange} className='w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' placeholder='e.g., 500mg' />
+                                            <label className='block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1'>Dosage *</label>
+                                            <input required type='text' name='dosage' value={formData.dosage} onChange={handleInputChange} className='w-full p-3 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' placeholder='e.g., 500mg' />
                                         </div>
                                         <div>
-                                            <label className='block text-sm font-semibold text-slate-700 mb-1'>Frequency *</label>
-                                            <select name='frequency' value={formData.frequency} onChange={handleInputChange} className='w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all'>
+                                            <label className='block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1'>Frequency *</label>
+                                            <select name='frequency' value={formData.frequency} onChange={handleInputChange} className='w-full p-3 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all'>
                                                 <option value='once_daily'>Once Daily</option>
                                                 <option value='twice_daily'>Twice Daily</option>
                                                 <option value='three_times_daily'>Three Times Daily</option>
@@ -544,30 +544,30 @@ const Medications = () => {
                                             </select>
                                         </div>
                                         <div>
-                                            <label className='block text-sm font-semibold text-slate-700 mb-1'>Doctor's Name</label>
-                                            <input type='text' name='doctorName' value={formData.doctorName} onChange={handleInputChange} className='w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' placeholder='Dr. Smith' />
+                                            <label className='block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1'>Doctor's Name</label>
+                                            <input type='text' name='doctorName' value={formData.doctorName} onChange={handleInputChange} className='w-full p-3 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' placeholder='Dr. Smith' />
                                         </div>
                                         <div>
-                                            <label className='block text-sm font-semibold text-slate-700 mb-1'>Start Date *</label>
-                                            <input required type='date' name='startDate' value={formData.startDate} onChange={handleInputChange} className='w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' />
+                                            <label className='block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1'>Start Date *</label>
+                                            <input required type='date' name='startDate' value={formData.startDate} onChange={handleInputChange} className='w-full p-3 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' />
                                         </div>
                                         <div>
-                                            <label className='block text-sm font-semibold text-slate-700 mb-1'>End Date</label>
-                                            <input type='date' name='endDate' value={formData.endDate} onChange={handleInputChange} className='w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' />
+                                            <label className='block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1'>End Date</label>
+                                            <input type='date' name='endDate' value={formData.endDate} onChange={handleInputChange} className='w-full p-3 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' />
                                         </div>
                                         <div className='md:col-span-2'>
-                                            <label className='block text-sm font-semibold text-slate-700 mb-1'>Instructions</label>
-                                            <textarea name='instructions' value={formData.instructions} onChange={handleInputChange} rows='2' className='w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' placeholder='e.g., Take after food'></textarea>
+                                            <label className='block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1'>Instructions</label>
+                                            <textarea name='instructions' value={formData.instructions} onChange={handleInputChange} rows='2' className='w-full p-3 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' placeholder='e.g., Take after food'></textarea>
                                         </div>
                                         <div className='md:col-span-2'>
                                             <div className='flex items-center justify-between mb-2'>
-                                                <label className='block text-sm font-semibold text-slate-700'>Reminder Times *</label>
+                                                <label className='block text-sm font-semibold text-slate-700 dark:text-slate-200'>Reminder Times *</label>
                                                 <button type='button' onClick={addTimeField} className='text-cyan-700 text-sm font-bold hover:text-cyan-800 transition-colors'>+ Add Time</button>
                                             </div>
                                             <div className='grid grid-cols-2 sm:grid-cols-4 gap-2'>
                                                 {formData.reminderTimes.map((time, index) => (
                                                     <div key={index} className='relative'>
-                                                        <input required type='time' value={time} onChange={(e) => handleTimeChange(index, e.target.value)} className='w-full p-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' />
+                                                        <input required type='time' value={time} onChange={(e) => handleTimeChange(index, e.target.value)} className='w-full p-2 bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 outline-none transition-all' />
                                                         {formData.reminderTimes.length > 1 && (
                                                             <button type='button' onClick={() => removeTimeField(index)} className='absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px]'>x</button>
                                                         )}
@@ -577,7 +577,7 @@ const Medications = () => {
                                         </div>
                                     </div>
                                     <div className='flex gap-4 pt-4'>
-                                        <button type='button' onClick={() => setShowAddModal(false)} className='flex-1 px-6 py-3 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 transition-all'>Cancel</button>
+                                        <button type='button' onClick={() => setShowAddModal(false)} className='flex-1 px-6 py-3 bg-slate-100 dark:bg-gray-800 text-slate-700 dark:text-slate-200 font-bold rounded-xl hover:bg-slate-200 transition-all'>Cancel</button>
                                         <button type='submit' className='flex-1 px-6 py-3 bg-gradient-to-r from-cyan-600 to-sky-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all'>Save Medication</button>
                                     </div>
                                 </form>

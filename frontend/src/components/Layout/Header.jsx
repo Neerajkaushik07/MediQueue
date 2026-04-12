@@ -28,7 +28,7 @@ const StatItem = ({ end, label, suffix = '+' }) => {
     return (
         <div className='text-left animate-fade-in'>
             <p className='text-3xl font-bold gradient-text'>{count}{suffix}</p>
-            <p className='text-sm text-gray-600 mt-1'>{label}</p>
+            <p className='text-sm text-gray-600 dark:text-gray-300 mt-1'>{label}</p>
         </div>
     )
 }
@@ -54,7 +54,7 @@ const Header = () => {
                         <span className='block mt-2 accent-heading'>At Your Fingertips</span>
                     </h1>
 
-                    <p className='text-gray-600 text-lg leading-relaxed max-w-lg animate-fade-in-up' style={{ animationDelay: '0.1s' }}>
+                    <p className='text-gray-600 dark:text-gray-300 text-lg leading-relaxed max-w-lg animate-fade-in-up' style={{ animationDelay: '0.1s' }}>
                         Connect with trusted medical professionals. Book appointments seamlessly and take control of your health journey with confidence.
                     </p>
 
@@ -87,7 +87,7 @@ const Header = () => {
                             alt="Medical professionals"
                         />
                         {/* Trust badge overlay */}
-                        <div className='absolute bottom-6 left-6 bg-white rounded-xl p-4 shadow-card max-w-xs'>
+                        <div className='absolute bottom-6 left-6 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-card max-w-xs'>
                             <div className='flex items-center gap-3'>
                                 <div className='w-12 h-12 rounded-full bg-gradient-primary flex items-center justify-center'>
                                     <svg className='w-6 h-6 text-white' fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,8 +95,8 @@ const Header = () => {
                                     </svg>
                                 </div>
                                 <div>
-                                    <p className='font-bold text-gray-900'>Trusted Care</p>
-                                    <p className='text-sm text-gray-600'>Licensed & Verified</p>
+                                    <p className='font-bold text-gray-900 dark:text-white'>Trusted Care</p>
+                                    <p className='text-sm text-gray-600 dark:text-gray-300'>Licensed & Verified</p>
                                 </div>
                             </div>
                         </div>

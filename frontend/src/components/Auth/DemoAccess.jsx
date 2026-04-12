@@ -41,16 +41,16 @@ const DemoAccess = () => {
                             {/* Patient Demo */}
                             <button
                                 onClick={handlePatientDemo}
-                                className='demo-option flex-1 flex flex-col items-center gap-3 p-5 rounded-xl border-2 border-gray-200 hover:border-primary hover:bg-primary/5 transition-all duration-300 group'
+                                className='demo-option flex-1 flex flex-col items-center gap-3 p-5 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-primary hover:bg-primary/5 transition-all duration-300 group'
                             >
                                 <div className='w-14 h-14 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center group-hover:scale-110 transition-transform'>
                                     <FaUser className='text-primary text-2xl' />
                                 </div>
                                 <div className='text-center'>
-                                    <h4 className='font-semibold text-gray-900 group-hover:text-primary transition-colors text-base'>
+                                    <h4 className='font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors text-base'>
                                         Patient Demo
                                     </h4>
-                                    <p className='text-xs text-gray-600 mt-1'>
+                                    <p className='text-xs text-gray-600 dark:text-gray-300 mt-1'>
                                         Explore patient features
                                     </p>
                                 </div>
@@ -59,16 +59,16 @@ const DemoAccess = () => {
                             {/* Doctor Demo */}
                             <button
                                 onClick={handleDoctorDemo}
-                                className='demo-option flex-1 flex flex-col items-center gap-3 p-5 rounded-xl border-2 border-gray-200 hover:border-primary hover:bg-primary/5 transition-all duration-300 group'
+                                className='demo-option flex-1 flex flex-col items-center gap-3 p-5 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-primary hover:bg-primary/5 transition-all duration-300 group'
                             >
                                 <div className='w-14 h-14 rounded-full bg-gradient-to-br from-green-100 to-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform'>
                                     <FaUserMd className='text-primary text-2xl' />
                                 </div>
                                 <div className='text-center'>
-                                    <h4 className='font-semibold text-gray-900 group-hover:text-primary transition-colors text-base'>
+                                    <h4 className='font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors text-base'>
                                         Doctor Demo
                                     </h4>
-                                    <p className='text-xs text-gray-600 mt-1'>
+                                    <p className='text-xs text-gray-600 dark:text-gray-300 mt-1'>
                                         Explore doctor features
                                     </p>
                                 </div>
@@ -76,8 +76,8 @@ const DemoAccess = () => {
                         </div>
 
                         {/* Footer Note */}
-                        <div className='px-5 py-2 bg-gray-50 border-t border-gray-100'>
-                            <p className='text-xs text-gray-600 text-center'>
+                        <div className='px-5 py-2 bg-gray-50 dark:bg-gray-900 border-t border-gray-100'>
+                            <p className='text-xs text-gray-600 dark:text-gray-300 text-center'>
                                 💡 No login required • Full feature access
                             </p>
                         </div>

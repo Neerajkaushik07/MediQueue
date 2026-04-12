@@ -236,7 +236,7 @@ const HealthDashboard = () => {
     ]
 
     return (
-        <div className='min-h-screen pt-4 pb-20 px-4 sm:px-6 lg:px-8 bg-gray-50'>
+        <div className='min-h-screen pt-4 pb-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-gray-900'>
             {/* Header with Greeting */}
             <DashboardHeader
                 name={userData?.name || 'Guest'}

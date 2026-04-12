@@ -12,7 +12,7 @@ const Testimonials = () => {
     }, [])
 
     return (
-        <div className='flex flex-col items-center gap-4 py-16 text-gray-800 bg-gray-50 rounded-xl my-20 px-4'>
+        <div className='flex flex-col items-center gap-4 py-16 text-gray-800 dark:text-gray-100 bg-gray-50 dark:bg-gray-900 rounded-xl my-20 px-4'>
             <h1 className='text-3xl font-medium'>What Our Users Say</h1>
             <p className='sm:w-1/3 text-center text-sm mb-8'>Real stories from real people who found their perfect healthcare match.</p>
 
@@ -29,9 +29,9 @@ const Testimonials = () => {
                             className={`absolute inset-0 flex flex-col items-center justify-center transition-all duration-700 ease-out transform ${position}`}
                         >
                             <img src={item.image} alt={item.name} className='w-16 h-16 rounded-full object-cover shadow-lg mb-4 border-2 border-white' />
-                            <p className='text-gray-600 text-lg italic mb-4 max-w-2xl text-center leading-relaxed'>"{item.text}"</p>
+                            <p className='text-gray-600 dark:text-gray-300 text-lg italic mb-4 max-w-2xl text-center leading-relaxed'>"{item.text}"</p>
                             <div className='text-center'>
-                                <h3 className='font-semibold text-gray-900'>{item.name}</h3>
+                                <h3 className='font-semibold text-gray-900 dark:text-white'>{item.name}</h3>
                                 <p className='text-sm text-[var(--primary)] font-medium'>{item.role}</p>
                             </div>
                         </div>

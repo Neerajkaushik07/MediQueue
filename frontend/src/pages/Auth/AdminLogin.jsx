@@ -48,16 +48,16 @@ const AdminLogin = () => {
                             </span>
                         </div>
                         <h2 className='text-3xl font-bold luxury-heading mb-2'>Admin Login</h2>
-                        <p className='text-gray-600 font-medium'>Exclusive access for administrators only</p>
+                        <p className='text-gray-600 dark:text-gray-300 font-medium'>Exclusive access for administrators only</p>
                     </div>
 
                     <div className='flex flex-col gap-6'>
                         <div className='w-full'>
-                            <label className='text-sm font-semibold text-gray-700 mb-2 block'>Admin Email</label>
+                            <label className='text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2 block'>Admin Email</label>
                             <input
                                 onChange={(e) => setEmail(e.target.value)}
                                 value={email}
-                                className='glass border-0 rounded-xl w-full p-4 mt-1 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium text-gray-800'
+                                className='glass border-0 rounded-xl w-full p-4 mt-1 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium text-gray-800 dark:text-gray-100'
                                 type="email"
                                 placeholder="Enter admin email"
                                 required
@@ -66,13 +66,13 @@ const AdminLogin = () => {
 
                         <div className='w-full'>
                             <div className='flex justify-between items-center mb-2'>
-                                <label className='text-sm font-semibold text-gray-700'>Admin Password</label>
+                                <label className='text-sm font-semibold text-gray-700 dark:text-gray-200'>Admin Password</label>
                             </div>
                             <div className='relative'>
                                 <input
                                     onChange={(e) => setPassword(e.target.value)}
                                     value={password}
-                                    className='glass border-0 rounded-xl w-full p-4 pr-12 mt-1 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium text-gray-800'
+                                    className='glass border-0 rounded-xl w-full p-4 pr-12 mt-1 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium text-gray-800 dark:text-gray-100'
                                     type={showPassword ? "text" : "password"}
                                     placeholder="Enter admin password"
                                     required
@@ -80,7 +80,7 @@ const AdminLogin = () => {
                                 <button
                                     type='button'
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className='absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors mt-0.5'
+                                    className='absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-200 transition-colors mt-0.5'
                                 >
                                     {showPassword ? <FaEyeSlash size={22} /> : <FaEye size={22} />}
                                 </button>
@@ -95,7 +95,7 @@ const AdminLogin = () => {
                         </button>
 
                         <div className='text-center'>
-                            <p className='text-xs text-gray-500 font-medium'>
+                            <p className='text-xs text-gray-500 dark:text-gray-400 font-medium'>
                                 Protected by enterprise-grade security. <br />
                                 Authorized personnel only.
                             </p>

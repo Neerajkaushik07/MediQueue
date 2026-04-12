@@ -20,7 +20,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className='medical-card sticky top-0 z-50 mx-0 px-4 sm:px-6 lg:px-8 flex items-center justify-between text-sm py-4 mb-5 shadow-medical backdrop-blur-sm bg-white/95 dark:bg-gray-900/95 dark:border-gray-800 border-x-0 border-t-0 !rounded-none'>
+    <div className='medical-card sticky top-0 z-50 mx-0 px-4 sm:px-6 lg:px-8 flex items-center justify-between text-sm py-4 mb-5 shadow-medical backdrop-blur-sm bg-white dark:bg-gray-800/95 dark:bg-gray-900/95 dark:border-gray-800 border-x-0 border-t-0 !rounded-none'>
       <div className="flex items-center gap-3 cursor-pointer transition-transform hover:scale-105 duration-300" onClick={() => navigate('/')}>
         <div className="w-11 h-11 bg-gradient-primary rounded-xl flex items-center justify-center shadow-soft">
           <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -192,7 +192,7 @@ const Navbar = () => {
       <div className='flex items-center gap-4'>
         <button
           onClick={toggleTheme}
-          className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+          className="p-2 rounded-full hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-800 transition-colors duration-200"
           aria-label="Toggle dark mode"
         >
           {theme === 'dark' ? (
@@ -200,7 +200,7 @@ const Navbar = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
             </svg>
           ) : (
-            <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
             </svg>
           )}
@@ -210,11 +210,11 @@ const Navbar = () => {
           // Show profile dropdown when logged in
           <div className='flex items-center gap-2 cursor-pointer group relative'>
             <img className='w-10 h-10 rounded-full border-2 border-primary/20 shadow-soft transition-all hover:border-primary duration-300' src={userData?.image || '/fallback-user.png'} alt="profile" />
-            <svg className='w-4 h-4 text-gray-600 transition-transform group-hover:rotate-180 duration-300' fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className='w-4 h-4 text-gray-600 dark:text-gray-300 transition-transform group-hover:rotate-180 duration-300' fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
             </svg>
-            <div className='absolute top-0 right-0 pt-14 text-sm font-medium text-gray-700 z-20 hidden group-hover:block animate-fade-in'>
-              <div className='min-w-48 bg-white rounded-xl flex flex-col gap-1 p-2 shadow-card border border-gray-100'>
+            <div className='absolute top-0 right-0 pt-14 text-sm font-medium text-gray-700 dark:text-gray-200 z-20 hidden group-hover:block animate-fade-in'>
+              <div className='min-w-48 bg-white dark:bg-gray-800 rounded-xl flex flex-col gap-1 p-2 shadow-card border border-gray-100'>
                 {userRole === 'patient' && (
                   <>
                     <p onClick={() => navigate('/patient-dashboard')} className='hover:text-primary hover:bg-calm-blue cursor-pointer px-4 py-2 rounded-lg transition-all duration-200'>My Dashboard</p>
@@ -248,15 +248,15 @@ const Navbar = () => {
       <img onClick={() => setShowMenu(true)} className='w-6 md:hidden cursor-pointer hover:scale-110 transition-transform duration-300' src={assets.menu_icon} alt="" />
 
       {/* ---- Mobile Menu ---- */}
-      <div className={`md:hidden ${showMenu ? 'fixed w-full' : 'h-0 w-0'} right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all duration-300`}>
-        <div className='flex items-center justify-between px-5 py-6 border-b border-gray-200'>
+      <div className={`md:hidden ${showMenu ? 'fixed w-full' : 'h-0 w-0'} right-0 top-0 bottom-0 z-20 overflow-hidden bg-white dark:bg-gray-800 transition-all duration-300`}>
+        <div className='flex items-center justify-between px-5 py-6 border-b border-gray-200 dark:border-gray-700'>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
             </div>
-            <span className="text-lg font-bold text-gray-900">MediQueue</span>
+            <span className="text-lg font-bold text-gray-900 dark:text-white">MediQueue</span>
           </div>
           <img onClick={() => setShowMenu(false)} src={assets.cross_icon} className='w-7 cursor-pointer hover:rotate-90 transition-transform duration-300' alt="" />
         </div>
@@ -265,45 +265,45 @@ const Navbar = () => {
 
           {userRole === 'doctor' && (
             <div className='mt-2 mb-2'>
-              <p className='px-5 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide'>Professional Panel</p>
+              <p className='px-5 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide'>Professional Panel</p>
               <NavLink onClick={() => setShowMenu(false)} to='/doctor-dashboard' >
-                <p className='px-5 py-3 rounded-lg text-gray-700 hover:bg-calm-blue hover:text-primary transition-all duration-200 flex items-center gap-2'>
+                <p className='px-5 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-calm-blue hover:text-primary transition-all duration-200 flex items-center gap-2'>
                   <span>📊</span>
                   Dashboard
                 </p>
               </NavLink>
               <NavLink onClick={() => setShowMenu(false)} to='/doctor-appointments' >
-                <p className='px-5 py-3 rounded-lg text-gray-700 hover:bg-calm-blue hover:text-primary transition-all duration-200 flex items-center gap-2'>
+                <p className='px-5 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-calm-blue hover:text-primary transition-all duration-200 flex items-center gap-2'>
                   <span>📅</span>
                   Appointments
                 </p>
               </NavLink>
               <NavLink onClick={() => setShowMenu(false)} to='/doctor-schedule' >
-                <p className='px-5 py-3 rounded-lg text-gray-700 hover:bg-calm-blue hover:text-primary transition-all duration-200 flex items-center gap-2'>
+                <p className='px-5 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-calm-blue hover:text-primary transition-all duration-200 flex items-center gap-2'>
                   <span>🕐</span>
                   Schedule
                 </p>
               </NavLink>
               <NavLink onClick={() => setShowMenu(false)} to='/doctor-patients' >
-                <p className='px-5 py-3 rounded-lg text-gray-700 hover:bg-calm-blue hover:text-primary transition-all duration-200 flex items-center gap-2'>
+                <p className='px-5 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-calm-blue hover:text-primary transition-all duration-200 flex items-center gap-2'>
                   <span>👥</span>
                   Patients
                 </p>
               </NavLink>
               <NavLink onClick={() => setShowMenu(false)} to='/doctor-finances' >
-                <p className='px-5 py-3 rounded-lg text-gray-700 hover:bg-calm-blue hover:text-primary transition-all duration-200 flex items-center gap-2'>
+                <p className='px-5 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-calm-blue hover:text-primary transition-all duration-200 flex items-center gap-2'>
                   <span>💰</span>
                   Finances
                 </p>
               </NavLink>
               <NavLink onClick={() => setShowMenu(false)} to='/doctor-reviews' >
-                <p className='px-5 py-3 rounded-lg text-gray-700 hover:bg-calm-blue hover:text-primary transition-all duration-200 flex items-center gap-2'>
+                <p className='px-5 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-calm-blue hover:text-primary transition-all duration-200 flex items-center gap-2'>
                   <span>⭐</span>
                   Reviews
                 </p>
               </NavLink>
               <NavLink onClick={() => setShowMenu(false)} to='/teleconsultation?role=doctor' >
-                <p className='px-5 py-3 rounded-lg text-gray-700 hover:bg-calm-blue hover:text-primary transition-all duration-200 flex items-center gap-2'>
+                <p className='px-5 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-calm-blue hover:text-primary transition-all duration-200 flex items-center gap-2'>
                   <span>💬</span>
                   Live Chat
                 </p>
@@ -311,13 +311,13 @@ const Navbar = () => {
             </div>
           )}
           {userRole !== 'doctor' && (
-            <NavLink onClick={() => setShowMenu(false)} to='/doctors' ><p className='px-5 py-3 rounded-lg text-gray-700 hover:bg-calm-blue hover:text-primary transition-all duration-200'>All Doctors</p></NavLink>
+            <NavLink onClick={() => setShowMenu(false)} to='/doctors' ><p className='px-5 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-calm-blue hover:text-primary transition-all duration-200'>All Doctors</p></NavLink>
           )}
           {userRole !== 'doctor' && (
-            <NavLink onClick={() => setShowMenu(false)} to='/features' ><p className='px-5 py-3 rounded-lg text-gray-700 hover:bg-calm-blue hover:text-primary transition-all duration-200'>Health Dashboard</p></NavLink>
+            <NavLink onClick={() => setShowMenu(false)} to='/features' ><p className='px-5 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-calm-blue hover:text-primary transition-all duration-200'>Health Dashboard</p></NavLink>
           )}
           {userRole !== 'doctor' && (
-            <NavLink onClick={() => setShowMenu(false)} to='/community' ><p className='px-5 py-3 rounded-lg text-gray-700 hover:bg-calm-blue hover:text-primary transition-all duration-200'>Community</p></NavLink>
+            <NavLink onClick={() => setShowMenu(false)} to='/community' ><p className='px-5 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-calm-blue hover:text-primary transition-all duration-200'>Community</p></NavLink>
           )}
 
 
@@ -326,8 +326,8 @@ const Navbar = () => {
 
           {userRole !== 'doctor' && (
             <>
-              <NavLink onClick={() => setShowMenu(false)} to='/'><p className='px-5 py-3 rounded-lg text-gray-700 hover:bg-calm-blue hover:text-primary transition-all duration-200'>Home</p></NavLink>
-              <NavLink onClick={() => setShowMenu(false)} to='/about' ><p className='px-5 py-3 rounded-lg text-gray-700 hover:bg-calm-blue hover:text-primary transition-all duration-200'>About us</p></NavLink>
+              <NavLink onClick={() => setShowMenu(false)} to='/'><p className='px-5 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-calm-blue hover:text-primary transition-all duration-200'>Home</p></NavLink>
+              <NavLink onClick={() => setShowMenu(false)} to='/about' ><p className='px-5 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-calm-blue hover:text-primary transition-all duration-200'>About us</p></NavLink>
             </>
           )}
         </ul>

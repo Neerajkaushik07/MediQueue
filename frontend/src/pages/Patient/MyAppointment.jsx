@@ -65,7 +65,7 @@ const StripeCheckoutForm = ({ appointmentId, onSuccess, onCancel }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 pt-2">
-      <div className="p-4 bg-gray-50 border border-gray-100 rounded-xl shadow-inner">
+      <div className="p-4 bg-gray-50 dark:bg-gray-900 border border-gray-100 rounded-xl shadow-inner">
         <PaymentElement options={{ layout: "accordion" }} />
       </div>
       <div className="flex gap-4 mt-6">
@@ -73,7 +73,7 @@ const StripeCheckoutForm = ({ appointmentId, onSuccess, onCancel }) => {
           type="button"
           onClick={onCancel}
           disabled={isProcessing}
-          className="flex-1 px-4 py-3 border border-gray-200 text-gray-600 font-semibold rounded-xl hover:bg-gray-100 hover:text-gray-900 transition-all duration-200 disabled:opacity-50"
+          className="flex-1 px-4 py-3 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 font-semibold rounded-xl hover:bg-gray-100 dark:bg-gray-800 hover:text-gray-900 dark:text-white transition-all duration-200 disabled:opacity-50"
         >
           Cancel
         </button>
@@ -429,19 +429,19 @@ const MyAppointments = () => {
       {/* Header Section */}
       <div className='mb-8 sm:flex sm:items-center sm:justify-between animate-fade-in-up'>
         <div>
-          <h1 className='text-3xl font-bold text-gray-900'>My Appointments</h1>
-          <p className='mt-2 text-sm text-gray-600'>Manage your upcoming visits and view history</p>
+          <h1 className='text-3xl font-bold text-gray-900 dark:text-white'>My Appointments</h1>
+          <p className='mt-2 text-sm text-gray-600 dark:text-gray-300'>Manage your upcoming visits and view history</p>
         </div>
 
         {/* Filter Tabs - Pill Shape */}
-        <div className='mt-4 sm:mt-0 flex p-1 bg-gray-100 rounded-xl overflow-hidden shadow-inner'>
+        <div className='mt-4 sm:mt-0 flex p-1 bg-gray-100 dark:bg-gray-800 rounded-xl overflow-hidden shadow-inner'>
           {['all', 'upcoming', 'completed', 'cancelled'].map((tab) => (
             <button
               key={tab}
               onClick={() => setFilter(tab)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 capitalize ${filter === tab
-                ? 'bg-white text-primary shadow-sm'
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'bg-white dark:bg-gray-800 text-primary shadow-sm dark:shadow-none'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-200'
                 }`}
             >
               {tab}
@@ -456,7 +456,7 @@ const MyAppointments = () => {
           filteredAppointments.map((item, index) => (
             <div
               key={index}
-              className='group bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 animate-fade-in-up'
+              className='group bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 shadow-sm dark:shadow-none hover:shadow-xl transition-all duration-300 animate-fade-in-up'
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               {/* Card Header: Doctor Info & Status */}
@@ -468,12 +468,12 @@ const MyAppointments = () => {
                       src={item.docData.image}
                       alt={item.docData.name}
                     />
-                    <div className='absolute -bottom-1 -right-1 bg-white p-0.5 rounded-full'>
+                    <div className='absolute -bottom-1 -right-1 bg-white dark:bg-gray-800 p-0.5 rounded-full'>
                       <div className='w-3 h-3 bg-green-500 rounded-full border-2 border-white'></div>
                     </div>
                   </div>
                   <div>
-                    <h3 className='font-bold text-gray-900 text-lg group-hover:text-primary transition-colors'>
+                    <h3 className='font-bold text-gray-900 dark:text-white text-lg group-hover:text-primary transition-colors'>
                       {item.docData.name}
                     </h3>
                     <p className='text-primary text-sm font-medium'>{item.docData.speciality}</p>
@@ -504,20 +504,20 @@ const MyAppointments = () => {
               </div>
 
               {/* Appointment Details */}
-              <div className='bg-gray-50 rounded-xl p-4 mb-6 grid grid-cols-2 gap-4'>
+              <div className='bg-gray-50 dark:bg-gray-900 rounded-xl p-4 mb-6 grid grid-cols-2 gap-4'>
                 <div className='flex flex-col gap-1'>
-                  <span className='text-xs text-gray-500 font-medium uppercase tracking-wider'>Date & Time</span>
-                  <div className='flex items-center gap-2 text-gray-700 font-semibold'>
+                  <span className='text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider'>Date & Time</span>
+                  <div className='flex items-center gap-2 text-gray-700 dark:text-gray-200 font-semibold'>
                     <svg className='w-4 h-4 text-primary' fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                     {slotDateFormat(item.slotDate)}
                   </div>
-                  <div className='ml-6 text-sm text-gray-500'>{item.slotTime}</div>
+                  <div className='ml-6 text-sm text-gray-500 dark:text-gray-400'>{item.slotTime}</div>
                 </div>
                 <div className='flex flex-col gap-1'>
-                  <span className='text-xs text-gray-500 font-medium uppercase tracking-wider'>Location</span>
-                  <div className='flex items-start gap-2 text-xs text-gray-600 leading-snug'>
+                  <span className='text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider'>Location</span>
+                  <div className='flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300 leading-snug'>
                     <svg className='w-4 h-4 text-primary mt-0.5 flex-shrink-0' fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -539,7 +539,7 @@ const MyAppointments = () => {
                     </button>
                     <button
                       onClick={() => openRescheduleModal(item)}
-                      className='px-4 py-2.5 rounded-lg text-gray-600 font-medium hover:bg-blue-50 hover:text-blue-600 transition-colors border border-transparent hover:border-blue-100'
+                      className='px-4 py-2.5 rounded-lg text-gray-600 dark:text-gray-300 font-medium hover:bg-blue-50 hover:text-blue-600 transition-colors border border-transparent hover:border-blue-100'
                     >
                       Reschedule
                     </button>
@@ -569,7 +569,7 @@ const MyAppointments = () => {
                     </button>
                     <button
                       onClick={() => openRescheduleModal(item)}
-                      className='flex-1 text-gray-600 font-medium hover:bg-gray-50 rounded-lg border border-gray-200 transition-colors'
+                      className='flex-1 text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 transition-colors'
                     >
                       Reschedule
                     </button>
@@ -590,7 +590,7 @@ const MyAppointments = () => {
 
                 {item.isCompleted && (
                   <div className='flex-1 flex gap-3'>
-                    <button className='flex-1 bg-gray-100 text-gray-500 py-2.5 rounded-lg font-medium cursor-default'>
+                    <button className='flex-1 bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 py-2.5 rounded-lg font-medium cursor-default'>
                       Visit Completed
                     </button>
                     <button
@@ -611,10 +611,10 @@ const MyAppointments = () => {
             </div>
           ))
         ) : (
-          <div className='col-span-full flex flex-col items-center justify-center py-20 bg-white rounded-3xl border border-dashed border-gray-200'>
+          <div className='col-span-full flex flex-col items-center justify-center py-20 bg-white dark:bg-gray-800 rounded-3xl border border-dashed border-gray-200 dark:border-gray-700'>
             <div className='text-6xl mb-4'>📅</div>
-            <h3 className='text-xl font-bold text-gray-900'>No Appointments Found</h3>
-            <p className='text-gray-500 mt-2 text-center max-w-md'>
+            <h3 className='text-xl font-bold text-gray-900 dark:text-white'>No Appointments Found</h3>
+            <p className='text-gray-500 dark:text-gray-400 mt-2 text-center max-w-md'>
               {filter === 'all'
                 ? "You haven't booked any appointments yet. Find a specialist to get started!"
                 : `You don't have any ${filter} appointments.`}
@@ -632,18 +632,18 @@ const MyAppointments = () => {
       {/* Stripe Payment Modal */}
       {showStripeModal && stripeClientSecret && (
         <div className='fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in p-4 sm:p-6'>
-          <div className='bg-white rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl transform transition-all flex flex-col max-h-[85vh] sm:max-h-[80vh] mt-10'>
+          <div className='bg-white dark:bg-gray-800 rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl transform transition-all flex flex-col max-h-[85vh] sm:max-h-[80vh] mt-10'>
             <div className='flex justify-between items-center mb-6 shrink-0'>
-              <h2 className='text-2xl font-bold text-gray-900'>Complete Payment</h2>
+              <h2 className='text-2xl font-bold text-gray-900 dark:text-white'>Complete Payment</h2>
               <button
                 onClick={() => {
                   setShowStripeModal(false);
                   setStripeClientSecret('');
                   setPaymentAppointmentId(null);
                 }}
-                className='p-2 hover:bg-gray-100 rounded-full transition-colors shrink-0'
+                className='p-2 hover:bg-gray-100 dark:bg-gray-800 rounded-full transition-colors shrink-0'
               >
-                <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
 
@@ -668,40 +668,40 @@ const MyAppointments = () => {
       {/* Review Modal - Same logic, slight styling tweak if needed */}
       {showReviewModal && (
         <div className='fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in'>
-          <div className='bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl transform transition-all'>
+          <div className='bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl transform transition-all'>
             <div className='flex justify-between items-center mb-6'>
-              <h2 className='text-2xl font-bold text-gray-900'>Write a Review</h2>
+              <h2 className='text-2xl font-bold text-gray-900 dark:text-white'>Write a Review</h2>
               <button
                 onClick={() => {
                   setShowReviewModal(false)
                   setRating(0)
                   setReviewComment('')
                 }}
-                className='p-2 hover:bg-gray-100 rounded-full transition-colors'
+                className='p-2 hover:bg-gray-100 dark:bg-gray-800 rounded-full transition-colors'
               >
-                <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
 
             {selectedAppointment && (
-              <div className='mb-6 flex items-center gap-4 p-4 bg-gray-50 rounded-xl'>
+              <div className='mb-6 flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl'>
                 <img src={selectedAppointment.docData.image} className='w-12 h-12 rounded-full object-cover' alt="" />
                 <div>
-                  <p className='text-sm text-gray-500'>Reviewing</p>
-                  <p className='font-bold text-gray-900'>{selectedAppointment.docData.name}</p>
+                  <p className='text-sm text-gray-500 dark:text-gray-400'>Reviewing</p>
+                  <p className='font-bold text-gray-900 dark:text-white'>{selectedAppointment.docData.name}</p>
                 </div>
               </div>
             )}
 
             {/* Star Rating */}
             <div className='mb-6 text-center'>
-              <label className='block text-sm font-medium text-gray-700 mb-3 uppercase tracking-wide'>Rate your experience</label>
+              <label className='block text-sm font-medium text-gray-700 dark:text-gray-200 mb-3 uppercase tracking-wide'>Rate your experience</label>
               <div className='flex justify-center gap-2'>
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
                     key={star}
                     onClick={() => setRating(star)}
-                    className={`text-4xl transition-all duration-200 hover:scale-110 ${star <= rating ? 'text-yellow-400 drop-shadow-sm' : 'text-gray-200 hover:text-yellow-200'}`}
+                    className={`text-4xl transition-all duration-200 hover:scale-110 ${star <= rating ? 'text-yellow-400 drop-shadow-sm dark:shadow-none' : 'text-gray-200 hover:text-yellow-200'}`}
                   >
                     ★
                   </button>
@@ -711,12 +711,12 @@ const MyAppointments = () => {
 
             {/* Review Comment */}
             <div className='mb-6'>
-              <label className='block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wide'>Your Feedback</label>
+              <label className='block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2 uppercase tracking-wide'>Your Feedback</label>
               <textarea
                 value={reviewComment}
                 onChange={(e) => setReviewComment(e.target.value)}
                 placeholder='Share your experience with this doctor...'
-                className='w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-shadow resize-none bg-gray-50 focus:bg-white'
+                className='w-full border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-shadow resize-none bg-gray-50 dark:bg-gray-900 focus:bg-white dark:bg-gray-800'
                 rows='4'
               />
             </div>
@@ -729,7 +729,7 @@ const MyAppointments = () => {
                   setRating(0)
                   setReviewComment('')
                 }}
-                className='px-6 py-3 border border-gray-200 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-colors'
+                className='px-6 py-3 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 font-semibold rounded-xl hover:bg-gray-50 dark:bg-gray-900 transition-colors'
               >
                 Cancel
               </button>
@@ -747,11 +747,11 @@ const MyAppointments = () => {
       {/* Reschedule Modal */}
       {showRescheduleModal && (
         <div className='fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in'>
-          <div className='bg-white rounded-2xl p-x-6 py-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto shadow-2xl'>
+          <div className='bg-white dark:bg-gray-800 rounded-2xl p-x-6 py-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto shadow-2xl'>
             <div className='px-8 mb-6 flex justify-between items-center'>
               <div>
-                <h2 className='text-2xl font-bold text-gray-900'>Reschedule Appointment</h2>
-                <p className='text-gray-500 text-sm mt-1'>Choose a new slot for your visit</p>
+                <h2 className='text-2xl font-bold text-gray-900 dark:text-white'>Reschedule Appointment</h2>
+                <p className='text-gray-500 dark:text-gray-400 text-sm mt-1'>Choose a new slot for your visit</p>
               </div>
               <button
                 onClick={() => {
@@ -759,9 +759,9 @@ const MyAppointments = () => {
                   setRescheduleSlotTime('')
                   setRescheduleSlotIndex(0)
                 }}
-                className='p-2 hover:bg-gray-100 rounded-full transition-colors'
+                className='p-2 hover:bg-gray-100 dark:bg-gray-800 rounded-full transition-colors'
               >
-                <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                <svg className="w-6 h-6 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
 
@@ -769,20 +769,20 @@ const MyAppointments = () => {
               <div className='mx-8 mb-8 p-4 bg-blue-50 border border-blue-100 rounded-xl flex items-center justify-between'>
                 <div>
                   <p className='text-sm text-blue-600 font-medium mb-1'>Current Appointment</p>
-                  <p className='text-gray-900 font-bold text-lg'>
+                  <p className='text-gray-900 dark:text-white font-bold text-lg'>
                     {slotDateFormat(selectedAppointment.slotDate)} at {selectedAppointment.slotTime}
                   </p>
                 </div>
                 <div className='text-right'>
                   <p className='text-sm text-blue-600 font-medium mb-1'>Doctor</p>
-                  <p className='text-gray-900 font-semibold'>{selectedAppointment.docData.name}</p>
+                  <p className='text-gray-900 dark:text-white font-semibold'>{selectedAppointment.docData.name}</p>
                 </div>
               </div>
             )}
 
             {/* Date Slots */}
             <div className='px-8 mb-2'>
-              <p className='text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide'>Select Date</p>
+              <p className='text-sm font-bold text-gray-700 dark:text-gray-200 mb-3 uppercase tracking-wide'>Select Date</p>
             </div>
             <div className='flex gap-4 items-center overflow-x-auto pb-4 px-8 scrollbar-hide'>
               {rescheduleSlots.length > 0 && rescheduleSlots.map((item, index) => (
@@ -790,7 +790,7 @@ const MyAppointments = () => {
                   onClick={() => { setRescheduleSlotIndex(index); setRescheduleSlotTime('') }}
                   className={`flex-shrink-0 text-center py-4 min-w-[4.5rem] rounded-2xl cursor-pointer transition-all duration-300 border-2 ${rescheduleSlotIndex === index
                     ? 'bg-primary text-white border-primary shadow-lg shadow-blue-500/30 scale-105'
-                    : 'bg-white text-gray-600 border-gray-100 hover:border-gray-300 hover:bg-gray-50'
+                    : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-100 hover:border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:bg-gray-900'
                     }`}
                   key={index}
                 >
@@ -802,7 +802,7 @@ const MyAppointments = () => {
 
             {/* Time Slots */}
             <div className='px-8 mb-2 mt-6'>
-              <p className='text-sm font-bold text-gray-700 mb-3 uppercase tracking-wide'>Select Time</p>
+              <p className='text-sm font-bold text-gray-700 dark:text-gray-200 mb-3 uppercase tracking-wide'>Select Time</p>
             </div>
             <div className='grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 px-8 mb-8'>
               {rescheduleSlots.length > 0 && rescheduleSlots[rescheduleSlotIndex].map((item, index) => (
@@ -810,7 +810,7 @@ const MyAppointments = () => {
                   onClick={() => setRescheduleSlotTime(item.time)}
                   className={`text-sm font-medium py-2.5 rounded-xl transition-all duration-200 border ${item.time === rescheduleSlotTime
                     ? 'bg-primary text-white border-primary shadow-md'
-                    : 'bg-white text-gray-600 border-gray-200 hover:border-primary hover:text-primary'
+                    : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-primary hover:text-primary'
                     }`}
                   key={index}
                 >
@@ -827,7 +827,7 @@ const MyAppointments = () => {
                   setRescheduleSlotTime('')
                   setRescheduleSlotIndex(0)
                 }}
-                className='px-6 py-3.5 border border-gray-200 text-gray-600 font-bold rounded-xl hover:bg-gray-50 transition-colors'
+                className='px-6 py-3.5 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 font-bold rounded-xl hover:bg-gray-50 dark:bg-gray-900 transition-colors'
               >
                 Cancel
               </button>

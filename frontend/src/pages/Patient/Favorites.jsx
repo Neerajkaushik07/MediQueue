@@ -100,14 +100,14 @@ const Favorites = () => {
   if (loading) {
     return (
       <div className='flex justify-center items-center min-h-[50vh]'>
-        <p className='text-gray-500'>Loading your favorites...</p>
+        <p className='text-gray-500 dark:text-gray-400'>Loading your favorites...</p>
       </div>
     )
   }
 
   return (
     <div>
-      <p className='pb-3 mt-12 text-lg font-medium text-gray-600 border-b'>My Favorite Doctors</p>
+      <p className='pb-3 mt-12 text-lg font-medium text-gray-600 dark:text-gray-300 border-b'>My Favorite Doctors</p>
 
       {favoriteDoctors.length > 0 ? (
         <div className='w-full grid grid-cols-auto gap-4 gap-y-6 pt-5'>
@@ -119,7 +119,7 @@ const Favorites = () => {
                   e.stopPropagation()
                   removeFavorite(doctor._id)
                 }}
-                className='absolute top-3 right-3 z-10 bg-white rounded-full p-2 shadow-md hover:scale-110 transition-transform'
+                className='absolute top-3 right-3 z-10 bg-white dark:bg-gray-800 rounded-full p-2 shadow-md hover:scale-110 transition-transform'
               >
                 <svg className='w-5 h-5 text-red-500 fill-current' viewBox='0 0 24 24'>
                   <path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' />
@@ -129,8 +129,8 @@ const Favorites = () => {
               <div onClick={() => { navigate(`/appointment/${doctor._id}`); scrollTo(0, 0) }}>
                 <img className='bg-[#EAEFFF]' src={doctor.image} alt="" />
                 <div className='p-4'>
-                  <div className={`flex items-center gap-2 text-sm text-center ${doctor.available ? 'text-green-500' : "text-gray-500"}`}>
-                    <p className={`w-2 h-2 rounded-full ${doctor.available ? 'bg-green-500' : "bg-gray-500"}`}></p>
+                  <div className={`flex items-center gap-2 text-sm text-center ${doctor.available ? 'text-green-500' : "text-gray-500 dark:text-gray-400"}`}>
+                    <p className={`w-2 h-2 rounded-full ${doctor.available ? 'bg-green-500' : "bg-gray-50 dark:bg-gray-9000"}`}></p>
                     <p>{doctor.available ? 'Available' : "Not Available"}</p>
                   </div>
                   <p className='text-[#262626] text-lg font-medium'>{doctor.name}</p>
@@ -139,15 +139,15 @@ const Favorites = () => {
                     {doctor.rating > 0 ? (
                       <>
                         <span className='text-yellow-500'>★</span>
-                        <span className='text-gray-700 font-medium'>{doctor.rating}</span>
-                        <span className='text-gray-500 text-xs'>({doctor.totalReviews} reviews)</span>
+                        <span className='text-gray-700 dark:text-gray-200 font-medium'>{doctor.rating}</span>
+                        <span className='text-gray-500 dark:text-gray-400 text-xs'>({doctor.totalReviews} reviews)</span>
                       </>
                     ) : (
                       <span className='text-gray-400 text-xs'>No reviews yet</span>
                     )}
                   </div>
-                  <p className='text-gray-600 text-sm mt-2'>Fees: ${doctor.fees}</p>
-                  <p className='text-gray-500 text-xs'>{doctor.experience} experience</p>
+                  <p className='text-gray-600 dark:text-gray-300 text-sm mt-2'>Fees: ${doctor.fees}</p>
+                  <p className='text-gray-500 dark:text-gray-400 text-xs'>{doctor.experience} experience</p>
                 </div>
               </div>
             </div>
@@ -158,7 +158,7 @@ const Favorites = () => {
           <svg className='w-20 h-20 text-gray-300 mx-auto mb-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
             <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1.5} d='M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z' />
           </svg>
-          <p className='text-gray-500 text-lg mb-4'>No favorite doctors yet</p>
+          <p className='text-gray-500 dark:text-gray-400 text-lg mb-4'>No favorite doctors yet</p>
           <button
             onClick={() => navigate('/doctors')}
             className='bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition-all'
